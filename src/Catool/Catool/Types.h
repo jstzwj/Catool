@@ -6,7 +6,7 @@
 #include<vector>
 #include<string>
 #include<complex>
-
+#include<iostream>
 
 namespace catool
 {
@@ -29,6 +29,31 @@ namespace catool
 	using vector = std::vector<T>;
 
 	using complex = std::complex<double>;
+
+
+
+	template<class T>
+	void var_dump(std::vector<T> & v)
+	{
+		std::cout << typeid(v).name() << std::endl;
+		std::cout << "[" ;
+		for (const auto & each:v)
+		{
+			std::cout << each << " ";
+		}
+		std::cout << "]" << std::endl;
+	}
+
+	template<class T>
+	void var_dump(std::complex<T> & com)
+	{
+		std::cout << typeid(com).name() << std::endl;
+		std::cout << "[";
+		std::cout << com.real<<",";
+		std::cout << com.imag;
+		std::cout << "]" << std::endl;
+	}
+
 
 }
 

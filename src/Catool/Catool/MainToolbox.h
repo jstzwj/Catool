@@ -245,7 +245,7 @@ namespace catool
 		}
 		complex abs(const complex &x)
 		{
-			return sqrt(x.real*x.real + x.imag*x.imag);
+			return sqrt(x.real()*x.real() + x.imag()*x.imag());
 		}
 
 
@@ -254,14 +254,14 @@ namespace catool
 		*/
 		inline double real(const complex &x)
 		{
-			return x.real;
+			return x.real();
 		}
 		/*
 		Y = imag(Z) returns the imaginary part of the elements of array Z.
 		*/
 		inline double imag(const complex &x)
 		{
-			return x.imag;
+			return x.imag();
 		}
 		/*
 		angle(z)£º¸´ ÊızµÄÏà½Ç(Phase angle)

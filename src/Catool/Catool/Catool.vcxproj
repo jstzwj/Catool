@@ -114,6 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MainToolbox.h" />
+    <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\Arithmetic.h" />
     <ClInclude Include="Types.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

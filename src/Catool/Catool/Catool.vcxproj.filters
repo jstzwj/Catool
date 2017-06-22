@@ -13,6 +13,15 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="头文件\MainToolbox">
+      <UniqueIdentifier>{9d4981c5-8711-45a1-9e52-370ceed9839b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\MainToolbox\Mathematics">
+      <UniqueIdentifier>{4abcf274-143f-45dd-af45-85bacde8a573}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\MainToolbox\Mathematics\ElementaryMath">
+      <UniqueIdentifier>{cf0427f9-bc05-49c3-a3cd-ece411a94e90}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -20,11 +29,14 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MainToolbox.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Types.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MainToolbox.h">
+      <Filter>头文件\MainToolbox</Filter>
+    </ClInclude>
+    <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\Arithmetic.h">
+      <Filter>头文件\MainToolbox\Mathematics\ElementaryMath</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

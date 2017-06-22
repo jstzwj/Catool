@@ -1,0 +1,139 @@
+#pragma once
+#ifndef CATOOL_MAINTOOLBOX_MATHEMATIC_ELEMENTARYMATH_ARITHMETIC_H
+#define CATOOL_MAINTOOLBOX_MATHEMATIC_ELEMENTARYMATH_ARITHMETIC_H
+
+#include"../../../Types.h"
+
+namespace catool
+{
+	namespace main_toolbox
+	{
+		namespace mathematics
+		{
+			/*
+			C = A + B adds arrays A and B and returns the result in C.
+			C = plus(A,B) is an alternate way to execute A + B, but is rarely used.
+			It enables operator overloading for classes.
+			*/
+			inline double plus(double a, double b)
+			{
+				return a + b;
+			}
+			template<class T>
+			inline vector<T> plus(const vector<T>& a, const vector<T>& b)
+			{
+				vector<T> result;
+				if (a.size() != b.size())
+					throw std::runtime_error("Matrix dimensions must agree.");
+				for (unsigned int i = 0; i < a.size(); ++i)
+				{
+					result.push_back(a[i] + b[i]);
+				}
+				return result;
+			}
+			template<class T>
+			inline vector<T> plus(const vector<T>& a, const T& b)
+			{
+				vector<T> result;
+				for (const auto &each : a)
+				{
+					result.push_back(each + b);
+				}
+				return result;
+			}
+
+			template<class T>
+			inline vector<T> plus(const T& a, const vector<T>& b)
+			{
+				vector<T> result;
+				for (const auto &each : b)
+				{
+					result.push_back(a + each);
+				}
+				return result;
+			}
+
+			/*
+			C = +A returns array A and stores it in C.
+			C = uplus(A) is an alternate way to execute +A, but is rarely used.
+			It enables operator overloading for classes.
+			*/
+			inline double uplus(double a)
+			{
+				return a;
+			}
+			template<class T>
+			inline vector<T> uplus(const vector<T>& a)
+			{
+				return a;
+			}
+			/*
+			C = A - B subtracts array B from array A and returns the result in C.
+			C = minus(A,B) is an alternate way to execute A - B, but is rarely used.
+			It enables operator overloading for classes.
+			*/
+			template<class T>
+			inline T minus(const T& a, const T& b)
+			{
+				return a - b;
+			}
+			template<class T>
+			inline vector<T> minus(const vector<T>& a, const vector<T>& b)
+			{
+				vector<T> result;
+				if (a.size() != b.size())
+					throw std::runtime_error("Matrix dimensions must agree.");
+				for (unsigned int i = 0; i < a.size(); ++i)
+				{
+					result.push_back(a[i] - b[i]);
+				}
+				return result;
+			}
+			template<class T>
+			inline vector<T> minus(const vector<T>& a, const T & b)
+			{
+				vector<T> result;
+				for (const auto &each : a)
+				{
+					result.push_back(each - b);
+				}
+				return result;
+			}
+			template<class T>
+			inline vector<T> minus(const T & a, const vector<T>& b)
+			{
+				vector<T> result;
+				for (const auto &each : b)
+				{
+					result.push_back(a - each);
+				}
+				return result;
+			}
+			/*
+			C = -A negates the elements of A and stores the result in C.
+			C = uminus(A) is an alternative way to execute -A, but is rarely used. 
+			It enables operator overloading for classes.
+			*/
+			inline double uminus(double a)
+			{
+				return -a;
+			}
+			template<class T>
+			inline vector<T> uminus(const vector<T>& a)
+			{
+				vector<T> result;
+				for (const auto &each : a)
+				{
+					result.push_back(-a);
+				}
+				return result;
+			}
+			/*
+			
+			*/
+
+		}
+	}
+}
+
+#endif // !CATOOL_MAINTOOLBOX_MATHEMATIC_ELEMENTARYMATH_ARITHMETIC_H
