@@ -35,13 +35,13 @@ namespace catool
 		std::vector<T> data;
 	public:
 		vector() noexcept
-			:row(1),column(0){}
-		vector(int row_) noexcept 
-			:row(row_), column(1) {}
-		vector(int row_, int col_) noexcept 
-			:row(row_), column(col_) {}
+			: row(1), column(0) {}
+		vector(int col_) noexcept
+			: row(1), column(col_) {}
+		vector(int row_, int col_) noexcept
+			: row(row_), column(col_) {}
 		vector(std::initializer_list<T> list)
-			:data(list){}
+			:data(list) {}
 
 		void push_back(const T& val)
 		{
@@ -57,11 +57,11 @@ namespace catool
 		}
 		typename std::vector<T>::iterator begin() { return data.begin(); }
 		typename std::vector<T>::iterator end() { return data.end(); }
-		typename std::vector<T>::const_iterator begin() const{ return data.begin(); }
-		typename std::vector<T>::const_iterator end() const{ return data.end(); }
-		typename std::vector<T>::const_iterator cbegin() const{ return data.cbegin(); }
+		typename std::vector<T>::const_iterator begin() const { return data.begin(); }
+		typename std::vector<T>::const_iterator end() const { return data.end(); }
+		typename std::vector<T>::const_iterator cbegin() const { return data.cbegin(); }
 		typename std::vector<T>::const_iterator cend() const { return data.cend(); }
-		int size() const{ return data.size(); }
+		int size() const { return data.size(); }
 	};
 
 	using complex = std::complex<double>;
@@ -96,7 +96,6 @@ namespace catool
 		std::cout << com.imag();
 		std::cout << "]" << std::endl;
 	}
-	
 }
 
 #endif // !CATOOL_TYPES_H
