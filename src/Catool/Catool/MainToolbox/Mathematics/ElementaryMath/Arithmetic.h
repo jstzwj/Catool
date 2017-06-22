@@ -25,7 +25,7 @@ namespace catool
 				vector<T> result;
 				if (a.size() != b.size())
 					throw std::runtime_error("Matrix dimensions must agree.");
-				for (unsigned int i = 0; i < a.size(); ++i)
+				for (int i = 0; i < a.size(); ++i)
 				{
 					result.push_back(a[i] + b[i]);
 				}
@@ -129,8 +129,25 @@ namespace catool
 				return result;
 			}
 			/*
-			
+			C = A.*B multiplies arrays A and B element by element and returns the result in C.
+			C = times(A,B) is an alternate way to execute A.*B, but is rarely used. 
+			It enables operator overloading for classes.
 			*/
+			template<class T>
+			inline vector<T> times(const vector<T>& a, const vector<T>& b)
+			{
+				vector<T> result;
+				if (a.size() != b.size())
+					throw std::runtime_error("Matrix dimensions must agree.");
+				for (unsigned int i = 0; i < a.size(); ++i)
+				{
+					result.push_back(a[i] * b[i]);
+				}
+				return result;
+			}
+
+
+
 
 		}
 	}
