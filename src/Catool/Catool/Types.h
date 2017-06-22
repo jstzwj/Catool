@@ -5,6 +5,7 @@
 #include<cstdint>
 #include<vector>
 #include<string>
+#include<complex>
 
 
 namespace catool
@@ -26,6 +27,8 @@ namespace catool
 
 	template<class T>
 	using vector = std::vector<T>;
+
+	using complex = std::complex<double>;
 
 }
 

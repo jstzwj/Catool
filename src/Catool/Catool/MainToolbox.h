@@ -10,7 +10,7 @@ namespace catool
 {
 	namespace main_toolbox
 	{
-		inline double qPow(double i, int n)
+		inline double qpow(double i, int n)
 		{
 			double result = i;
 			int m = 1;
@@ -25,11 +25,10 @@ namespace catool
 			}
 			else
 			{
-				result = 1.0 / qPow(i, -n);
+				result = 1.0 / qpow(i, -n);
 			}
 			return result;
 		}
-
 		//trigonometric functions
 		/*
 		sin
@@ -65,6 +64,7 @@ namespace catool
 		*/
 		inline double cos(double n)
 		{
+			return std::cos(n);
 		}
 
 		//integer
@@ -159,23 +159,116 @@ namespace catool
 				return 0;
 		}
 		/*
-		r = rem(a,b) returns the remainder after division of a by b, where a is the dividend and b is the divisor. 
-		This function is often called the remainder operation, which can be expressed as r = a - b.*fix(a./b). 
+		r = rem(a,b) returns the remainder after division of a by b, where a is the dividend and b is the divisor.
+		This function is often called the remainder operation, which can be expressed as r = a - b.*fix(a./b).
 		The rem function follows the convention that rem(a,0) is NaN.
 		*/
 		double rem(double x, double y)
 		{
-			return std::fmod(x,y);
+			return std::fmod(x, y);
 		}
 		/*
-		gcd(x, y)：整数x和y的最大公因数
-		lcm(x, y)：整数x和y的最小公倍数
-		exp(x) ：自然指数
-		pow2(x)：2的指数
-		log(x)：以e为底的对数，即自然对数或
-		log2(x)：以2为底的对数
-		log10(x)：以10为底的对数
-	*/
+		G = gcd(A,B) returns the greatest common divisors of the elements of A and B.
+		The elements in G are always nonnegative, and gcd(0,0) returns 0. This syntax supports inputs of any numeric type.
+
+		*/
+		inline int gcd(int a, int b)
+		{
+			int r;
+			while (b > 0)
+			{
+				r = a%b;
+				a = b;
+				b = r;
+			}
+			return a;
+		}
+		/*
+		L = lcm(A,B) returns the least common multiples of the elements of A and B.
+		*/
+		inline int lcm(int a, int b)
+		{
+			return a*b / gcd(a, b);
+		}
+		/*
+		Y = exp(X) returns the exponential ex for each element in array X.
+		For complex elements z = x + iy, it returns the complex exponential
+		*/
+#define EULER_CONSTANT  2.71828182845904523536
+		inline double exp(double x)
+		{
+			return std::pow(EULER_CONSTANT,x);
+		}
+
+		inline double pow2(double x)
+		{
+			return std::pow(2, x);
+		}
+		/*
+		Y = log(X) returns the natural logarithm ln(x) of each element in array X.
+		*/
+		inline double log(double x)
+		{
+			return std::log(x);
+		}
+		inline double log2(double x)
+		{
+			return std::log2(x);
+		}
+		inline double log10(double x)
+		{
+			return std::log10(x);
+		}
+		/*
+		B = sqrt(X) returns the square root of each element of the array X.
+		For the elements of X that are negative or complex, sqrt(X) produces complex results.
+		*/
+		inline double sqrt(double x)
+		{
+			return std::sqrt(x);
+		}
+
+		/*
+		abs(z) returns the absolute value of z. 
+		If z is complex, abs(z) returns the complex modulus (magnitude) of z.
+
+		abs(A) returns the absolute value of each element of A. 
+		If A is complex, abs(A) returns the complex modulus (magnitude) of each element of A.
+		*/
+		double abs(double x)
+		{
+			return x >= 0.0 ? x: -x;
+		}
+		int abs(int x)
+		{
+			return x >= 0 ? x: -x;
+		}
+		complex abs(const complex &x)
+		{
+			return sqrt(x.real*x.real + x.imag*x.imag);
+		}
+
+
+		/*
+		X = real(Z) returns the real part of the elements of the complex array Z.
+		*/
+		inline double real(const complex &x)
+		{
+			return x.real;
+		}
+		/*
+		Y = imag(Z) returns the imaginary part of the elements of array Z.
+		*/
+		inline double imag(const complex &x)
+		{
+			return x.imag;
+		}
+		/*
+		angle(z)：复 数z的相角(Phase angle)
+
+		conj(z)：复数z的共轭复数
+		*/
+			
 	}
 }
 
