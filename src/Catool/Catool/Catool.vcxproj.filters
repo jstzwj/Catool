@@ -22,6 +22,9 @@
     <Filter Include="头文件\MainToolbox\Mathematics\ElementaryMath">
       <UniqueIdentifier>{cf0427f9-bc05-49c3-a3cd-ece411a94e90}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\Fundamentals">
+      <UniqueIdentifier>{8526f966-4ffc-4f1c-8d9d-02f5a598b0dd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -32,11 +35,11 @@
     <ClInclude Include="Types.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="MainToolbox.h">
-      <Filter>头文件\MainToolbox</Filter>
-    </ClInclude>
     <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\Arithmetic.h">
       <Filter>头文件\MainToolbox\Mathematics\ElementaryMath</Filter>
+    </ClInclude>
+    <ClInclude Include="Fundamentals\Array.h">
+      <Filter>头文件\Fundamentals</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

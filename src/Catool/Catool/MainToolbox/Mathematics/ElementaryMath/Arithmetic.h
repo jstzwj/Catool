@@ -4,13 +4,14 @@
 
 #include<cmath>
 #include"../../../Types.h"
-
+#include"../../../Fundamentals/Array.h"
 namespace catool
 {
 	namespace main_toolbox
 	{
 		namespace mathematics
 		{
+			using namespace fundamentals;
 			/*
 			C = A + B adds arrays A and B and returns the result in C.
 			C = plus(A,B) is an alternate way to execute A + B, but is rarely used.
@@ -21,21 +22,21 @@ namespace catool
 				return a + b;
 			}
 			template<class T>
-			inline vector<T> plus(const vector<T>& a, const vector<T>& b)
+			inline Array<T> plus(const Array<T>& a, const Array<T>& b)
 			{
-				vector<T> result;
 				if (a.size() != b.size())
 					throw std::runtime_error("Matrix dimensions must agree.");
+				Array<T> result(a.size());
 				for (int i = 0; i < a.size(); ++i)
 				{
-					result.push_back(a[i] + b[i]);
+					result[i]=a[i] + b[i];
 				}
 				return result;
 			}
 			template<class T>
-			inline vector<T> plus(const vector<T>& a, const T& b)
+			inline Array<T> plus(const Array<T>& a, const T& b)
 			{
-				vector<T> result;
+				Array<T> result;
 				for (const auto &each : a)
 				{
 					result.push_back(each + b);
@@ -44,9 +45,9 @@ namespace catool
 			}
 
 			template<class T>
-			inline vector<T> plus(const T& a, const vector<T>& b)
+			inline Array<T> plus(const T& a, const Array<T>& b)
 			{
-				vector<T> result;
+				Array<T> result;
 				for (const auto &each : b)
 				{
 					result.push_back(a + each);
@@ -64,7 +65,7 @@ namespace catool
 				return a;
 			}
 			template<class T>
-			inline vector<T> uplus(const vector<T>& a)
+			inline Array<T> uplus(const Array<T>& a)
 			{
 				return a;
 			}
@@ -79,9 +80,9 @@ namespace catool
 				return a - b;
 			}
 			template<class T>
-			inline vector<T> minus(const vector<T>& a, const vector<T>& b)
+			inline Array<T> minus(const Array<T>& a, const Array<T>& b)
 			{
-				vector<T> result;
+				Array<T> result;
 				if (a.size() != b.size())
 					throw std::runtime_error("Matrix dimensions must agree.");
 				for (unsigned int i = 0; i < a.size(); ++i)
@@ -91,9 +92,9 @@ namespace catool
 				return result;
 			}
 			template<class T>
-			inline vector<T> minus(const vector<T>& a, const T & b)
+			inline Array<T> minus(const Array<T>& a, const T & b)
 			{
-				vector<T> result;
+				Array<T> result;
 				for (const auto &each : a)
 				{
 					result.push_back(each - b);
@@ -101,9 +102,9 @@ namespace catool
 				return result;
 			}
 			template<class T>
-			inline vector<T> minus(const T & a, const vector<T>& b)
+			inline Array<T> minus(const T & a, const Array<T>& b)
 			{
-				vector<T> result;
+				Array<T> result;
 				for (const auto &each : b)
 				{
 					result.push_back(a - each);
@@ -120,9 +121,9 @@ namespace catool
 				return -a;
 			}
 			template<class T>
-			inline vector<T> uminus(const vector<T>& a)
+			inline Array<T> uminus(const Array<T>& a)
 			{
-				vector<T> result;
+				Array<T> result;
 				for (const auto &each : a)
 				{
 					result.push_back(-a);
@@ -135,9 +136,9 @@ namespace catool
 			It enables operator overloading for classes.
 			*/
 			template<class T>
-			inline vector<T> times(const vector<T>& a, const vector<T>& b)
+			inline Array<T> times(const Array<T>& a, const Array<T>& b)
 			{
-				vector<T> result;
+				Array<T> result;
 				if (a.size() != b.size())
 					throw std::runtime_error("Matrix dimensions must agree.");
 				for (unsigned int i = 0; i < a.size(); ++i)
@@ -150,9 +151,9 @@ namespace catool
 			x = A./B divides each element of A by the corresponding element of B.
 			*/
 			template<class T>
-			inline vector<T> rdivide(const vector<T>& a, const vector<T>& b)
+			inline Array<T> rdivide(const Array<T>& a, const Array<T>& b)
 			{
-				vector<T> result;
+				Array<T> result;
 				if (a.size() != b.size())
 					throw std::runtime_error("Matrix dimensions must agree.");
 				for (unsigned int i = 0; i < a.size(); ++i)
@@ -162,9 +163,9 @@ namespace catool
 				return result;
 			}
 			template<class T>
-			inline vector<T> rdivide(const vector<T>& a, const T & b)
+			inline Array<T> rdivide(const Array<T>& a, const T & b)
 			{
-				vector<T> result;
+				Array<T> result;
 				for (unsigned int i = 0; i < a.size(); ++i)
 				{
 					result.push_back(a[i] / b);
@@ -172,9 +173,9 @@ namespace catool
 				return result;
 			}
 			template<class T>
-			inline vector<T> rdivide(const T &  a, const vector<T>& b)
+			inline Array<T> rdivide(const T &  a, const Array<T>& b)
 			{
-				vector<T> result;
+				Array<T> result;
 				for (unsigned int i = 0; i < b.size(); ++i)
 				{
 					result.push_back(a / b[i]);
@@ -186,9 +187,9 @@ namespace catool
 			x = B.\A divides each element of A by the corresponding element of B.
 			*/
 			template<class T>
-			inline vector<T> ldivide(const vector<T>& a, const vector<T>& b)
+			inline Array<T> ldivide(const Array<T>& a, const Array<T>& b)
 			{
-				vector<T> result;
+				Array<T> result;
 				if (a.size() != b.size())
 					throw std::runtime_error("Matrix dimensions must agree.");
 				for (unsigned int i = 0; i < a.size(); ++i)
@@ -198,9 +199,9 @@ namespace catool
 				return result;
 			}
 			template<class T>
-			inline vector<T> ldivide(const vector<T>& a, const T & b)
+			inline Array<T> ldivide(const Array<T>& a, const T & b)
 			{
-				vector<T> result;
+				Array<T> result;
 				for (unsigned int i = 0; i < a.size(); ++i)
 				{
 					result.push_back(b / a[i]);
@@ -208,9 +209,9 @@ namespace catool
 				return result;
 			}
 			template<class T>
-			inline vector<T> ldivide(const T &  a, const vector<T>& b)
+			inline Array<T> ldivide(const T &  a, const Array<T>& b)
 			{
-				vector<T> result;
+				Array<T> result;
 				for (unsigned int i = 0; i < b.size(); ++i)
 				{
 					result.push_back(b[i] / a);
@@ -225,9 +226,9 @@ namespace catool
 			Use the nthroot function to obtain the real roots.
 			*/
 			template<class T>
-			inline vector<T> power(const vector<T>& a, const T & b)
+			inline Array<T> power(const Array<T>& a, const T & b)
 			{
-				vector<T> result;
+				Array<T> result;
 				for (unsigned int i = 0; i < a.size(); ++i)
 				{
 					result.push_back(std::pow(a[i], b));
@@ -236,8 +237,28 @@ namespace catool
 			}
 
 			/*
-
+			C = A*B is the matrix product of A and B.
 			*/
+			template<class T>
+			inline Array<T> mtimes(const Array<T>& a, const Array<T>& b)
+			{
+				Array<T> result;
+				if (a.col_size() != b.row_size())
+					throw std::runtime_error("nonconformant arguments.");
+				result.resize(a.rows()*b.cols());
+				for (int i = 0; i < a.rows();++i)
+				{
+					for (int j = 0; j < b.cols();++j)
+					{
+						int des = i*a.cols() + j;
+						for (int k = 0; k < a.cols();++k)
+						{
+							result[des] += a[i*a.cols() + k] * b[k*b.cols()+j];
+						}
+					}
+				}
+				return result;
+			}
 		}
 	}
 }

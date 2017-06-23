@@ -6,6 +6,7 @@
 #include<cmath>
 #include<cassert>
 
+
 namespace catool
 {
 	namespace main_toolbox
