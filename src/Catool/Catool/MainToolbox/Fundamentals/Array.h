@@ -25,6 +25,7 @@ namespace catool
 				Array() noexcept {}
 				Array(int col_) noexcept
 				{
+					if (col_ < 0)col_ = 0;
 					dim.push_back(col_);
 					data.resize(col_);
 				}
@@ -36,6 +37,7 @@ namespace catool
 				template<typename T1, typename... T2>
 				void ArrayConstructor(T1 p, T2... arg)
 				{
+					if (p < 0)p = 0;
 					dim.push_back(p);
 					ArrayConstructor(arg...);
 				}
@@ -76,16 +78,16 @@ namespace catool
 
 				int dim_size()const { return dim.size(); }
 				int get_dim_data(int n) const
-				{ 
+				{
 					if (n >= static_cast<int>(dim.size()))
 						return 0;
 					else
-						return dim[n]; 
+						return dim[n];
 				}
 				int get_dim_acc(int n)const
 				{
 					int acc = 1;
-					for (int i = 0; i < n;++i)
+					for (int i = n; i < dim.size(); ++i)
 					{
 						acc *= dim[i];
 					}
@@ -103,10 +105,9 @@ namespace catool
 					resize_from_dim();
 				}
 
-
 				void reshape(const Array<int> & sz)
 				{
-					if (sz.dim.size()!=1)
+					if (sz.dim.size() != 1)
 					{
 						throw std::runtime_error("the size array shall be one dimension array.");
 					}
@@ -123,9 +124,8 @@ namespace catool
 
 				void fill(const T& val)
 				{
-					std::fill(data.begin(),data.end(),val);
+					std::fill(data.begin(), data.end(), val);
 				}
-
 			};
 			//functions
 			/*
@@ -144,7 +144,7 @@ namespace catool
 			inline Array<int> zeros(T1 p, T2... arg)
 			{
 				Array<int> result;
-				result.reshape(p,arg...);
+				result.reshape(p, arg...);
 				return result;
 			}
 
@@ -169,7 +169,7 @@ namespace catool
 			}
 			inline Array<int> ones(int n)
 			{
-				Array<int> result(n,n);
+				Array<int> result(n, n);
 				result.fill(1);
 				return result;
 			}
@@ -201,7 +201,7 @@ namespace catool
 			*/
 			inline void rand_fill(Array<double>& arry)
 			{
-				std::srand(std::time(0));
+				std::srand(static_cast<unsigned int>(std::time(0)));
 				for (auto& each : arry)
 				{
 					each = (double)std::rand() / RAND_MAX;
@@ -213,7 +213,7 @@ namespace catool
 			}
 			inline Array<double> rand(int n)
 			{
-				Array<double> result(n,n);
+				Array<double> result(n, n);
 				rand_fill(result);
 				return result;
 			}
@@ -240,7 +240,7 @@ namespace catool
 			/*
 			Logical 1 (true)
 			*/
-			
+
 			inline bool logical_true()
 			{
 				return true;
@@ -275,25 +275,25 @@ namespace catool
 			false
 			Logical 0 (false)
 			*/
-			inline bool logical_true()
+			inline bool logical_false()
 			{
 				return false;
 			}
-			inline Array<bool> logical_true(int n)
+			inline Array<bool> logical_false(int n)
 			{
 				Array<bool> result(n, n);
 				result.fill(false);
 				return result;
 			}
 			template<typename T1, typename... T2>
-			inline Array<bool> logical_true(T1 p, T2... arg)
+			inline Array<bool> logical_false(T1 p, T2... arg)
 			{
 				Array<bool> result;
 				result.reshape(p, arg...);
 				result.fill(false);
 				return result;
 			}
-			inline Array<bool> logical_true(const Array<int> & sz)
+			inline Array<bool> logical_false(const Array<int> & sz)
 			{
 				if (sz.dim_size() != 1)
 				{
@@ -306,10 +306,56 @@ namespace catool
 				return result;
 			}
 			/*
-			
+			eye
+			Identity matrix
 			*/
-
-
+			inline int eye()
+			{
+				return 1;
+			}
+			template<class T>
+			inline T eye()
+			{
+				return std::declval<T>();
+			}
+			template<class T = int>
+			inline Array<T> eye(int n)
+			{
+				Array<T> result(n, n);
+				for (int i = 0; i < n; ++i)
+				{
+					result[i*n + i] = 1;
+				}
+				return result;
+			}
+			template<typename T = int>
+			inline Array<T> eye(int m, int n)
+			{
+				Array<T> result;
+				result.reshape(m, n);
+				int min = m > n ? n : m;
+				for (int i = 0; i < min; ++i)
+				{
+					result[i*n + i] = 1;
+				}
+				return result;
+			}
+			template<typename T = int>
+			inline Array<T> eye(const Array<int> & sz)
+			{
+				if (!(sz.dim_size() == 1 && sz.size() <= 2 && sz.size()>0))
+				{
+					throw std::runtime_error("Invalid call to eye.");
+				}
+				if (sz.size() == 1)
+				{
+					return eye(sz[0]);
+				}
+				else
+				{
+					return eye(sz[0], sz[1]);
+				}
+			}
 		}
 	}
 }

@@ -41,9 +41,9 @@ namespace catool
 	inline string compose_index(std::vector<int>& loop)
 	{
 		string ans = "(";
-		for (unsigned int i = 0; i < loop.size();++i)
+		for (unsigned int i = 0; i < loop.size(); ++i)
 		{
-			if (i==0)
+			if (i == 0)
 			{
 				ans += ":";
 			}
@@ -53,7 +53,7 @@ namespace catool
 			}
 			else
 			{
-				ans += ","+std::to_string(loop[i]);
+				ans += "," + std::to_string(loop[i]);
 			}
 		}
 		ans += ")";
@@ -68,7 +68,7 @@ namespace catool
 			std::cout << compose_index(loop) << "\t=" << std::endl;
 
 			int prefix_index = 0;
-			for (int i = 2; i <loop.size();++i)
+			for (int i = 2; i < loop.size(); ++i)
 			{
 				prefix_index += v.get_dim_acc(i)*loop[i];
 			}
@@ -77,7 +77,7 @@ namespace catool
 			{
 				for (int j = 0; j < v.get_dim_data(1); ++j)
 				{
-					std::cout << v[prefix_index+i*v.get_dim_acc(1) + j] << " ";
+					std::cout << v[prefix_index + i*v.get_dim_acc(1) + j] << " ";
 				}
 				std::cout << std::endl;
 			}
@@ -92,11 +92,10 @@ namespace catool
 		}
 	}
 
-
 	template<class T>
 	inline void var_dump(const Array<T> & v)
 	{
-		if (v.dim_size()-1 < 2)
+		if (v.dim_size() - 1 < 2)
 		{
 			std::cout << typeid(v).name() << "\t=" << std::endl;
 			if (v.dim_size() == 1)
@@ -124,13 +123,12 @@ namespace catool
 			std::vector<int> loop;
 			loop.resize(v.dim_size());
 			int &i = loop[v.dim_size() - 1];
-			for (i = 0; i < v.get_dim_data(v.dim_size()-1);++i)
+			for (i = 0; i < v.get_dim_data(v.dim_size() - 1); ++i)
 			{
-				var_dump_impl(v,loop, v.dim_size() - 2);
+				var_dump_impl(v, loop, v.dim_size() - 2);
 			}
 		}
 	}
-	
 
 	inline void var_dump(const complex & com)
 	{

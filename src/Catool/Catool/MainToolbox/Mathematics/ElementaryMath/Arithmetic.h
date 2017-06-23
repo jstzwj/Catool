@@ -29,7 +29,7 @@ namespace catool
 				Array<T> result(a.size());
 				for (int i = 0; i < a.size(); ++i)
 				{
-					result[i]=a[i] + b[i];
+					result[i] = a[i] + b[i];
 				}
 				return result;
 			}
@@ -246,14 +246,14 @@ namespace catool
 				if (a.col_size() != b.row_size())
 					throw std::runtime_error("nonconformant arguments.");
 				result.resize(a.rows()*b.cols());
-				for (int i = 0; i < a.rows();++i)
+				for (int i = 0; i < a.rows(); ++i)
 				{
-					for (int j = 0; j < b.cols();++j)
+					for (int j = 0; j < b.cols(); ++j)
 					{
 						int des = i*a.cols() + j;
-						for (int k = 0; k < a.cols();++k)
+						for (int k = 0; k < a.cols(); ++k)
 						{
-							result[des] += a[i*a.cols() + k] * b[k*b.cols()+j];
+							result[des] += a[i*a.cols() + k] * b[k*b.cols() + j];
 						}
 					}
 				}
