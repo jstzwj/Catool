@@ -113,7 +113,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Fundamentals\Array.h" />
+    <ClInclude Include="MainToolbox\Fundamentals\Array.h" />
     <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\Arithmetic.h" />
     <ClInclude Include="Types.h" />
   </ItemGroup>

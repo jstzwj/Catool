@@ -4,7 +4,7 @@
 
 #include<cmath>
 #include"../../../Types.h"
-#include"../../../Fundamentals/Array.h"
+#include"../../Fundamentals/Array.h"
 namespace catool
 {
 	namespace main_toolbox

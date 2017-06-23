@@ -22,7 +22,7 @@
     <Filter Include="头文件\MainToolbox\Mathematics\ElementaryMath">
       <UniqueIdentifier>{cf0427f9-bc05-49c3-a3cd-ece411a94e90}</UniqueIdentifier>
     </Filter>
-    <Filter Include="头文件\Fundamentals">
+    <Filter Include="头文件\MainToolbox\Fundamentals">
       <UniqueIdentifier>{8526f966-4ffc-4f1c-8d9d-02f5a598b0dd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -38,8 +38,8 @@
     <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\Arithmetic.h">
       <Filter>头文件\MainToolbox\Mathematics\ElementaryMath</Filter>
     </ClInclude>
-    <ClInclude Include="Fundamentals\Array.h">
-      <Filter>头文件\Fundamentals</Filter>
+    <ClInclude Include="MainToolbox\Fundamentals\Array.h">
+      <Filter>头文件\MainToolbox\Fundamentals</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -4,9 +4,10 @@
 
 #include<cstdint>
 #include<string>
+#include<vector>
 #include<complex>
 #include<initializer_list>
-#include"Fundamentals\Array.h"
+#include"MainToolbox\Fundamentals\Array.h"
 
 namespace catool
 {
@@ -24,7 +25,8 @@ namespace catool
 
 	using logical = bool;
 	using string = std::string;
-
+	template<class T>
+	using Array = main_toolbox::fundamentals::Array<T>;
 	using complex = std::complex<double>;
 
 	/*
@@ -36,17 +38,98 @@ namespace catool
 		std::cout << typeid(v).name() << std::endl;
 		std::cout << v << std::endl;
 	}
-
-	template<class T>
-	inline void var_dump(const fundamentals::Array<T> & v)
+	inline string compose_index(std::vector<int>& loop)
 	{
-		std::cout << typeid(v).name() << std::endl;
-		std::cout << "[";
-		for (const auto & each : v)
+		string ans = "(";
+		for (unsigned int i = 0; i < loop.size();++i)
 		{
-			std::cout << each << " ";
+			if (i==0)
+			{
+				ans += ":";
+			}
+			else if (i == 1)
+			{
+				ans += ",:";
+			}
+			else
+			{
+				ans += ","+std::to_string(loop[i]);
+			}
 		}
-		std::cout << "]" << std::endl;
+		ans += ")";
+		return ans;
+	}
+	template<class T>
+	inline void var_dump(const Array<T> & v)
+	{
+		if (v.dim_size()-1 < 2)
+		{
+			std::cout << typeid(v).name() << "\t=" << std::endl;
+			if (v.dim_size() == 1)
+			{
+				for (int j = 0; j < v.get_dim_data(0); ++j)
+				{
+					std::cout << v[j] << " ";
+				}
+				std::cout << std::endl;
+			}
+			else
+			{
+				for (int i = 0; i < v.get_dim_data(0); ++i)
+				{
+					for (int j = 0; j < v.get_dim_data(1); ++j)
+					{
+						std::cout << v[i*v.get_dim_acc(1) + j] << " ";
+					}
+					std::cout << std::endl;
+				}
+			}
+		}
+		else
+		{
+			std::vector<int> loop;
+			loop.resize(v.dim_size());
+			int &i = loop[v.dim_size() - 1];
+			for (i = 0; i < v.get_dim_data(v.dim_size()-1);++i)
+			{
+				var_dump_impl(v,loop, v.dim_size() - 2);
+			}
+		}
+	}
+	template<class T>
+	inline void var_dump_impl(const Array<T> & v,std::vector<int>& loop, int cur_loop)
+	{
+		if (cur_loop < 2)
+		{
+			std::cout << compose_index(loop) << "\t=" << std::endl;
+			if (v.dim_size() == 1)
+			{
+				for (int j = 0; j < v.get_dim_data(0); ++j)
+				{
+					std::cout << v[j] << " ";
+				}
+				std::cout << std::endl;
+			}
+			else
+			{
+				for (int i = 0; i < v.get_dim_data(0); ++i)
+				{
+					for (int j = 0; j < v.get_dim_data(1); ++j)
+					{
+						std::cout << v[i*v.get_dim_acc(1) + j] << " ";
+					}
+					std::cout << std::endl;
+				}
+			}
+		}
+		else
+		{
+			int &i = loop[cur_loop];
+			for (i = 0; i < v.get_dim_data(cur_loop); ++i)
+			{
+				var_dump_impl(v, loop,cur_loop-1);
+			}
+		}
 	}
 
 	inline void var_dump(const complex & com)
