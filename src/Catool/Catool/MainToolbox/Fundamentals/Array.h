@@ -3,6 +3,8 @@
 #define CATOOL_FUNDAMENTALS_ARRAY
 
 #include<vector>
+#include<cstdlib>
+#include<ctime>
 
 namespace catool
 {
@@ -119,8 +121,16 @@ namespace catool
 					data.resize(acc);
 				}
 
+				void fill(const T& val)
+				{
+					std::fill(data.begin(),data.end(),val);
+				}
+
 			};
 			//functions
+			/*
+			zeros: Create array of all zeros
+			*/
 			inline int zeros()
 			{
 				return 0;
@@ -149,6 +159,87 @@ namespace catool
 				result.resize_from_dim();
 				return result;
 			}
+			/*
+			ones
+			Create array of all ones
+			*/
+			inline int ones()
+			{
+				return 1;
+			}
+			inline Array<int> ones(int n)
+			{
+				Array<int> result(n,n);
+				result.fill(1);
+				return result;
+			}
+
+			template<typename T1, typename... T2>
+			inline Array<int> ones(T1 p, T2... arg)
+			{
+				Array<int> result;
+				result.reshape(p, arg...);
+				result.fill(1);
+				return result;
+			}
+
+			inline Array<int> ones(const Array<int> & sz)
+			{
+				if (sz.dim_size() != 1)
+				{
+					throw std::runtime_error("the size array shall be one dimension array.");
+				}
+				Array<int> result;
+				result.get_dim() = sz.get_data();
+				result.resize_from_dim();
+				result.fill(1);
+				return result;
+			}
+			/*
+			rand
+			Uniformly distributed random numbers
+			*/
+			inline void rand_fill(Array<double>& arry)
+			{
+				std::srand(std::time(0));
+				for (auto& each : arry)
+				{
+					each = (double)std::rand() / RAND_MAX;
+				}
+			}
+			inline double rand()
+			{
+				return ((double)std::rand() / RAND_MAX);
+			}
+			inline Array<double> rand(int n)
+			{
+				Array<double> result(n,n);
+				rand_fill(result);
+				return result;
+			}
+			template<typename T1, typename... T2>
+			inline Array<double> rand(T1 p, T2... arg)
+			{
+				Array<double> result;
+				result.reshape(p, arg...);
+				rand_fill(result);
+				return result;
+			}
+			inline Array<double> rand(const Array<int> & sz)
+			{
+				if (sz.dim_size() != 1)
+				{
+					throw std::runtime_error("the size array shall be one dimension array.");
+				}
+				Array<double> result;
+				result.get_dim() = sz.get_data();
+				result.resize_from_dim();
+				rand_fill(result);
+				return result;
+			}
+
+
+
 		}
 	}
 }
