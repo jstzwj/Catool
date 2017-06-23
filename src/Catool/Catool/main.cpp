@@ -11,6 +11,7 @@ int main()
 	Array<int> def{ 4,5,-4,0,6 };
 	//var_dump(main_toolbox::mathematics::plus(def, abc));
 	//var_dump(main_toolbox::fundamentals::rand(5,5,6,7));
+	var_dump(main_toolbox::fundamentals::logical_true(5));
 	system("pause");
 	return 0;
 }

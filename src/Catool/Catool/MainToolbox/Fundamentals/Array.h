@@ -237,7 +237,77 @@ namespace catool
 				rand_fill(result);
 				return result;
 			}
-
+			/*
+			Logical 1 (true)
+			*/
+			
+			inline bool logical_true()
+			{
+				return true;
+			}
+			inline Array<bool> logical_true(int n)
+			{
+				Array<bool> result(n, n);
+				result.fill(true);
+				return result;
+			}
+			template<typename T1, typename... T2>
+			inline Array<bool> logical_true(T1 p, T2... arg)
+			{
+				Array<bool> result;
+				result.reshape(p, arg...);
+				result.fill(true);
+				return result;
+			}
+			inline Array<bool> logical_true(const Array<int> & sz)
+			{
+				if (sz.dim_size() != 1)
+				{
+					throw std::runtime_error("the size array shall be one dimension array.");
+				}
+				Array<bool> result;
+				result.get_dim() = sz.get_data();
+				result.resize_from_dim();
+				result.fill(true);
+				return result;
+			}
+			/*
+			false
+			Logical 0 (false)
+			*/
+			inline bool logical_true()
+			{
+				return false;
+			}
+			inline Array<bool> logical_true(int n)
+			{
+				Array<bool> result(n, n);
+				result.fill(false);
+				return result;
+			}
+			template<typename T1, typename... T2>
+			inline Array<bool> logical_true(T1 p, T2... arg)
+			{
+				Array<bool> result;
+				result.reshape(p, arg...);
+				result.fill(false);
+				return result;
+			}
+			inline Array<bool> logical_true(const Array<int> & sz)
+			{
+				if (sz.dim_size() != 1)
+				{
+					throw std::runtime_error("the size array shall be one dimension array.");
+				}
+				Array<bool> result;
+				result.get_dim() = sz.get_data();
+				result.resize_from_dim();
+				result.fill(false);
+				return result;
+			}
+			/*
+			
+			*/
 
 
 		}
