@@ -87,20 +87,26 @@ namespace catool
 				int get_dim_acc(int n)const
 				{
 					int acc = 1;
-					for (int i = n; i < dim.size(); ++i)
+					for (unsigned int i = n + 1; i < dim.size(); ++i)
 					{
 						acc *= dim[i];
 					}
 					return acc;
 				}
-
 				template<typename T1, typename... T2>
 				void reshape(T1 p, T2... arg)
 				{
+					dim.clear();
 					dim.push_back(p);
-					reshape(arg...);
+					reshape_impl(arg...);
 				}
-				void reshape()
+				template<typename T1, typename... T2>
+				void reshape_impl(T1 p, T2... arg)
+				{
+					dim.push_back(p);
+					reshape_impl(arg...);
+				}
+				void reshape_impl()
 				{
 					resize_from_dim();
 				}
@@ -125,6 +131,14 @@ namespace catool
 				void fill(const T& val)
 				{
 					std::fill(data.begin(), data.end(), val);
+				}
+				bool isMatrix()const
+				{
+					return dim.size() != 1;
+				}
+				bool isVector()const
+				{
+					return dim.size() == 1;
 				}
 			};
 			//functions
@@ -354,6 +368,110 @@ namespace catool
 				else
 				{
 					return eye(sz[0], sz[1]);
+				}
+			}
+			/*
+			diag
+			Create diagonal matrix or get diagonal elements of matrix
+			*/
+			template<class T = int>
+			inline Array<T> diag(const Array<T> & v)
+			{
+				if (v.isVector())
+				{
+					int sz = v.size();
+					Array<T> result(sz, sz);
+					for (int i = 0; i < sz; ++i)
+					{
+						result[i*sz + i] = v[i];
+					}
+					return result;
+				}
+				else
+				{
+					if (v.dim_size() != 2)
+					{
+						throw std::runtime_error("Matrix must be 2-dimensional");
+					}
+
+					int m = v.get_dim_data(0);
+					int n = v.get_dim_data(1);
+					int min = m > n ? n : m;
+					Array<T> result(min);
+					for (int i = 0; i < min; ++i)
+					{
+						result[i] = v[i*n + i];
+					}
+					return result;
+				}
+			}
+
+			template<class T = int>
+			inline Array<T> diag(const Array<T> & v, int k)
+			{
+				int absk = k > 0 ? k : -k;
+				if (v.isVector())
+				{
+					int matrix_sz = v.size() + absk;
+					int diagonal_sz = v.size();
+					Array<T> result(matrix_sz, matrix_sz);
+					// places the elements of vector v on the kth diagonal.
+					//k=0 represents the main diagonal, k>0 is above the main diagonal, and k<0 is below the main diagonal.
+					if (k > 0)
+					{
+						for (int i = 0; i < diagonal_sz; ++i)
+						{
+							result[i*matrix_sz + i + absk] = v[i];
+						}
+					}
+					else
+					{
+						for (int i = 0; i < diagonal_sz; ++i)
+						{
+							result[(i + absk)*matrix_sz + i] = v[i];
+						}
+					}
+					return result;
+				}
+				else
+				{
+					if (v.dim_size() != 2)
+					{
+						throw std::runtime_error("Matrix must be 2-dimensional");
+					}
+
+					int m = v.get_dim_data(0);
+					int n = v.get_dim_data(1);
+					int min = m > n ? n : m;
+					int max = m < n ? n : m;
+					Array<T> result(min);
+					//k out of matrix range
+					if (absk > max)
+					{
+						result.reshape(0);
+					}
+					else
+					{
+						if (k > 0)
+						{
+							int i;
+							for (i = 0; i < m&& i + absk < n; ++i)
+							{
+								result[i] = v[i*n + i + absk];
+							}
+							result.reshape(i);
+						}
+						else
+						{
+							int i;
+							for (i = 0; i + absk < m&& i < n; ++i)
+							{
+								result[i] = v[(i + absk)*n + i];
+							}
+							result.reshape(i);
+						}
+					}
+					return result;
 				}
 			}
 		}
