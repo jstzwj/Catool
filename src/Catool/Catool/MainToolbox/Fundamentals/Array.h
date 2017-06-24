@@ -23,11 +23,12 @@ namespace catool
 				std::vector<T> data;
 			public:
 				Array() noexcept {}
-				Array(int col_) noexcept
+				Array(int row_) noexcept
 				{
-					if (col_ < 0)col_ = 0;
-					dim.push_back(col_);
-					data.resize(col_);
+					if (row_ < 0)row_ = 0;
+					dim.push_back(row_);
+					dim.push_back(1);
+					data.resize(row_);
 				}
 				template<class ...K>
 				Array(K ...arg)
@@ -50,7 +51,7 @@ namespace catool
 					:data(list)
 				{
 					dim.push_back(1);
-					dim.push_back(data.size());
+					dim.push_back(list.size());
 				}
 
 				//using iterator = std::vector<T>::iterator;
@@ -71,7 +72,7 @@ namespace catool
 				typename std::vector<T>::const_iterator cbegin() const { return data.cbegin(); }
 				typename std::vector<T>::const_iterator cend() const { return data.cend(); }
 				int size() const { return data.size(); }
-				void resize(int size) { data.resize(size); }
+				/*void resize(int size) { data.resize(size); }*/
 				std::vector<int> & get_dim() { return dim; }
 				std::vector<int> get_dim() const { return dim; }
 				std::vector<T> & get_data() { return data; }
@@ -88,33 +89,33 @@ namespace catool
 				int get_dim_acc(int n)const
 				{
 					int acc = 1;
-					for (unsigned int i = n + 1; i < dim.size(); ++i)
+					for (int i = 0; i < n; ++i)
 					{
 						acc *= dim[i];
 					}
 					return acc;
 				}
 				template<typename T1, typename... T2>
-				void reshape(T1 p, T2... arg)
+				void resize(T1 p, T2... arg)
 				{
 					dim.clear();
 					dim.push_back(p);
-					reshape_impl(arg...);
+					resize_impl(arg...);
 				}
 				template<typename T1, typename... T2>
-				void reshape_impl(T1 p, T2... arg)
+				void resize_impl(T1 p, T2... arg)
 				{
 					dim.push_back(p);
-					reshape_impl(arg...);
+					resize_impl(arg...);
 				}
-				void reshape_impl()
+				void resize_impl()
 				{
 					resize_from_dim();
 				}
 
-				void reshape(const Array<int> & sz)
+				void resize(const Array<int> & sz)
 				{
-					if (sz.dim.size() != 1)
+					if (sz.dim.size() >2)
 					{
 						throw std::runtime_error("the size array shall be one dimension array.");
 					}
@@ -159,7 +160,7 @@ namespace catool
 			inline Array<int> zeros(T1 p, T2... arg)
 			{
 				Array<int> result;
-				result.reshape(p, arg...);
+				result.resize(p, arg...);
 				return result;
 			}
 
@@ -193,7 +194,7 @@ namespace catool
 			inline Array<int> ones(T1 p, T2... arg)
 			{
 				Array<int> result;
-				result.reshape(p, arg...);
+				result.resize(p, arg...);
 				result.fill(1);
 				return result;
 			}
@@ -236,7 +237,7 @@ namespace catool
 			inline Array<double> rand(T1 p, T2... arg)
 			{
 				Array<double> result;
-				result.reshape(p, arg...);
+				result.resize(p, arg...);
 				rand_fill(result);
 				return result;
 			}
@@ -270,7 +271,7 @@ namespace catool
 			inline Array<bool> logical_true(T1 p, T2... arg)
 			{
 				Array<bool> result;
-				result.reshape(p, arg...);
+				result.resize(p, arg...);
 				result.fill(true);
 				return result;
 			}
@@ -304,7 +305,7 @@ namespace catool
 			inline Array<bool> logical_false(T1 p, T2... arg)
 			{
 				Array<bool> result;
-				result.reshape(p, arg...);
+				result.resize(p, arg...);
 				result.fill(false);
 				return result;
 			}
@@ -347,7 +348,7 @@ namespace catool
 			inline Array<T> eye(int m, int n)
 			{
 				Array<T> result;
-				result.reshape(m, n);
+				result.resize(m, n);
 				int min = m > n ? n : m;
 				for (int i = 0; i < min; ++i)
 				{
@@ -358,7 +359,7 @@ namespace catool
 			template<typename T = int>
 			inline Array<T> eye(const Array<int> & sz)
 			{
-				if (!(sz.dim_size() == 1 && sz.size() <= 2 && sz.size()>0))
+				if (!(sz.size() <= 2 && sz.size()>0&&sz.dim_size()<=2))
 				{
 					throw std::runtime_error("Invalid call to eye.");
 				}
@@ -449,7 +450,7 @@ namespace catool
 					//k out of matrix range
 					if (absk > max)
 					{
-						result.reshape(0);
+						result.resize(0);
 					}
 					else
 					{
@@ -460,7 +461,7 @@ namespace catool
 							{
 								result[i] = v[i*n + i + absk];
 							}
-							result.reshape(i);
+							result.resize(i);
 						}
 						else
 						{
@@ -469,7 +470,7 @@ namespace catool
 							{
 								result[i] = v[(i + absk)*n + i];
 							}
-							result.reshape(i);
+							result.resize(i);
 						}
 					}
 					return result;
@@ -539,6 +540,14 @@ namespace catool
 				return result;
 
 			}
+			/*
+			cat
+			Concatenate arrays along specified dimension
+			*/
+
+
+
+
 		}
 	}
 }
