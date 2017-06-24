@@ -11,19 +11,19 @@ namespace catool
 	{
 		namespace mathematics
 		{
-			using namespace fundamentals;
+			//using namespace ::ca;
 			/*
 			C = A + B adds arrays A and B and returns the result in C.
 			C = plus(A,B) is an alternate way to execute A + B, but is rarely used.
 			It enables operator overloading for classes.
 			*/
-			template<class T>
-			inline T plus(const T& a, const T& b)
+			template<class T,class U>
+			inline auto plus(const T& a, const U& b)-> decltype(a + b)
 			{
 				return a + b;
 			}
-			template<class T>
-			inline Array<T> plus(const Array<T>& a, const Array<T>& b)
+			template<class T, class U>
+			inline Array<T> plus(const Array<T>& a, const Array<U>& b)
 			{
 				if (a.get_dim()==b.get_dim())
 				{
@@ -39,8 +39,8 @@ namespace catool
 					throw std::runtime_error("Matrix dimensions must agree.");
 				}
 			}
-			template<class T>
-			inline Array<T> plus(const Array<T>& a, const T& b)
+			template<class T, class U>
+			inline Array<T> plus(const Array<T>& a, const U& b)
 			{
 				Array<T> result(a);
 				for (auto &each : result)
@@ -50,8 +50,8 @@ namespace catool
 				return result;
 			}
 
-			template<class T>
-			inline Array<T> plus(const T& a, const Array<T>& b)
+			template<class T, class U>
+			inline Array<T> plus(const U& a, const Array<T>& b)
 			{
 				Array<T> result(b);
 				for (auto &each : result)
@@ -80,13 +80,13 @@ namespace catool
 			C = minus(A,B) is an alternate way to execute A - B, but is rarely used.
 			It enables operator overloading for classes.
 			*/
-			template<class T>
-			inline T minus(const T& a, const T& b)
+			template<class T,class U>
+			inline auto minus(const T& a, const U& b)->decltype(a-b)
 			{
 				return a - b;
 			}
-			template<class T>
-			inline Array<T> minus(const Array<T>& a, const Array<T>& b)
+			template<class T,class U>
+			inline Array<T> minus(const Array<T>& a, const Array<U>& b)
 			{
 				if (a.get_dim() == b.get_dim())
 				{
@@ -102,8 +102,8 @@ namespace catool
 					throw std::runtime_error("Matrix dimensions must agree.");
 				}
 			}
-			template<class T>
-			inline Array<T> minus(const Array<T>& a, const T & b)
+			template<class T, class U>
+			inline Array<T> minus(const Array<T>& a, const U & b)
 			{
 				Array<T> result(a);
 				for (auto &each : result)
@@ -112,13 +112,13 @@ namespace catool
 				}
 				return result;
 			}
-			template<class T>
-			inline Array<T> minus(const T & a, const Array<T>& b)
+			template<class T, class U>
+			inline Array<T> minus(const U & a, const Array<T>& b)
 			{
 				Array<T> result(b);
 				for (auto &each : result)
 				{
-					each += a;
+					each -= a;
 				}
 				return result;
 			}
@@ -275,6 +275,116 @@ namespace catool
 				}
 				return result;
 			}
+			/*
+			Y = fix(X) rounds each element of X to the nearest integer toward zero. 
+			For positive X, the behavior of fix is the same as floor. 
+			For negative X, the behavior of fix is the same as ceil.
+			*/
+			template<class T>
+			inline decltype(auto) fix(T x)
+			{
+				if (x > 0.0)
+					return std::floor(x);
+				else
+					return std::ceil(x);
+			}
+			template<class T>
+			inline Array<T> fix(const Array<T> & t)
+			{
+				Array<T> result(t);
+				for (auto & each:result)
+					each = fix(each);
+				return result;
+			}
+			/*
+			floor
+			Round toward negative infinity
+			*/
+			template<class T>
+			inline decltype(auto) floor(T x)
+			{
+				return std::floor(x);
+			}
+			template<class T>
+			inline Array<T> floor(const Array<T> & t)
+			{
+				Array<T> result(t);
+				for (auto & each : result)
+					each = std::floor(each);
+				return result;
+			}
+			/*
+			ceil
+			Round toward positive infinity
+			*/
+			inline double ceil(double x)
+			{
+				return std::ceil(x);
+			}
+			/*
+			
+			*/
+			inline double round(double x)
+			{
+				return std::round(x);
+			}
+			/*
+			rat:
+			R = rat(X) returns the rational fraction approximation of X to within the default tolerance, 1e-6*norm(X(:),1). The approximation is a character array containing the truncated continued fractional expansion.
+			R = rat(X,tol) approximates X to within the tolerance, tol.
+			[N,D] = rat(___) returns two arrays, N and D, such that N./D approximates X, using any of the above syntaxes.
+			3 + 1/(7 + 1/(16 + 1/(-294)))
+			*/
+
+			inline Array<int> rat(double x, double tol)
+			{
+				int n, d;
+				double float_part = x;
+				int stack[32], top = 0;
+
+				while (true)
+				{
+					stack[top] = (int)round(float_part);
+					++top;
+					assert((top < 32) && "rat stack full.");
+
+					n = 1;
+					d = 0;
+					for (int i = top - 1; i >= 0; --i)
+					{
+						int tmp = n;
+						n = n*stack[i] + d;
+						d = tmp;
+					}
+					double tmp = x - (double)n / d;
+					if (tmp<tol&& tmp>-tol)
+						break;
+					float_part = 1.0 / (float_part - stack[top - 1]);
+				}
+				if (n < 0 && d < 0)
+					return{ -n,-d };
+				else
+					return{ n,d };
+			}
+
+			inline Array<int> rat(double x)
+			{
+				return rat(x, 1e-6);
+			}
+			/*
+			S = rats(X) returns a character vector containing the rational approximations to the elements of X using the default length of 13.
+			rats returns asterisks for elements that cannot be printed in the allotted space, but which are not negligible compared to the other elements in X.
+			S = rats(X,strlen) returns a character vector of length strlen. The rational approximation uses a tolerance that is inversely proportional to the length.
+			*/
+			inline string rats(double x)
+			{
+				Array<int> result = rat(x);
+				return std::to_string(result[0]) + "/" + std::to_string(result[1]);
+			}
+
+
+
+
 		}
 	}
 }
