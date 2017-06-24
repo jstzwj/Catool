@@ -7,6 +7,7 @@
 #include<vector>
 #include<complex>
 #include<initializer_list>
+#include<typeinfo>
 #include"MainToolbox\Fundamentals\Array.h"
 
 namespace catool

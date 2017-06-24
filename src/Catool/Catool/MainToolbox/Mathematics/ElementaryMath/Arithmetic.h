@@ -281,7 +281,7 @@ namespace catool
 			For negative X, the behavior of fix is the same as ceil.
 			*/
 			template<class T>
-			inline decltype(auto) fix(T x)
+			inline T fix(T x)
 			{
 				if (x > 0.0)
 					return std::floor(x);
@@ -301,7 +301,7 @@ namespace catool
 			Round toward negative infinity
 			*/
 			template<class T>
-			inline decltype(auto) floor(T x)
+			inline T floor(T x)
 			{
 				return std::floor(x);
 			}
