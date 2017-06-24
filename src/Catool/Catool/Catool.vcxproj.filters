@@ -44,5 +44,8 @@
     <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\Trigonometry.h">
       <Filter>头文件\MainToolbox\Mathematics\ElementaryMath</Filter>
     </ClInclude>
+    <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\Constants.h">
+      <Filter>头文件\MainToolbox\Mathematics\ElementaryMath</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
