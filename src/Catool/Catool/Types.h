@@ -63,7 +63,7 @@ namespace catool
 	template<class T>
 	inline void var_dump_impl(const Array<T> & v, std::vector<int>& loop, int cur_loop)
 	{
-		if (cur_loop <2)
+		if (cur_loop < 2)
 		{
 			std::cout << compose_index(loop) << "\t=" << std::endl;
 
@@ -119,7 +119,7 @@ namespace catool
 					}
 				}
 				//change [](0) to [](0x1)
-				if (v.dim_size()==1)
+				if (v.dim_size() == 1)
 				{
 					std::cout << "x1";
 				}
@@ -148,7 +148,7 @@ namespace catool
 					{
 						std::cout << v[i*v.get_dim_acc(1) + j] << " ";
 						++counter;
-						if (counter%v.get_dim_data(1)==0)
+						if (counter%v.get_dim_data(1) == 0)
 						{
 							std::cout << std::endl;
 						}
@@ -161,7 +161,7 @@ namespace catool
 			std::vector<int> loop;
 			loop.resize(v.dim_size());
 			int &i = loop[v.dim_size() - 1];
-			for (i = 0; i < v.get_dim_data(v.dim_size()-1); ++i)
+			for (i = 0; i < v.get_dim_data(v.dim_size() - 1); ++i)
 			{
 				var_dump_impl(v, loop, v.dim_size() - 2);
 			}
@@ -176,6 +176,10 @@ namespace catool
 		std::cout << com.imag();
 		std::cout << "]" << std::endl;
 	}
+	
+
+
+
 }
 
 #endif // !CATOOL_TYPES_H

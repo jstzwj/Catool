@@ -17,29 +17,35 @@ namespace catool
 			C = plus(A,B) is an alternate way to execute A + B, but is rarely used.
 			It enables operator overloading for classes.
 			*/
-			inline double plus(double a, double b)
+			template<class T>
+			inline T plus(const T& a, const T& b)
 			{
 				return a + b;
 			}
 			template<class T>
 			inline Array<T> plus(const Array<T>& a, const Array<T>& b)
 			{
-				if (a.size() != b.size())
-					throw std::runtime_error("Matrix dimensions must agree.");
-				Array<T> result(a.size());
-				for (int i = 0; i < a.size(); ++i)
+				if (a.get_dim()==b.get_dim())
 				{
-					result[i] = a[i] + b[i];
+					Array<T> result(a);
+					for (int i = 0; i < a.size(); ++i)
+					{
+						result[i] = a[i] + b[i];
+					}
+					return result;
 				}
-				return result;
+				else
+				{
+					throw std::runtime_error("Matrix dimensions must agree.");
+				}
 			}
 			template<class T>
 			inline Array<T> plus(const Array<T>& a, const T& b)
 			{
-				Array<T> result;
-				for (const auto &each : a)
+				Array<T> result(a);
+				for (auto &each : result)
 				{
-					result.push_back(each + b);
+					each += b;
 				}
 				return result;
 			}
@@ -47,10 +53,10 @@ namespace catool
 			template<class T>
 			inline Array<T> plus(const T& a, const Array<T>& b)
 			{
-				Array<T> result;
-				for (const auto &each : b)
+				Array<T> result(b);
+				for (auto &each : result)
 				{
-					result.push_back(a + each);
+					each += a;
 				}
 				return result;
 			}
@@ -82,32 +88,37 @@ namespace catool
 			template<class T>
 			inline Array<T> minus(const Array<T>& a, const Array<T>& b)
 			{
-				Array<T> result;
-				if (a.size() != b.size())
-					throw std::runtime_error("Matrix dimensions must agree.");
-				for (unsigned int i = 0; i < a.size(); ++i)
+				if (a.get_dim() == b.get_dim())
 				{
-					result.push_back(a[i] - b[i]);
+					Array<T> result(a);
+					for (int i = 0; i < a.size(); ++i)
+					{
+						result[i] = a[i] - b[i];
+					}
+					return result;
 				}
-				return result;
+				else
+				{
+					throw std::runtime_error("Matrix dimensions must agree.");
+				}
 			}
 			template<class T>
 			inline Array<T> minus(const Array<T>& a, const T & b)
 			{
-				Array<T> result;
-				for (const auto &each : a)
+				Array<T> result(a);
+				for (auto &each : result)
 				{
-					result.push_back(each - b);
+					each -= b;
 				}
 				return result;
 			}
 			template<class T>
 			inline Array<T> minus(const T & a, const Array<T>& b)
 			{
-				Array<T> result;
-				for (const auto &each : b)
+				Array<T> result(b);
+				for (auto &each : result)
 				{
-					result.push_back(a - each);
+					each += a;
 				}
 				return result;
 			}
@@ -123,10 +134,10 @@ namespace catool
 			template<class T>
 			inline Array<T> uminus(const Array<T>& a)
 			{
-				Array<T> result;
-				for (const auto &each : a)
+				Array<T> result(a);
+				for (auto &each : result)
 				{
-					result.push_back(-a);
+					each=-each;
 				}
 				return result;
 			}
@@ -138,12 +149,12 @@ namespace catool
 			template<class T>
 			inline Array<T> times(const Array<T>& a, const Array<T>& b)
 			{
-				Array<T> result;
-				if (a.size() != b.size())
+				Array<T> result(a);
+				if (a.get_dim() != b.get_dim())
 					throw std::runtime_error("Matrix dimensions must agree.");
 				for (unsigned int i = 0; i < a.size(); ++i)
 				{
-					result.push_back(a[i] * b[i]);
+					result[i]=a[i] * b[i];
 				}
 				return result;
 			}
@@ -153,32 +164,32 @@ namespace catool
 			template<class T>
 			inline Array<T> rdivide(const Array<T>& a, const Array<T>& b)
 			{
-				Array<T> result;
-				if (a.size() != b.size())
+				Array<T> result(a);
+				if (a.get_dim() != b.get_dim())
 					throw std::runtime_error("Matrix dimensions must agree.");
 				for (unsigned int i = 0; i < a.size(); ++i)
 				{
-					result.push_back(a[i] / b[i]);
+					result[i]=a[i] / b[i];
 				}
 				return result;
 			}
 			template<class T>
 			inline Array<T> rdivide(const Array<T>& a, const T & b)
 			{
-				Array<T> result;
+				Array<T> result(a);
 				for (unsigned int i = 0; i < a.size(); ++i)
 				{
-					result.push_back(a[i] / b);
+					result[i]=a[i] / b;
 				}
 				return result;
 			}
 			template<class T>
 			inline Array<T> rdivide(const T &  a, const Array<T>& b)
 			{
-				Array<T> result;
+				Array<T> result(b);
 				for (unsigned int i = 0; i < b.size(); ++i)
 				{
-					result.push_back(a / b[i]);
+					result[i]=a / b[i];
 				}
 				return result;
 			}
@@ -189,32 +200,32 @@ namespace catool
 			template<class T>
 			inline Array<T> ldivide(const Array<T>& a, const Array<T>& b)
 			{
-				Array<T> result;
-				if (a.size() != b.size())
+				Array<T> result(a);
+				if (a.get_dim() != b.get_dim())
 					throw std::runtime_error("Matrix dimensions must agree.");
 				for (unsigned int i = 0; i < a.size(); ++i)
 				{
-					result.push_back(b[i] / a[i]);
+					result[i]=b[i] / a[i];
 				}
 				return result;
 			}
 			template<class T>
 			inline Array<T> ldivide(const Array<T>& a, const T & b)
 			{
-				Array<T> result;
+				Array<T> result(a);
 				for (unsigned int i = 0; i < a.size(); ++i)
 				{
-					result.push_back(b / a[i]);
+					result[i]=b / a[i];
 				}
 				return result;
 			}
 			template<class T>
 			inline Array<T> ldivide(const T &  a, const Array<T>& b)
 			{
-				Array<T> result;
+				Array<T> result(b);
 				for (unsigned int i = 0; i < b.size(); ++i)
 				{
-					result.push_back(b[i] / a);
+					result[i]=b[i] / a;
 				}
 				return result;
 			}
@@ -228,32 +239,37 @@ namespace catool
 			template<class T>
 			inline Array<T> power(const Array<T>& a, const T & b)
 			{
-				Array<T> result;
+				Array<T> result(a);
 				for (unsigned int i = 0; i < a.size(); ++i)
 				{
-					result.push_back(std::pow(a[i], b));
+					result[i]=std::pow(a[i], b);
 				}
 				return result;
 			}
-
 			/*
 			C = A*B is the matrix product of A and B.
 			*/
 			template<class T>
 			inline Array<T> mtimes(const Array<T>& a, const Array<T>& b)
 			{
-				Array<T> result;
-				if (a.col_size() != b.row_size())
-					throw std::runtime_error("nonconformant arguments.");
-				result.resize(a.rows()*b.cols());
-				for (int i = 0; i < a.rows(); ++i)
+				if (a.dim_size()>2||b.dim_size()>2)
 				{
-					for (int j = 0; j < b.cols(); ++j)
+					throw std::runtime_error("Arguments must be 2 - D, or at least one argument must be scalar.Use TIMES(.*) for elementwise multiplication.");
+				}
+				if (a.get_dim_data(1)!=b.get_dim_data(0))
+				{
+					throw std::runtime_error("Matrix dimensions must agree.");
+				}
+				Array<T> result(a.get_dim_data(0), b.get_dim_data(1));
+				//result.resize(a.rows()*b.cols());
+				for (int i = 0; i < a.get_dim_data(0); ++i)
+				{
+					for (int j = 0; j < b.get_dim_data(1); ++j)
 					{
-						int des = i*a.cols() + j;
-						for (int k = 0; k < a.cols(); ++k)
+						int des = i*a.get_dim_data(0) + j;
+						for (int k = 0; k < a.get_dim_data(1); ++k)
 						{
-							result[des] += a[i*a.cols() + k] * b[k*b.cols() + j];
+							result[des] += a[i*a.get_dim_data(1) + k] * b[k*b.get_dim_data(1) + j];
 						}
 					}
 				}
