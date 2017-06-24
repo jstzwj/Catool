@@ -81,7 +81,7 @@ namespace catool
 			{
 				for (int j = 0; j < v.get_dim_data(v.dim_size() - 1); ++j)
 				{
-					std::cout << v[prefix_index + i*v.get_dim_acc(v.dim_size() - 1) + j] << " ";
+					std::cout << v[prefix_index + i*v.get_dim_acc(v.dim_size() - 2) + j] << " ";
 				}
 				std::cout << std::endl;
 			}
@@ -139,7 +139,7 @@ namespace catool
 				{
 					for (int j = 0; j < v.get_dim_data(v.dim_size() - 1); ++j)
 					{
-						std::cout << v[i*v.get_dim_acc(1) + j] << " ";
+						std::cout << v[i*v.get_dim_acc(0) + j] << " ";
 					}
 					std::cout << std::endl;
 				}

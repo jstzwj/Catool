@@ -49,6 +49,7 @@ namespace catool
 				Array(std::initializer_list<T> list)
 					:data(list)
 				{
+					dim.push_back(1);
 					dim.push_back(data.size());
 				}
 
@@ -80,7 +81,7 @@ namespace catool
 				int get_dim_data(int n) const
 				{
 					if (n >= static_cast<int>(dim.size()))
-						return 0;
+						return 1;
 					else
 						return dim[n];
 				}
@@ -473,6 +474,70 @@ namespace catool
 					}
 					return result;
 				}
+			}
+			/*
+			blkdiag(a, b, c, d, ...)
+			*/
+			template<class T>
+			inline int dimSum(int n, const Array<T>& v)
+			{
+				return v.get_dim_data(n);
+			}
+
+			template<class T, class ...Targs>
+			inline int dimSum(int n, const Array<T>& v, Targs ...args)
+			{
+				return v.get_dim_data(n) + dimSum(n, args...);
+			}
+
+
+
+			template<class T>
+			inline void blkdiag_impl(Array<T>& result, int m, int n, const Array<T>& v)
+			{
+				if (v.dim_size() >2)
+				{
+					throw std::runtime_error("Matrix must be 2-dimensional");
+				}
+				for (int i = 0; i < v.get_dim_data(0); ++i)
+				{
+					for (int j = 0; j < v.get_dim_data(1); ++j)
+					{
+						result[(i + m)*result.get_dim_data(1) + j + n] = v[i*v.get_dim_data(1) + j];
+					}
+				}
+			}
+
+			template<class T, class ...Targs>
+			inline void blkdiag_impl(Array<T>& result, int m, int n, const Array<T>& v, Targs ...args)
+			{
+				if (v.dim_size()>2)
+				{
+					throw std::runtime_error("Matrix must be 2-dimensional");
+				}
+				for (int i = 0; i < v.get_dim_data(0); ++i)
+				{
+					for (int j = 0; j < v.get_dim_data(1); ++j)
+					{
+						result[(i + m)*result.get_dim_data(1) + j + n] = v[i*v.get_dim_data(1) + j];
+					}
+				}
+				blkdiag_impl(result, m + v.get_dim_data(0), n + v.get_dim_data(1), args...);
+			}
+			template<class T, class ...Targs>
+			inline Array<T> blkdiag(const Array<T>& v, Targs ...args)
+			{
+				if (v.dim_size()>2)
+				{
+					throw std::runtime_error("Matrix must be 2-dimensional");
+				}
+				int m = dimSum(0, v, args...);
+				int n = dimSum(1, v, args...);
+				
+				Array<T> result(m, n);
+				blkdiag_impl(result, 0,0,v, args...);
+				return result;
+
 			}
 		}
 	}
