@@ -4,7 +4,7 @@
 
 #include<cmath>
 #include"../../../Types.h"
-#include"../../Fundamentals/Array.h"
+#include"Array.h"
 #include"Constants.h"
 namespace catool
 {
@@ -36,7 +36,7 @@ namespace catool
 			template<class T>
 			inline T sind(T n)
 			{
-				return std::sin(n*CATOOL_PI/180);
+				return std::sin(n*CATOOL_PI / 180);
 			}
 			template<class T>
 			inline Array<T> sind(const Array<T>& n)
@@ -70,7 +70,7 @@ namespace catool
 			template<class T>
 			inline T asind(T n)
 			{
-				return std::asin(n)*180/CATOOL_PI;
+				return std::asin(n) * 180 / CATOOL_PI;
 			}
 			template<class T>
 			inline Array<T> asind(const Array<T>& n)
@@ -219,7 +219,6 @@ namespace catool
 					each = std::acosh(each);
 				return result;
 			}
-
 		}
 	}
 }

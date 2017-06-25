@@ -8,7 +8,7 @@
 #include<complex>
 #include<initializer_list>
 #include<typeinfo>
-#include"MainToolbox\Fundamentals\Array.h"
+#include"MainToolbox\Mathematics\ElementaryMath\Array.h"
 
 namespace catool
 {
@@ -178,7 +178,6 @@ namespace catool
 			std::cout << "]" << std::endl;
 		}
 	}
-
 }
 
 #endif // !CATOOL_TYPES_H

@@ -5,7 +5,6 @@
 #include<cmath>
 #include"../../Fundamentals/Array.h"
 
-
 #define CATOOL_PI 3.1415926535897932384626433832795
 #define CATOOL_NATURAL_CONSTANT 2.71828182845904523536
 #define CATOOL_GOLD_SECTION 1.61803398874989484820458683436563811772030917980576286
@@ -33,7 +32,7 @@ namespace catool
 			{
 				Array<bool> result;
 				result.resize(n.get_dim());
-				for (int i = 0; i < result.size();++i)
+				for (int i = 0; i < result.size(); ++i)
 				{
 					result[i] = std::isfinite(n[i]);
 				}
@@ -77,12 +76,8 @@ namespace catool
 				}
 				return result;
 			}
-
-
 		}
 	}
 }
-
-
 
 #endif	//CATOOL_MAINTOOLBOX_MATHEMATIC_ELEMENTARYMATH_CONSTANTS_H
