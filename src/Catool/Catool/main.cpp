@@ -1,7 +1,7 @@
 #include<iostream>
 #include<cassert>
 #include"Types.h"
-#include"MainToolbox\Fundamentals\Array.h"
+#include"MainToolbox\Mathematics\ElementaryMath\Array.h"
 #include"MainToolbox\Mathematics\ElementaryMath\Arithmetic.h"
 using namespace catool::main_toolbox;
 using namespace catool::main_toolbox::mathematics;
@@ -18,7 +18,7 @@ int main()
 	//var_dump(main_toolbox::fundamentals::diag(main_toolbox::fundamentals::zeros(3, 4),0));
 	//var_dump(main_toolbox::fundamentals::diag(main_toolbox::fundamentals::eye(3, 4),0));
 	//var_dump(main_toolbox::fundamentals::blkdiag(abc, def,abc));
-	//var_dump(fix(plus( rand(3,4),10)));
+	var_dump(fix(times(rand(3, 4), 10)));
 	system("pause");
 	return 0;
 }

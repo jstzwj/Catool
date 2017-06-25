@@ -25,6 +25,12 @@
     <Filter Include="头文件\MainToolbox\Fundamentals">
       <UniqueIdentifier>{8526f966-4ffc-4f1c-8d9d-02f5a598b0dd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\MainToolbox\Mathematics\LinearAlgebra">
+      <UniqueIdentifier>{f6d6ab44-f782-49dd-a606-e9fa3422a32f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\MainToolbox\Mathematics\RandomNumber">
+      <UniqueIdentifier>{3d7429f9-7a60-4d29-82ea-b134dd829aaa}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -38,16 +44,28 @@
     <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\Arithmetic.h">
       <Filter>头文件\MainToolbox\Mathematics\ElementaryMath</Filter>
     </ClInclude>
-    <ClInclude Include="MainToolbox\Fundamentals\Array.h">
-      <Filter>头文件\MainToolbox\Fundamentals</Filter>
-    </ClInclude>
     <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\Trigonometry.h">
       <Filter>头文件\MainToolbox\Mathematics\ElementaryMath</Filter>
     </ClInclude>
     <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\Constants.h">
       <Filter>头文件\MainToolbox\Mathematics\ElementaryMath</Filter>
     </ClInclude>
-    <ClInclude Include="ExponentsLogarithms.h">
+    <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\Complex.h">
+      <Filter>头文件\MainToolbox\Mathematics\ElementaryMath</Filter>
+    </ClInclude>
+    <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\DiscreteMath.h">
+      <Filter>头文件\MainToolbox\Mathematics\ElementaryMath</Filter>
+    </ClInclude>
+    <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\ExponentsLogarithms.h">
+      <Filter>头文件\MainToolbox\Mathematics\ElementaryMath</Filter>
+    </ClInclude>
+    <ClInclude Include="MainToolbox\Mathematics\LinearAlgebra\LinearEquations.h">
+      <Filter>头文件\MainToolbox\Mathematics\LinearAlgebra</Filter>
+    </ClInclude>
+    <ClInclude Include="MainToolbox\Mathematics\RandomNumber\Rand.h">
+      <Filter>头文件\MainToolbox\Mathematics\RandomNumber</Filter>
+    </ClInclude>
+    <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\Array.h">
       <Filter>头文件\MainToolbox\Mathematics\ElementaryMath</Filter>
     </ClInclude>
   </ItemGroup>

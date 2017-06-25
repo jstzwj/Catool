@@ -4,7 +4,7 @@
 
 #include<cmath>
 #include"../../../Types.h"
-#include"../../Fundamentals/Array.h"
+#include"Array.h"
 namespace catool
 {
 	namespace main_toolbox
@@ -17,7 +17,7 @@ namespace catool
 			C = plus(A,B) is an alternate way to execute A + B, but is rarely used.
 			It enables operator overloading for classes.
 			*/
-			template<class T,class U>
+			template<class T, class U>
 			inline auto plus(const T& a, const U& b)-> decltype(a + b)
 			{
 				return a + b;
@@ -25,7 +25,7 @@ namespace catool
 			template<class T, class U>
 			inline Array<T> plus(const Array<T>& a, const Array<U>& b)
 			{
-				if (a.get_dim()==b.get_dim())
+				if (a.get_dim() == b.get_dim())
 				{
 					Array<T> result(a);
 					for (int i = 0; i < a.size(); ++i)
@@ -80,12 +80,12 @@ namespace catool
 			C = minus(A,B) is an alternate way to execute A - B, but is rarely used.
 			It enables operator overloading for classes.
 			*/
-			template<class T,class U>
-			inline auto minus(const T& a, const U& b)->decltype(a-b)
+			template<class T, class U>
+			inline auto minus(const T& a, const U& b)->decltype(a - b)
 			{
 				return a - b;
 			}
-			template<class T,class U>
+			template<class T, class U>
 			inline Array<T> minus(const Array<T>& a, const Array<U>& b)
 			{
 				if (a.get_dim() == b.get_dim())
@@ -137,7 +137,7 @@ namespace catool
 				Array<T> result(a);
 				for (auto &each : result)
 				{
-					each=-each;
+					each = -each;
 				}
 				return result;
 			}
@@ -154,7 +154,27 @@ namespace catool
 					throw std::runtime_error("Matrix dimensions must agree.");
 				for (unsigned int i = 0; i < a.size(); ++i)
 				{
-					result[i]=a[i] * b[i];
+					result[i] = a[i] * b[i];
+				}
+				return result;
+			}
+			template<class T, class U>
+			inline Array<T> times(const Array<T>& a, const U& b)
+			{
+				Array<T> result(a);
+				for (int i = 0; i < result.size(); ++i)
+				{
+					result[i] *= b;
+				}
+				return result;
+			}
+			template<class T, class U>
+			inline Array<T> times(const U& a, const Array<T>& b)
+			{
+				Array<T> result(b);
+				for (unsigned int i = 0; i < result.size(); ++i)
+				{
+					result[i] *= a;
 				}
 				return result;
 			}
@@ -169,7 +189,7 @@ namespace catool
 					throw std::runtime_error("Matrix dimensions must agree.");
 				for (unsigned int i = 0; i < a.size(); ++i)
 				{
-					result[i]=a[i] / b[i];
+					result[i] = a[i] / b[i];
 				}
 				return result;
 			}
@@ -179,7 +199,7 @@ namespace catool
 				Array<T> result(a);
 				for (unsigned int i = 0; i < a.size(); ++i)
 				{
-					result[i]=a[i] / b;
+					result[i] = a[i] / b;
 				}
 				return result;
 			}
@@ -189,7 +209,7 @@ namespace catool
 				Array<T> result(b);
 				for (unsigned int i = 0; i < b.size(); ++i)
 				{
-					result[i]=a / b[i];
+					result[i] = a / b[i];
 				}
 				return result;
 			}
@@ -205,7 +225,7 @@ namespace catool
 					throw std::runtime_error("Matrix dimensions must agree.");
 				for (unsigned int i = 0; i < a.size(); ++i)
 				{
-					result[i]=b[i] / a[i];
+					result[i] = b[i] / a[i];
 				}
 				return result;
 			}
@@ -215,7 +235,7 @@ namespace catool
 				Array<T> result(a);
 				for (unsigned int i = 0; i < a.size(); ++i)
 				{
-					result[i]=b / a[i];
+					result[i] = b / a[i];
 				}
 				return result;
 			}
@@ -225,7 +245,7 @@ namespace catool
 				Array<T> result(b);
 				for (unsigned int i = 0; i < b.size(); ++i)
 				{
-					result[i]=b[i] / a;
+					result[i] = b[i] / a;
 				}
 				return result;
 			}
@@ -242,7 +262,7 @@ namespace catool
 				Array<T> result(a);
 				for (unsigned int i = 0; i < a.size(); ++i)
 				{
-					result[i]=std::pow(a[i], b);
+					result[i] = std::pow(a[i], b);
 				}
 				return result;
 			}
@@ -252,11 +272,11 @@ namespace catool
 			template<class T>
 			inline Array<T> mtimes(const Array<T>& a, const Array<T>& b)
 			{
-				if (a.dim_size()>2||b.dim_size()>2)
+				if (a.dim_size() > 2 || b.dim_size() > 2)
 				{
 					throw std::runtime_error("Arguments must be 2 - D, or at least one argument must be scalar.Use TIMES(.*) for elementwise multiplication.");
 				}
-				if (a.get_dim_data(1)!=b.get_dim_data(0))
+				if (a.get_dim_data(1) != b.get_dim_data(0))
 				{
 					throw std::runtime_error("Matrix dimensions must agree.");
 				}
@@ -276,8 +296,8 @@ namespace catool
 				return result;
 			}
 			/*
-			Y = fix(X) rounds each element of X to the nearest integer toward zero. 
-			For positive X, the behavior of fix is the same as floor. 
+			Y = fix(X) rounds each element of X to the nearest integer toward zero.
+			For positive X, the behavior of fix is the same as floor.
 			For negative X, the behavior of fix is the same as ceil.
 			*/
 			template<class T>
@@ -292,7 +312,7 @@ namespace catool
 			inline Array<T> fix(const Array<T> & t)
 			{
 				Array<T> result(t);
-				for (auto & each:result)
+				for (auto & each : result)
 					each = fix(each);
 				return result;
 			}
@@ -322,7 +342,7 @@ namespace catool
 				return std::ceil(x);
 			}
 			/*
-			
+
 			*/
 			inline double round(double x)
 			{
@@ -381,10 +401,6 @@ namespace catool
 				Array<int> result = rat(x);
 				return std::to_string(result[0]) + "/" + std::to_string(result[1]);
 			}
-
-
-
-
 		}
 	}
 }

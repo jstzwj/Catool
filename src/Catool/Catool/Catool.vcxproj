@@ -113,11 +113,15 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ExponentsLogarithms.h" />
-    <ClInclude Include="MainToolbox\Fundamentals\Array.h" />
     <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\Arithmetic.h" />
+    <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\Array.h" />
+    <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\Complex.h" />
     <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\Constants.h" />
+    <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\DiscreteMath.h" />
+    <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\ExponentsLogarithms.h" />
     <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\Trigonometry.h" />
+    <ClInclude Include="MainToolbox\Mathematics\LinearAlgebra\LinearEquations.h" />
+    <ClInclude Include="MainToolbox\Mathematics\RandomNumber\Rand.h" />
     <ClInclude Include="Types.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
