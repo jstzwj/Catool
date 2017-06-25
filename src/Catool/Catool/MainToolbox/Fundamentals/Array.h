@@ -111,6 +111,12 @@ namespace catool
 				resize_from_dim();
 			}
 
+			void resize(const std::vector<int> & sz)
+			{
+				dim = sz;
+				resize_from_dim();
+			}
+
 			void resize(const Array<int> & sz)
 			{
 				if (sz.dim.size() > 2)

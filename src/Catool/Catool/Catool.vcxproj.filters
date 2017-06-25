@@ -47,5 +47,8 @@
     <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\Constants.h">
       <Filter>头文件\MainToolbox\Mathematics\ElementaryMath</Filter>
     </ClInclude>
+    <ClInclude Include="ExponentsLogarithms.h">
+      <Filter>头文件\MainToolbox\Mathematics\ElementaryMath</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

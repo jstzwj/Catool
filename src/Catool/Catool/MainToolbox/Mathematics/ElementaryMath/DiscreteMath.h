@@ -1,0 +1,17 @@
+#pragma once
+#ifndef CATOOL_MAINTOOLBOX_MATHEMATIC_ELEMENTARYMATH_DISCRETEMATH_H
+#define CATOOL_MAINTOOLBOX_MATHEMATIC_ELEMENTARYMATH_DISCRETEMATH_H
+
+#include<cmath>
+namespace catool
+{
+	namespace main_toolbox
+	{
+		namespace mathematics
+		{
+
+
+		}
+	}
+}
+#endif	//CATOOL_MAINTOOLBOX_MATHEMATIC_ELEMENTARYMATH_DISCRETEMATH_H
