@@ -70,6 +70,39 @@ namespace catool
 			*/
 
 
+			/*
+			X = real(Z) returns the real part of the elements of the complex array Z.
+			*/
+			template<class T>
+			double real(const T &x)
+			{
+				return std::real(x);
+			}
+			template<class T>
+			Array<T> real(const Array<T>& x)
+			{
+				Array<T> result(x);
+				for (auto& each : result)
+					each = std::real(each);
+				return result;
+			}
+			/*
+			Y = imag(Z) returns the imaginary part of the elements of array Z.
+			*/
+			template<class T>
+			double imag(const T &x)
+			{
+				return std::imag(x);
+			}
+			template<class T>
+			Array<T> imag(const Array<T>& x)
+			{
+				Array<T> result(x);
+				for (auto& each : result)
+					each = std::imag(each);
+				return result;
+			}
+
 
 			/*
 			Y = sign(x) returns an array Y the same size as x, where each element of Y is:
