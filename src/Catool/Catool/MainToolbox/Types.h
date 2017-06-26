@@ -9,6 +9,7 @@
 #include<initializer_list>
 #include<typeinfo>
 #include"Mathematics\ElementaryMath\Array.h"
+#include"Mathematics\ElementaryMath\Complex.h"
 
 namespace catool
 {
@@ -28,13 +29,12 @@ namespace catool
 
 		using logical = bool;
 		using string = std::string;
-		using complex = std::complex<double>;
 
 		/*
 		var_dump :print the info of variables.
 		*/
 		template<class T>
-		inline void var_dump(const T & v)
+		void var_dump(const T & v)
 		{
 			std::cout << typeid(v).name() << std::endl;
 			std::cout << v << std::endl;
@@ -62,7 +62,7 @@ namespace catool
 		}
 
 		template<class T>
-		inline void var_dump_impl(const Array<T> & v, std::vector<int>& loop, int cur_loop)
+		void var_dump_impl(const Array<T> & v, std::vector<int>& loop, int cur_loop)
 		{
 			if (cur_loop < 2)
 			{
@@ -99,7 +99,7 @@ namespace catool
 		}
 
 		template<class T>
-		inline void var_dump(const Array<T> & v)
+		void var_dump(const Array<T> & v)
 		{
 			//dimension empty
 			for (int i = 0; i < v.dim_size(); ++i)
@@ -169,13 +169,12 @@ namespace catool
 			}
 		}
 
-		inline void var_dump(const complex & com)
+		void var_dump(const Complex & com)
 		{
-			std::cout << typeid(com).name() << std::endl;
-			std::cout << "[";
-			std::cout << com.real() << ",";
+			std::cout << typeid(com).name() <<"="<< std::endl;
+			std::cout << com.real() << "+";
 			std::cout << com.imag();
-			std::cout << "]" << std::endl;
+			std::cout << "i" << std::endl;
 		}
 	}
 }

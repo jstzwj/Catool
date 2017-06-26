@@ -31,6 +31,9 @@
     <Filter Include="头文件\MainToolbox\Mathematics\RandomNumber">
       <UniqueIdentifier>{3d7429f9-7a60-4d29-82ea-b134dd829aaa}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\MainToolbox\Mathematics\Interpolation">
+      <UniqueIdentifier>{3e19021c-eae7-4adc-b3f1-313d3a22c283}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -67,6 +70,9 @@
     </ClInclude>
     <ClInclude Include="MainToolbox\Types.h">
       <Filter>头文件\MainToolbox</Filter>
+    </ClInclude>
+    <ClInclude Include="MainToolbox\Mathematics\Interpolation\Interpolation.h">
+      <Filter>头文件\MainToolbox\Mathematics\Interpolation</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

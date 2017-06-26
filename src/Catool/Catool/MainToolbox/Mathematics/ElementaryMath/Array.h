@@ -123,11 +123,11 @@ namespace catool
 
 			void resize(const Array<int> & sz)
 			{
-				if (sz.dim.size() > 2)
+				if (sz.dim_size() > 2)
 				{
 					throw std::runtime_error("the size array shall be one dimension array.");
 				}
-				dim = sz.data();
+				dim = sz.get_data();
 				resize_from_dim();
 			}
 			void resize_from_dim()
@@ -217,48 +217,6 @@ namespace catool
 			result.get_dim() = sz.get_data();
 			result.resize_from_dim();
 			result.fill(1);
-			return result;
-		}
-		/*
-		rand
-		Uniformly distributed random numbers
-		*/
-		inline void rand_fill(Array<double>& arry)
-		{
-			std::srand(static_cast<unsigned int>(std::time(0)));
-			for (auto& each : arry)
-			{
-				each = (double)std::rand() / RAND_MAX;
-			}
-		}
-		inline double rand()
-		{
-			return ((double)std::rand() / RAND_MAX);
-		}
-		inline Array<double> rand(int n)
-		{
-			Array<double> result(n, n);
-			rand_fill(result);
-			return result;
-		}
-		template<typename T1, typename... T2>
-		inline Array<double> rand(T1 p, T2... arg)
-		{
-			Array<double> result;
-			result.resize(p, arg...);
-			rand_fill(result);
-			return result;
-		}
-		inline Array<double> rand(const Array<int> & sz)
-		{
-			if (sz.dim_size() != 1)
-			{
-				throw std::runtime_error("the size array shall be one dimension array.");
-			}
-			Array<double> result;
-			result.get_dim() = sz.get_data();
-			result.resize_from_dim();
-			rand_fill(result);
 			return result;
 		}
 		/*

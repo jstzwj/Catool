@@ -120,6 +120,7 @@
     <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\DiscreteMath.h" />
     <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\ExponentsLogarithms.h" />
     <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\Trigonometry.h" />
+    <ClInclude Include="MainToolbox\Mathematics\Interpolation\Interpolation.h" />
     <ClInclude Include="MainToolbox\Mathematics\LinearAlgebra\LinearEquations.h" />
     <ClInclude Include="MainToolbox\Mathematics\RandomNumber\Rand.h" />
     <ClInclude Include="MainToolbox\Types.h" />
