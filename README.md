@@ -54,8 +54,10 @@ These compilers which have been tested are shown in the following list.
 `exp`	Exponential<br/>
 
 ### Complex Numbers
-`abs`	Absolute value and complex magnitude.....coming<br/>
-`sign`	Sign function (signum function).....coming<br/>
+`abs`	Absolute value and complex magnitude<br/>
+`angle`	Phase angle<br/>
+`conj`	Complex conjugate<br/>
+`sign`	Sign function (signum function)<br/>
 
 ### Discrete Math
 `gcd`	Greatest common divisor<br/>
@@ -76,12 +78,15 @@ These compilers which have been tested are shown in the following list.
 
 ## Linear Algebra
 
-`inv`	Matrix inverse....coming<br/>
+`inv`	Matrix inverse<br/>
 
 ## Random Number Generation
 
 `rand`	Uniformly distributed random numbers<br/>
+`randn`	Normally distributed random numbers<br/>
+`randi`	Uniformly distributed pseudorandom integers<br/>
 
+`rng`	Control random number generation<br/>
 
 
 
