@@ -171,7 +171,7 @@ namespace catool
 
 		void var_dump(const Complex & com)
 		{
-			std::cout << typeid(com).name() <<"="<< std::endl;
+			std::cout << typeid(com).name() << "=" << std::endl;
 			std::cout << com.real() << "+";
 			std::cout << com.imag();
 			std::cout << "i" << std::endl;

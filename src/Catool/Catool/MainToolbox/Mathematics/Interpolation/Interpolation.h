@@ -9,8 +9,6 @@ namespace catool
 	{
 		namespace mathematics
 		{
-
-
 		}
 	}
 }

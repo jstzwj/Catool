@@ -55,7 +55,7 @@ namespace catool
 
 			template<class U>
 			Array(const Array<U>& other)
-				:dim(other.get_dim()),data(other.begin(),other.end()){}
+				:dim(other.get_dim()), data(other.begin(), other.end()) {}
 
 			//using iterator = std::vector<T>::iterator;
 			//using const_iterator = std::vector<T>::const_iterator;
@@ -153,8 +153,8 @@ namespace catool
 			}
 			bool isRow()const
 			{
-				for (unsigned int i = 0; i < dim.size();++i)
-					if (i!=1&&dim[i] != 1)return false;
+				for (unsigned int i = 0; i < dim.size(); ++i)
+					if (i != 1 && dim[i] != 1)return false;
 				return true;
 			}
 			bool isCol()const
@@ -167,7 +167,7 @@ namespace catool
 			{
 				if (dim.size() == 0)return true;
 				for (unsigned int i = 0; i < dim.size(); ++i)
-					if (dim[i]==0)return true;
+					if (dim[i] == 0)return true;
 				return true;
 			}
 		};
@@ -528,10 +528,6 @@ namespace catool
 		Concatenate arrays along specified dimension
 		*/
 
-
-
-
-
 		/*
 		length
 		Length of largest array dimension
@@ -544,7 +540,7 @@ namespace catool
 		template<class T>
 		int length(const Array<T>& n)
 		{
-			return std::max_element(n.get_dim().begin(),n.get_dim().end());
+			return std::max_element(n.get_dim().begin(), n.get_dim().end());
 		}
 		/*
 		size
@@ -561,7 +557,7 @@ namespace catool
 			return n.get_dim();
 		}
 		template<class T>
-		int size(const Array<T> &n,int dim)
+		int size(const Array<T> &n, int dim)
 		{
 			if (dim <= 0)
 				throw std::runtime_error("error: size: requested dimension DIM out of range");
@@ -596,7 +592,7 @@ namespace catool
 			return n.size();
 		}
 		/*
-		isscalar	
+		isscalar
 		Determine whether input is scalar
 		*/
 		template<class T>
@@ -605,7 +601,7 @@ namespace catool
 			return std::is_pod<T>::value;
 		}
 		/*
-		isvector	
+		isvector
 		Determine whether input is vector
 		*/
 		template<class T>
@@ -620,7 +616,7 @@ namespace catool
 		}
 
 		/*
-		ismatrix	
+		ismatrix
 		Determine whether input is matrix
 		*/
 		template<class T>
@@ -634,7 +630,7 @@ namespace catool
 			return n.isMatrix();
 		}
 		/*
-		isrow	
+		isrow
 		Determine whether input is row vector
 		*/
 		template<class T>
@@ -674,7 +670,6 @@ namespace catool
 		{
 			return n.isEmpty();
 		}
-
 	}
 }
 

@@ -30,8 +30,8 @@ int main()
 		var_dump(inv(test));
 	}*/
 	//var_dump(sign(Complex(1,2)));
-	var_dump(inv(ones(2,2)));
-	
+	var_dump(inv(ones(2, 2)));
+
 	system("pause");
 	return 0;
 }

@@ -104,7 +104,7 @@ namespace catool
 			{
 				return ((double)std::rand() / RAND_MAX)*max;
 			}
-			inline Array<double> randi(int max,int n)
+			inline Array<double> randi(int max, int n)
 			{
 				Array<double> result(n, n);
 				for (auto& each : result)
@@ -112,7 +112,7 @@ namespace catool
 				return result;
 			}
 			template<typename T1, typename... T2>
-			inline Array<double> randi(int max,T1 p, T2... arg)
+			inline Array<double> randi(int max, T1 p, T2... arg)
 			{
 				Array<double> result;
 				result.resize(p, arg...);
@@ -120,7 +120,7 @@ namespace catool
 					each = ((double)std::rand() / RAND_MAX)*max;
 				return result;
 			}
-			inline Array<double> randi(int max,const Array<int> & sz)
+			inline Array<double> randi(int max, const Array<int> & sz)
 			{
 				if (sz.dim_size() != 1)
 				{
@@ -136,7 +136,7 @@ namespace catool
 			rng
 			Control random number generation
 			*/
-			enum RANG_TYPE {SHUFFLE,DEFAULT};
+			enum RANG_TYPE { SHUFFLE, DEFAULT };
 			[[noreturn]]inline void rng(unsigned int seed)
 			{
 				std::srand(seed);
@@ -144,7 +144,7 @@ namespace catool
 
 			[[noreturn]]inline void rng(RANG_TYPE type)
 			{
-				if (type== RANG_TYPE::SHUFFLE)
+				if (type == RANG_TYPE::SHUFFLE)
 				{
 					std::srand(static_cast<unsigned int>(std::time(nullptr)));
 				}
@@ -153,8 +153,6 @@ namespace catool
 					throw std::runtime_error("Unknown rang type.");
 				}
 			}
-
-
 		}
 	}
 }
