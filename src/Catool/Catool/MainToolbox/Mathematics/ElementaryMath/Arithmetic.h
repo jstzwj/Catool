@@ -3,7 +3,7 @@
 #define CATOOL_MAINTOOLBOX_MATHEMATIC_ELEMENTARYMATH_ARITHMETIC_H
 
 #include<cmath>
-#include"../../../Types.h"
+#include"../../Types.h"
 #include"Array.h"
 namespace catool
 {

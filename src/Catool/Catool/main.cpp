@@ -1,8 +1,9 @@
 #include<iostream>
 #include<cassert>
-#include"Types.h"
+#include"MainToolbox\Types.h"
 #include"MainToolbox\Mathematics\ElementaryMath\Array.h"
 #include"MainToolbox\Mathematics\ElementaryMath\Arithmetic.h"
+#include"MainToolbox\Mathematics\LinearAlgebra\LinearEquations.h"
 using namespace catool::main_toolbox;
 using namespace catool::main_toolbox::mathematics;
 int main()
@@ -18,7 +19,8 @@ int main()
 	//var_dump(main_toolbox::fundamentals::diag(main_toolbox::fundamentals::zeros(3, 4),0));
 	//var_dump(main_toolbox::fundamentals::diag(main_toolbox::fundamentals::eye(3, 4),0));
 	//var_dump(main_toolbox::fundamentals::blkdiag(abc, def,abc));
-	var_dump(fix(times(rand(3, 4), 10)));
+	//var_dump(fix(times(rand(3, 4), 10)));
+	var_dump(inv(times(eye(4,4),4)));
 	system("pause");
 	return 0;
 }

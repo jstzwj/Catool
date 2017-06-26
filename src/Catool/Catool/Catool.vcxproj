@@ -122,7 +122,7 @@
     <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\Trigonometry.h" />
     <ClInclude Include="MainToolbox\Mathematics\LinearAlgebra\LinearEquations.h" />
     <ClInclude Include="MainToolbox\Mathematics\RandomNumber\Rand.h" />
-    <ClInclude Include="Types.h" />
+    <ClInclude Include="MainToolbox\Types.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -8,7 +8,7 @@
 #include<complex>
 #include<initializer_list>
 #include<typeinfo>
-#include"MainToolbox\Mathematics\ElementaryMath\Array.h"
+#include"Mathematics\ElementaryMath\Array.h"
 
 namespace catool
 {

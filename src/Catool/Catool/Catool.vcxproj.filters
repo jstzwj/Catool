@@ -38,9 +38,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Types.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\Arithmetic.h">
       <Filter>头文件\MainToolbox\Mathematics\ElementaryMath</Filter>
     </ClInclude>
@@ -67,6 +64,9 @@
     </ClInclude>
     <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\Array.h">
       <Filter>头文件\MainToolbox\Mathematics\ElementaryMath</Filter>
+    </ClInclude>
+    <ClInclude Include="MainToolbox\Types.h">
+      <Filter>头文件\MainToolbox</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

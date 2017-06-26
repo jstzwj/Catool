@@ -52,6 +52,10 @@ namespace catool
 				dim.push_back(list.size());
 			}
 
+			template<class U>
+			Array(const Array<U>& other)
+				:dim(other.get_dim()),data(other.begin(),other.end()){}
+
 			//using iterator = std::vector<T>::iterator;
 			//using const_iterator = std::vector<T>::const_iterator;
 
