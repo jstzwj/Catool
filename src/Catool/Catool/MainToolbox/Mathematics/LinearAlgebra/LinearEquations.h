@@ -43,8 +43,8 @@ namespace catool
 							for (int k = 0; k < m_sz; ++k)
 							{
 								
-								m[k*m_sz + j] = m[k*m_sz + j] +scale_each*m[k*m_sz + i];
-								result[k*m_sz + j] = result[k*m_sz + j] + scale_each*result[k*m_sz + i];
+								m[k*m_sz + j] = m[k*m_sz + j] -scale_each*m[k*m_sz + i];
+								result[k*m_sz + j] = result[k*m_sz + j] - scale_each*result[k*m_sz + i];
 							}
 						}
 					}

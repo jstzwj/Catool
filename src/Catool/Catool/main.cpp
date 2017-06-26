@@ -20,7 +20,10 @@ int main()
 	//var_dump(main_toolbox::fundamentals::diag(main_toolbox::fundamentals::eye(3, 4),0));
 	//var_dump(main_toolbox::fundamentals::blkdiag(abc, def,abc));
 	//var_dump(fix(times(rand(3, 4), 10)));
-	var_dump(inv(times(eye(4,4),4)));
+	//var_dump(inv(times(eye(4,4),4)));
+	Array<double> test{2,-1,0,-1,2,-1,0,-1,2};
+	test.resize(3,3);
+	var_dump(inv(test));
 	system("pause");
 	return 0;
 }
