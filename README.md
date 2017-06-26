@@ -14,6 +14,20 @@ These compilers which have been tested are shown in the following list.
 
 # Function index
 
+## Fundamentals
+
+### Array and matrix
+`length`	Length of largest array dimension<br/>
+`size`	Array size<br/>
+`ndims`	Number of array dimensions<br/>
+`numel`	Number of array elements<br/>
+`isscalar`	Determine whether input is scalar<br/>
+`isvector`	Determine whether input is vector<br/>
+`ismatrix`	Determine whether input is matrix<br/>
+`isrow`	Determine whether input is row vector<br/>
+`iscolumn`	Determine whether input is column vector<br/>
+`isempty`	Determine whether array is empty<br/>
+
 ## Elementary Math
 
 ### Arithmetic
