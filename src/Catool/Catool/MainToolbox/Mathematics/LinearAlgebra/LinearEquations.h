@@ -2,6 +2,7 @@
 #ifndef CATOOL_MAINTOOLBOX_MATHEMATICS_LINEARALGEBRA_LINEAREQUATIONS_H
 #define CATOOL_MAINTOOLBOX_MATHEMATICS_LINEARALGEBRA_LINEAREQUATIONS_H
 
+#include <limits>
 #include<cmath>
 #include"../ElementaryMath/Array.h"
 
@@ -28,6 +29,9 @@ namespace catool
 				for (int i = 0; i < m_sz;++i)
 				{
 					double scale = m[i*m_sz + i];
+					//warning
+					if (std::abs(scale) < std::numeric_limits<double>::epsilon())
+						throw "warning: matrix singular to machine precision.";
 					//Unitized row
 					for (int j = 0; j < m_sz;++j)
 					{

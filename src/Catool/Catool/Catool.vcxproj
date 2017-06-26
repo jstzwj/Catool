@@ -124,6 +124,7 @@
     <ClInclude Include="MainToolbox\Mathematics\LinearAlgebra\LinearEquations.h" />
     <ClInclude Include="MainToolbox\Mathematics\RandomNumber\Rand.h" />
     <ClInclude Include="MainToolbox\Types.h" />
+    <ClInclude Include="Version.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -3,6 +3,7 @@
 #define CATOOL_FUNDAMENTALS_ARRAY
 
 #include<vector>
+#include<algorithm>
 #include<cstdlib>
 #include<ctime>
 
@@ -149,6 +150,25 @@ namespace catool
 			bool isVector()const
 			{
 				return dim.size() == 1;
+			}
+			bool isRow()const
+			{
+				for (unsigned int i = 0; i < dim.size();++i)
+					if (i!=1&&dim[i] != 1)return false;
+				return true;
+			}
+			bool isCol()const
+			{
+				for (unsigned int i = 0; i < dim.size(); ++i)
+					if (i != 0 && dim[i] != 1)return false;
+				return true;
+			}
+			bool isEmpty()const
+			{
+				if (dim.size() == 0)return true;
+				for (unsigned int i = 0; i < dim.size(); ++i)
+					if (dim[i]==0)return true;
+				return true;
 			}
 		};
 		//functions
@@ -507,6 +527,154 @@ namespace catool
 		cat
 		Concatenate arrays along specified dimension
 		*/
+
+
+
+
+
+		/*
+		length
+		Length of largest array dimension
+		*/
+		template<class T>
+		int length(const T& n)
+		{
+			return 1;
+		}
+		template<class T>
+		int length(const Array<T>& n)
+		{
+			return std::max_element(n.get_dim().begin(),n.get_dim().end());
+		}
+		/*
+		size
+		Array size
+		*/
+		template<class T>
+		Array<int> size(const T&n)
+		{
+			return{ 1 };
+		}
+		template<class T>
+		Array<int> size(const Array<T> &n)
+		{
+			return n.get_dim();
+		}
+		template<class T>
+		int size(const Array<T> &n,int dim)
+		{
+			if (dim <= 0)
+				throw std::runtime_error("error: size: requested dimension DIM out of range");
+			return n.get_dim_data(dim);
+		}
+		/*
+		ndims
+		Number of array dimensions
+		*/
+		template<class T>
+		int ndims(const T&n)
+		{
+			return 1;
+		}
+		template<class T>
+		int ndims(const Array<T> &n)
+		{
+			return n.dim_size();
+		}
+		/*
+		numel
+		Number of array elements
+		*/
+		template<class T>
+		int numel(const T&n)
+		{
+			return 1;
+		}
+		template<class T>
+		int numel(const Array<T> &n)
+		{
+			return n.size();
+		}
+		/*
+		isscalar	
+		Determine whether input is scalar
+		*/
+		template<class T>
+		bool isscalar(const T&n)
+		{
+			return std::is_pod<T>::value;
+		}
+		/*
+		isvector	
+		Determine whether input is vector
+		*/
+		template<class T>
+		bool isvector(const T& n)
+		{
+			return false;
+		}
+		template<class T>
+		bool isvector(const Array<T>& n)
+		{
+			return n.isVector();
+		}
+
+		/*
+		ismatrix	
+		Determine whether input is matrix
+		*/
+		template<class T>
+		bool ismatrix(const T& n)
+		{
+			return false;
+		}
+		template<class T>
+		bool ismatrix(const Array<T>& n)
+		{
+			return n.isMatrix();
+		}
+		/*
+		isrow	
+		Determine whether input is row vector
+		*/
+		template<class T>
+		bool isrow(const T& n)
+		{
+			return true;
+		}
+		template<class T>
+		bool isrow(const Array<T>& n)
+		{
+			return n.isRow();
+		}
+		/*
+		iscolumn	Determine whether input is column vector
+		*/
+		template<class T>
+		bool iscolumn(const T& n)
+		{
+			return true;
+		}
+		template<class T>
+		bool iscolumn(const Array<T>& n)
+		{
+			return n.isCol();
+		}
+
+		/*
+		isempty	Determine whether array is empty
+		*/
+		template<class T>
+		bool isempty(const T& n)
+		{
+			return false;
+		}
+		template<class T>
+		bool isempty(const Array<T>& n)
+		{
+			return n.isEmpty();
+		}
+
 	}
 }
 

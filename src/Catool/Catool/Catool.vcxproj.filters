@@ -74,5 +74,8 @@
     <ClInclude Include="MainToolbox\Mathematics\Interpolation\Interpolation.h">
       <Filter>头文件\MainToolbox\Mathematics\Interpolation</Filter>
     </ClInclude>
+    <ClInclude Include="Version.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
