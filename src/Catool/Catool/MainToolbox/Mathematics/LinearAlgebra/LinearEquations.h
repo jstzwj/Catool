@@ -59,21 +59,14 @@ namespace catool
 			lu
 			LU matrix factorization
 			*/
-			inline std::tuple<Array<double>,Array<double>> lu(Array<double> m)
+			inline std::tuple<Array<double>, Array<double>> lu(Array<double> m)
 			{
 				Array<double> u(m.get_dim()), l(m.get_dim());
 				int row = m.get_dim_data(1);
 				int col = m.get_dim_data(0);
-				
+
 				//TODO
-
-
-
-
-
 			}
-
-
 		}
 	}
 }

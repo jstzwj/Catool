@@ -14,7 +14,7 @@ namespace catool
 			Exponential
 			*/
 			template<class T>
-			inline T exp(T n)
+			inline T exp(const T & n)
 			{
 				return std::exp(n);
 			}

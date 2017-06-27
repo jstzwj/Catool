@@ -17,7 +17,7 @@ namespace catool
 			Sine of argument in radians
 			*/
 			template<class T>
-			inline T sin(T n)
+			inline T sin(const T & n)
 			{
 				return std::sin(n);
 			}
@@ -34,7 +34,7 @@ namespace catool
 			Sine of argument in degrees
 			*/
 			template<class T>
-			inline T sind(T n)
+			inline T sind(const T & n)
 			{
 				return std::sin(n*CATOOL_PI / 180);
 			}
@@ -51,7 +51,7 @@ namespace catool
 			Inverse sine in radians
 			*/
 			template<class T>
-			inline T asin(T n)
+			inline T asin(const T & n)
 			{
 				return std::asin(n);
 			}
@@ -68,7 +68,7 @@ namespace catool
 			Inverse sine in degrees
 			*/
 			template<class T>
-			inline T asind(T n)
+			inline T asind(const T & n)
 			{
 				return std::asin(n) * 180 / CATOOL_PI;
 			}
@@ -85,7 +85,7 @@ namespace catool
 			Hyperbolic sine of argument in radians
 			*/
 			template<class T>
-			inline T sinh(T n)
+			inline T sinh(const T & n)
 			{
 				return std::sinh(n);
 			}
@@ -103,7 +103,7 @@ namespace catool
 			Inverse hyperbolic sine
 			*/
 			template<class T>
-			inline T asinh(T n)
+			inline T asinh(const T & n)
 			{
 				return std::asinh(n);
 			}
@@ -121,7 +121,7 @@ namespace catool
 			Cosine of argument in radians
 			*/
 			template<class T>
-			inline T cos(T n)
+			inline T cos(const T & n)
 			{
 				return std::cos(n);
 			}
@@ -138,7 +138,7 @@ namespace catool
 			Sine of argument in degrees
 			*/
 			template<class T>
-			inline T cosd(T n)
+			inline T cosd(const T & n)
 			{
 				return std::cos(n*CATOOL_PI / 180);
 			}
@@ -155,7 +155,7 @@ namespace catool
 			Inverse cose in radians
 			*/
 			template<class T>
-			inline T acos(T n)
+			inline T acos(const T & n)
 			{
 				return std::acos(n);
 			}
@@ -172,7 +172,7 @@ namespace catool
 			Inverse cose in degrees
 			*/
 			template<class T>
-			inline T acosd(T n)
+			inline T acosd(const T & n)
 			{
 				return std::acos(n) * 180 / CATOOL_PI;
 			}
@@ -189,7 +189,7 @@ namespace catool
 			Hyperbolic cose of argument in radians
 			*/
 			template<class T>
-			inline T cosh(T n)
+			inline T cosh(const T & n)
 			{
 				return std::cosh(n);
 			}
@@ -207,7 +207,7 @@ namespace catool
 			Inverse hyperbolic cose
 			*/
 			template<class T>
-			inline T acosh(T n)
+			inline T acosh(const T & n)
 			{
 				return std::acosh(n);
 			}
@@ -223,7 +223,7 @@ namespace catool
 			tan	Tangent of argument in radians
 			*/
 			template<class T>
-			inline T tan(T n)
+			inline T tan(const T & n)
 			{
 				return std::tan(n);
 			}
@@ -239,7 +239,7 @@ namespace catool
 			tand	Tangent of argument in degrees
 			*/
 			template<class T>
-			inline T tand(T n)
+			inline T tand(const T & n)
 			{
 				return std::tan(n*CATOOL_PI / 180);
 			}
@@ -255,7 +255,7 @@ namespace catool
 			atan	Inverse tangent in radians
 			*/
 			template<class T>
-			inline T atan(T n)
+			inline T atan(const T & n)
 			{
 				return std::atan(n);
 			}
@@ -271,7 +271,7 @@ namespace catool
 			atand	Inverse tangent in degrees
 			*/
 			template<class T>
-			inline T atand(T n)
+			inline T atand(const T & n)
 			{
 				return std::atan(n) * 180 / CATOOL_PI;
 			}
@@ -287,39 +287,24 @@ namespace catool
 			atan2	Four - quadrant inverse tangent
 			*/
 			template<class T>
-			inline T atan2(T n)
+			inline T atan2(const T& y, const T& x)
 			{
-				return std::atan2(n);
-			}
-			template<class T>
-			inline Array<T> atan2(const Array<T>& n)
-			{
-				Array<T> result(n);
-				for (auto& each : result)
-					each = std::atan2(each);
-				return result;
+				return std::atan2(y, x);
 			}
 			/*
 			atan2d	Four - quadrant inverse tangent in degrees
 			*/
 			template<class T>
-			inline T atan2d(T n)
+			inline T atan2d(const T& y, const T& x)
 			{
-				return std::atan2(n) * 180 / CATOOL_PI;
+				return std::atan2(y, x) * 180 / CATOOL_PI;
 			}
-			template<class T>
-			inline Array<T> atan2d(const Array<T>& n)
-			{
-				Array<T> result(n);
-				for (auto& each : result)
-					each = std::atan2(each) * 180 / CATOOL_PI;
-				return result;
-			}
+
 			/*
 			tanh	Hyperbolic tangent
 			*/
 			template<class T>
-			inline T tanh(T n)
+			inline T tanh(const T & n)
 			{
 				return std::tanh(n);
 			}
@@ -335,7 +320,7 @@ namespace catool
 			atanh	Inverse hyperbolic tangent
 			*/
 			template<class T>
-			inline T atanh(T n)
+			inline T atanh(const T & n)
 			{
 				return std::atanh(n);
 			}
@@ -347,14 +332,6 @@ namespace catool
 					each = std::atanh(each);
 				return result;
 			}
-				
-				
-				
-				
-				
-				
-				
-
 		}
 	}
 }

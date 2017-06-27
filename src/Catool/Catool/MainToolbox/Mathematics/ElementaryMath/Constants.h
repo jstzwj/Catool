@@ -23,7 +23,7 @@ namespace catool
 			isfinite	Array elements that are finite
 			*/
 			template<class T>
-			bool isfinite(T n)
+			bool isfinite(const T & n)
 			{
 				return std::isfinite(n);
 			}
@@ -42,7 +42,7 @@ namespace catool
 			isinf	Array elements that are infinite
 			*/
 			template<class T>
-			bool isinf(T n)
+			bool isinf(const T & n)
 			{
 				return std::isinf(n);
 			}
@@ -61,7 +61,7 @@ namespace catool
 			isnan
 			*/
 			template<class T>
-			bool isnan(T n)
+			bool isnan(const T & n)
 			{
 				return std::isnan(n);
 			}
