@@ -50,4 +50,22 @@ class Matrix
 这也是我使用列优先的原因之二。  
 
 
+## Array简要表示
+`cpp
+template<class T>
+class Array
+{
+    private:
+    std::vector<T> dim;
+    std::vector<T> data;
+    public:
+    ...other...
+};
+`
+
+## 常用成员函数说明
+
+
+
+
 
