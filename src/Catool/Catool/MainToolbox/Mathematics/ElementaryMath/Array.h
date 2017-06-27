@@ -4,6 +4,7 @@
 
 #include<vector>
 #include<algorithm>
+#include<tuple>
 #include<cstdlib>
 #include<ctime>
 
@@ -535,6 +536,132 @@ namespace catool
 		cat
 		Concatenate arrays along specified dimension
 		*/
+
+		/*
+		y = linspace(x1,x2)
+		y = linspace(x1,x2,n)
+		*/
+
+		Array<double> linspace(double x1, double x2, int n)
+		{
+			Array<double> result;
+			result.resize(1, n);
+			double interval = (x2 - x1) / (n - 1);
+			double cur_val = x1;
+
+			for (auto & each : result)
+			{
+				each = cur_val;
+				cur_val = cur_val + interval;
+			}
+			return result;
+		}
+
+		/*
+		logspace
+		Generate logarithmically spaced vector
+		*/
+		Array<double> logspace(double x1, double x2, int n)
+		{
+			Array<double> result;
+			result.resize(1, n);
+			double interval = (x2 - x1) / (n - 1);
+			double cur_val = x1;
+
+			for (auto & each : result)
+			{
+				each = std::pow(10, cur_val);
+				cur_val = cur_val + interval;
+			}
+			return result;
+		}
+		/*
+		freqspace
+		Frequency spacing for frequency response
+		*/
+
+		/*
+		[X,Y] = meshgrid(x,y)
+		[X,Y] = meshgrid(x)
+		[X,Y,Z] = meshgrid(x,y,z)
+		[X,Y,Z] = meshgrid(x)
+		*/
+
+		template<class T>
+		std::tuple<Array<T>, Array<T>> meshgrid(const Array<T>& x, const Array<T>& y)
+		{
+			if (x.dim_size() > 2 || y.dim_size() > 2)
+			{
+				throw std::runtime_error("error: meshgrid: X and Y must be vectors");
+			}
+			Array<T> m, n;
+			m.resize(y.size(), x.size());
+			n.resize(y.size(), x.size());
+			for (int i = 0; i < y.size(); ++i)
+			{
+				for (int j = 0; j < x.size(); ++j)
+				{
+					m[j*y.size() + i] = x[j];
+				}
+			}
+			for (int i = 0; i < x.size(); ++i)
+			{
+				for (int j = 0; j < y.size(); ++j)
+				{
+					n[i*y.size() + j] = y[j];
+				}
+			}
+			return std::make_tuple(m, n);
+		}
+		template<class T>
+		std::tuple<Array<T>, Array<T>, Array<T>> meshgrid(const Array<T>& x, const Array<T>& y, const Array<T>& z)
+		{
+			if (x.dim_size() > 2 || y.dim_size()>2 || z.dim_size()>2)
+			{
+				throw std::runtime_error("error: meshgrid: X , Y and Z must be vectors");
+			}
+			Array<T> m, n, o;
+			m.resize(y.size(), x.size(), z.size());
+			n.resize(y.size(), x.size(), z.size());
+			o.resize(y.size(), x.size(), z.size());
+
+			for (int i = 0; i < z.size(); ++i)
+			{
+				for (int j = 0; j < y.size(); ++j)
+				{
+					for (int k = 0; k < x.size(); ++k)
+					{
+						m[i*m.get_dim_acc(2) + k*m.get_dim_acc(1) + j] = x[k];
+					}
+				}
+			}
+			for (int i = 0; i < x.size(); ++i)
+			{
+				for (int j = 0; j < z.size(); ++j)
+				{
+					for (int k = 0; k < y.size(); ++k)
+					{
+						n[j*m.get_dim_acc(2) + i*m.get_dim_acc(1) + k] = y[k];
+					}
+				}
+			}
+			for (int i = 0; i < y.size(); ++i)
+			{
+				for (int j = 0; j < x.size(); ++j)
+				{
+					for (int k = 0; k < z.size(); ++k)
+					{
+						o[k*m.get_dim_acc(2) + j*m.get_dim_acc(1) + i] = z[k];
+					}
+				}
+			}
+			return std::make_tuple(m, n, o);
+		}
+		template<class T>
+		std::tuple<Array<T>, Array<T>> meshgrid(const Array<T>& x)
+		{
+			return meshgrid(x, x);
+		}
 
 		/*
 		length

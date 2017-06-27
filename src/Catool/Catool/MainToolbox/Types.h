@@ -64,34 +64,30 @@ namespace catool
 		template<class T>
 		void var_dump_impl(const Array<T> & v, std::vector<int>& loop, int cur_loop)
 		{
-			if (cur_loop < 2)
+			int &i = loop[cur_loop];
+			for (i = 0; i < v.get_dim_data(cur_loop); ++i)
 			{
-				std::cout << compose_index(loop) << "\t=" << std::endl;
-
-				int prefix_index = 0;
-				for (unsigned int i = 2; i < loop.size(); ++i)
+				if (cur_loop < 2)
 				{
-					prefix_index += v.get_dim_acc(i)*loop[i];
-				}
+					std::cout << compose_index(loop) << "\t=" << std::endl;
 
-				int counter = 0;
-				for (int i = 0; i < v.get_dim_data(1); ++i)
-				{
-					for (int j = 0; j < v.get_dim_data(0); ++j)
+					int prefix_index = 0;
+					for (unsigned int i = 2; i < loop.size(); ++i)
 					{
-						std::cout << v[prefix_index + i*v.get_dim_acc(1) + j] << " ";
-						++counter;
-						if (counter%v.get_dim_data(1) == 0)
-						{
-							std::cout << std::endl;
-						}
+						prefix_index += v.get_dim_acc(i)*loop[i];
 					}
+
+					for (int i = 0; i < v.get_dim_data(0); ++i)
+					{
+						for (int j = 0; j < v.get_dim_data(1); ++j)
+						{
+							std::cout << v[prefix_index + j*v.get_dim_data(0) + i] << " ";
+						}
+						std::cout << std::endl;
+					}
+					break;
 				}
-			}
-			else
-			{
-				int &i = loop[cur_loop];
-				for (i = 0; i < v.get_dim_data(cur_loop); ++i)
+				else
 				{
 					var_dump_impl(v, loop, cur_loop - 1);
 				}
@@ -142,7 +138,7 @@ namespace catool
 				}
 				else
 				{
-					int counter = 0;
+					/*int counter = 0;
 					for (int i = 0; i < v.get_dim_data(1); ++i)
 					{
 						for (int j = 0; j < v.get_dim_data(0); ++j)
@@ -154,6 +150,14 @@ namespace catool
 								std::cout << std::endl;
 							}
 						}
+					}*/
+					for (int i = 0; i < v.get_dim_data(0); ++i)
+					{
+						for (int j = 0; j < v.get_dim_data(1); ++j)
+						{
+							std::cout << v[j*v.get_dim_data(0) + i] << " ";
+						}
+						std::cout << std::endl;
 					}
 				}
 			}
