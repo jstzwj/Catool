@@ -17,90 +17,93 @@ These compilers which have been tested are shown in the following list.
 ## Fundamentals
 
 ### Array and matrix
-`length`	Length of largest array dimension<br/>
-`size`	Array size<br/>
-`ndims`	Number of array dimensions<br/>
-`numel`	Number of array elements<br/>
-`isscalar`	Determine whether input is scalar<br/>
-`isvector`	Determine whether input is vector<br/>
-`ismatrix`	Determine whether input is matrix<br/>
-`isrow`	Determine whether input is row vector<br/>
-`iscolumn`	Determine whether input is column vector<br/>
-`isempty`	Determine whether array is empty<br/>
+`length`	Length of largest array dimension  
+`size`	Array size  
+`ndims`	Number of array dimensions  
+`numel`	Number of array elements  
+`isscalar`	Determine whether input is scalar  
+`isvector`	Determine whether input is vector  
+`ismatrix`	Determine whether input is matrix  
+`isrow`	Determine whether input is row vector  
+`iscolumn`	Determine whether input is column vector  
+`isempty`	Determine whether array is empty  
 
 ## Elementary Math
 
 ### Arithmetic
 
-`plus`	Addition<br/>
-`uplus`	Unary plus<br/>
-`minus`	Subtraction<br/>
-`uminus`	Unary minus<br/>
-`times`	Element-wise multiplication<br/>
-`rdivide`	Right array division<br/>
-`ldivide`	Left array division<br/>
-`power`	Element-wise power<br/>
-`mtimes`	Matrix Multiplication<br/>
+`plus`	Addition  
+`uplus`	Unary plus  
+`minus`	Subtraction  
+`uminus`	Unary minus  
+`times`	Element-wise multiplication  
+`rdivide`	Right array division  
+`ldivide`	Left array division  
+`power`	Element-wise power  
+`mtimes`	Matrix Multiplication 
 
-`ceil`	Round toward positive infinity<br/>
-`fix`	Round toward zero<br/>
+`cumprod`  Cumulative produc
+
+
+`ceil`	Round toward positive infinity  
+`fix`	Round toward zero  
 `floor`	Round toward negative infinity<br/>
-`mod`	Remainder after division (modulo operation) ....coming<br/>
-`rem`	Remainder after division<br/>
-`round`	Round to nearest decimal or integer<br/>
+`mod`	Remainder after division (modulo operation) ....coming  
+`rem`	Remainder after division  
+`round`	Round to nearest decimal or integer  
 
 ### Trigonometry
 
-`sin`	Sine of argument in radians<br/>
-`sind`	Sine of argument in degrees<br/>
-`asin`	Inverse sine in radians<br/>
-`asind`	Inverse sine in degrees<br/>
-`sinh`	Hyperbolic sine of argument in radians<br/>
-`asinh`	Inverse hyperbolic sine<br/>
-`cos`	Cosine of argument in radians<br/>
-`cosd`	Cosine of argument in degrees<br/>
-`acos`	Inverse cosine in radians<br/>
-`acosd`	Inverse cosine in degrees<br/>
-`cosh`	Hyperbolic cosine<br/>
-`acosh`	Inverse hyperbolic cosine<br/>
+`sin`	Sine of argument in radians  
+`sind`	Sine of argument in degrees  
+`asin`	Inverse sine in radians  
+`asind`	Inverse sine in degrees  
+`sinh`	Hyperbolic sine of argument in radians  
+`asinh`	Inverse hyperbolic sine  
+`cos`	Cosine of argument in radians  
+`cosd`	Cosine of argument in degrees  
+`acos`	Inverse cosine in radians  
+`acosd`	Inverse cosine in degrees   
+`cosh`	Hyperbolic cosine  
+`acosh`	Inverse hyperbolic cosine  
 
 ### Exp and Log
-`exp`	Exponential<br/>
+`exp`	Exponential  
 
 ### Complex Numbers
-`abs`	Absolute value and complex magnitude<br/>
-`angle`	Phase angle<br/>
-`conj`	Complex conjugate<br/>
-`sign`	Sign function (signum function)<br/>
+`abs`	Absolute value and complex magnitude  
+`angle`	Phase angle  
+`conj`	Complex conjugate  
+`sign`	Sign function (signum function)  
 
 ### Discrete Math
-`gcd`	Greatest common divisor<br/>
-`lcm`	Least common multiple<br/>
-`rat`	Rational fraction approximation<br/>
-`rats`	Rational output<br/>
+`gcd`	Greatest common divisor  
+`lcm`	Least common multiple  
+`rat`	Rational fraction approximation  
+`rats`	Rational output  
 
 
 ### Constants
-`Inf`	Infinity<br/>
-`pi`	Ratio of circle's circumference to its diameter<br/>
-`natural constant` <br/>
-`euler constant` <br/>
-`NaN`	Not-a-Number<br/>
-`isfinite`	Array elements that are finite<br/>
-`isinf`	Array elements that are infinite<br/>
-`isnan`	Array elements that are NaN<br/>
+`Inf`	Infinity  
+`pi`	Ratio of circle's circumference to its diameter  
+`natural constant`   
+`euler constant`   
+`NaN`	Not-a-Number  
+`isfinite`	Array elements that are finite  
+`isinf`	Array elements that are infinite  
+`isnan`	Array elements that are NaN  
 
 ## Linear Algebra
 
-`inv`	Matrix inverse<br/>
+`inv`	Matrix inverse  
 
 ## Random Number Generation
 
-`rand`	Uniformly distributed random numbers<br/>
-`randn`	Normally distributed random numbers<br/>
-`randi`	Uniformly distributed pseudorandom integers<br/>
+`rand`	Uniformly distributed random numbers  
+`randn`	Normally distributed random numbers  
+`randi`	Uniformly distributed pseudorandom integers  
 
-`rng`	Control random number generation<br/>
+`rng`	Control random number generation  
 
 
 
