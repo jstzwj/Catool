@@ -3,6 +3,7 @@
 #define CATOOL_MAINTOOLBOX_MATHEMATICS_LINEARALGEBRA_LINEAREQUATIONS_H
 
 #include <limits>
+#include<tuple>
 #include<cmath>
 #include"../ElementaryMath/Array.h"
 
@@ -54,6 +55,25 @@ namespace catool
 				}
 				return result;
 			}
+			/*
+			lu
+			LU matrix factorization
+			*/
+			inline std::tuple<Array<double>,Array<double>> lu(Array<double> m)
+			{
+				Array<double> u(m.get_dim()), l(m.get_dim());
+				int row = m.get_dim_data(1);
+				int col = m.get_dim_data(0);
+				
+				//TODO
+
+
+
+
+
+			}
+
+
 		}
 	}
 }

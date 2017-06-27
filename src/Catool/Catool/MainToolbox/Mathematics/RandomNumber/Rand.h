@@ -136,7 +136,7 @@ namespace catool
 			rng
 			Control random number generation
 			*/
-			enum RANG_TYPE { SHUFFLE, DEFAULT };
+			enum class RANG_TYPE { SHUFFLE, DEFAULT };
 			[[noreturn]]inline void rng(unsigned int seed)
 			{
 				std::srand(seed);

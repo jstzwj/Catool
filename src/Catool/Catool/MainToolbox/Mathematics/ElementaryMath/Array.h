@@ -29,6 +29,11 @@ namespace catool
 				dim.push_back(1);
 				data.resize(row_);
 			}
+			Array(const std::vector<int> dims) noexcept
+				:dim(dims)
+			{
+				this->resize_from_dim();
+			}
 			template<class ...K>
 			Array(K ...arg)
 			{
@@ -56,6 +61,9 @@ namespace catool
 			template<class U>
 			Array(const Array<U>& other)
 				:dim(other.get_dim()), data(other.begin(), other.end()) {}
+
+			Array(const Array<T>& other)
+				: dim(other.get_dim()), data(other.begin(), other.end()) {}
 
 			//using iterator = std::vector<T>::iterator;
 			//using const_iterator = std::vector<T>::const_iterator;

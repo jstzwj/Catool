@@ -4,6 +4,7 @@
 
 #include<cmath>
 #include"../../Types.h"
+#include"Constants.h"
 #include"Array.h"
 namespace catool
 {
@@ -295,6 +296,115 @@ namespace catool
 				}
 				return result;
 			}
+
+			/*
+			cumprod
+			Cumulative product
+			*/
+			enum class CUMPROD_DIRECTION
+			{
+				DEFAULT,
+				REVERSE
+			};
+			enum class CUMPROD_NANFLAG
+			{
+				OMITNAN,
+				INCLUDENAN
+			};
+
+			inline void cumprod_impl(Array<double> & n,
+				std::vector<int> &dims,
+				int cur_dim,
+				int cum_dim,
+				CUMPROD_DIRECTION direction,
+				CUMPROD_NANFLAG nanflag)
+			{
+				if (cur_dim < 0)
+				{
+					int sum_index = 0;
+					for (unsigned int i = 0; i < dims.size(); ++i)
+					{
+						if (i != cum_dim)
+							sum_index += dims[i] * n.get_dim_acc(i);
+					}
+					double cum = 1;
+					if (direction == CUMPROD_DIRECTION::DEFAULT)
+					{
+						for (int i = 0; i < n.get_dim_data(cum_dim); ++i)
+						{
+							if (n[i*n.get_dim_acc(cum_dim) + sum_index] != CATOOL_NAN ||
+								nanflag != CUMPROD_NANFLAG::OMITNAN)
+							{
+								n[i*n.get_dim_acc(cum_dim) + sum_index] *= cum;
+								cum = n[i*n.get_dim_acc(cum_dim) + sum_index];
+							}
+						}
+					}
+					else if (direction == CUMPROD_DIRECTION::REVERSE)
+					{
+						for (int i = n.get_dim_data(cum_dim) - 1; i >= 0; --i)
+						{
+							if (n[i*n.get_dim_acc(cum_dim) + sum_index] != CATOOL_NAN ||
+								nanflag != CUMPROD_NANFLAG::OMITNAN)
+							{
+								n[i*n.get_dim_acc(cum_dim) + sum_index] *= cum;
+								cum = n[i*n.get_dim_acc(cum_dim) + sum_index];
+							}
+						}
+					}
+					else
+					{
+						throw std::runtime_error("Unknown CUMPROD_DIRECTION");
+					}
+				}
+				else
+				{
+					if (cur_dim != cum_dim)
+					{
+						int &i = dims[cur_dim];
+						for (i = 0; i < n.get_dim_data(cur_dim); ++i)
+						{
+							cumprod_impl(n, dims, cur_dim - 1, cum_dim, direction, nanflag);
+						}
+					}
+					else
+					{
+						cumprod_impl(n, dims, cur_dim - 1, cum_dim, direction, nanflag);
+					}
+				}
+			}
+
+			inline Array<double> cumprod(const Array<double> & n,
+				CUMPROD_DIRECTION direction = CUMPROD_DIRECTION::DEFAULT,
+				CUMPROD_NANFLAG nanflag = CUMPROD_NANFLAG::INCLUDENAN)
+			{
+				Array<double> result(n);
+				std::vector<int> dims;
+				dims.resize(n.dim_size());
+				cumprod_impl(result, dims, n.dim_size() - 1, n.dim_size() - 1, direction, nanflag);
+				return result;
+			}
+			/*
+			B = cumprod(A, dim)
+			*/
+			inline Array<double> cumprod(const Array<double> & n, int dim,
+				CUMPROD_DIRECTION direction = CUMPROD_DIRECTION::DEFAULT,
+				CUMPROD_NANFLAG nanflag = CUMPROD_NANFLAG::INCLUDENAN)
+			{
+				Array<double> result(n);
+				std::vector<int> dims;
+				dims.resize(n.dim_size());
+				cumprod_impl(result, dims, n.dim_size() - 1, dim, direction, nanflag);
+				return result;
+			}
+			/*
+			cumsum	Cumulative sum
+			diff	Differences and Approximate Derivatives
+			movsum	Moving sum
+			prod	Product of array elements
+			sum	Sum of array elements
+			*/
+
 			/*
 			Y = fix(X) rounds each element of X to the nearest integer toward zero.
 			For positive X, the behavior of fix is the same as floor.
