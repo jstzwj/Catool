@@ -18,16 +18,16 @@
 2.Array在进行cat等操作时会需要额外的空间，因此动态扩展空间的需求是存在的  
 3.当维度信息作为类型的一部分时，函数接受参数时重载会比较麻烦，容易混乱  
 例如，把Matrix这么写  
-`cpp
-template<class T>
-class Matrix
-{
-    private:
-    Array<Array<T> > data;
-    public:
-    ...other...
-};
-`
+```cpp
+template<class T>  
+class Matrix  
+{  
+    private:  
+    Array<Array<T> > data;  
+    public:  
+    ...other...  
+};  
+````
 这样三维，四维的矩阵怎么表示？如何保证内层Array<T>长度相同？  
 
 4.维度是很容易弄乱思维的的细节，画图会比较直观  
@@ -51,17 +51,17 @@ class Matrix
 
 
 ## Array简要表示
-`cpp
-template<class T>
-class Array
-{
-    private:
-    std::vector<T> dim;
-    std::vector<T> data;
-    public:
-    ...other...
-};
-`
+```cpp
+template<class T>  
+class Array  
+{  
+    private:  
+    std::vector<T> dim;  
+    std::vector<T> data;  
+    public:  
+    ...other...  
+};  
+```
 
 ## 常用成员函数说明
 
