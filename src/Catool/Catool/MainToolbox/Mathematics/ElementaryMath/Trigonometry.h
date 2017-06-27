@@ -219,6 +219,142 @@ namespace catool
 					each = std::acosh(each);
 				return result;
 			}
+			/*
+			tan	Tangent of argument in radians
+			*/
+			template<class T>
+			inline T tan(T n)
+			{
+				return std::tan(n);
+			}
+			template<class T>
+			inline Array<T> tan(const Array<T>& n)
+			{
+				Array<T> result(n);
+				for (auto& each : result)
+					each = std::tan(each);
+				return result;
+			}
+			/*
+			tand	Tangent of argument in degrees
+			*/
+			template<class T>
+			inline T tand(T n)
+			{
+				return std::tan(n*CATOOL_PI / 180);
+			}
+			template<class T>
+			inline Array<T> tand(const Array<T>& n)
+			{
+				Array<T> result(n);
+				for (auto& each : result)
+					each = std::tan(each*CATOOL_PI / 180);
+				return result;
+			}
+			/*
+			atan	Inverse tangent in radians
+			*/
+			template<class T>
+			inline T atan(T n)
+			{
+				return std::atan(n);
+			}
+			template<class T>
+			inline Array<T> atan(const Array<T>& n)
+			{
+				Array<T> result(n);
+				for (auto& each : result)
+					each = std::atan(each);
+				return result;
+			}
+			/*
+			atand	Inverse tangent in degrees
+			*/
+			template<class T>
+			inline T atand(T n)
+			{
+				return std::atan(n) * 180 / CATOOL_PI;
+			}
+			template<class T>
+			inline Array<T> atand(const Array<T>& n)
+			{
+				Array<T> result(n);
+				for (auto& each : result)
+					each = std::atan(each) * 180 / CATOOL_PI;
+				return result;
+			}
+			/*
+			atan2	Four - quadrant inverse tangent
+			*/
+			template<class T>
+			inline T atan2(T n)
+			{
+				return std::atan2(n);
+			}
+			template<class T>
+			inline Array<T> atan2(const Array<T>& n)
+			{
+				Array<T> result(n);
+				for (auto& each : result)
+					each = std::atan2(each);
+				return result;
+			}
+			/*
+			atan2d	Four - quadrant inverse tangent in degrees
+			*/
+			template<class T>
+			inline T atan2d(T n)
+			{
+				return std::atan2(n) * 180 / CATOOL_PI;
+			}
+			template<class T>
+			inline Array<T> atan2d(const Array<T>& n)
+			{
+				Array<T> result(n);
+				for (auto& each : result)
+					each = std::atan2(each) * 180 / CATOOL_PI;
+				return result;
+			}
+			/*
+			tanh	Hyperbolic tangent
+			*/
+			template<class T>
+			inline T tanh(T n)
+			{
+				return std::tanh(n);
+			}
+			template<class T>
+			inline Array<T> tanh(const Array<T>& n)
+			{
+				Array<T> result(n);
+				for (auto& each : result)
+					each = std::tanh(each);
+				return result;
+			}
+			/*
+			atanh	Inverse hyperbolic tangent
+			*/
+			template<class T>
+			inline T atanh(T n)
+			{
+				return std::atanh(n);
+			}
+			template<class T>
+			inline Array<T> atanh(const Array<T>& n)
+			{
+				Array<T> result(n);
+				for (auto& each : result)
+					each = std::atanh(each);
+				return result;
+			}
+				
+				
+				
+				
+				
+				
+				
+
 		}
 	}
 }

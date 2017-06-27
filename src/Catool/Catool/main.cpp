@@ -31,7 +31,7 @@ int main()
 	}*/
 	//var_dump(sign(Complex(1,2)));
 	//var_dump(inv(ones(2, 2)));
-	var_dump(cumprod(times(ones(2,2,2),2),0));
+	//var_dump(cumprod(times(ones(2,2,2),2),0));
 	system("pause");
 	return 0;
 }

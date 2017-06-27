@@ -60,12 +60,23 @@ These compilers which have been tested are shown in the following list.
 `asind`	Inverse sine in degrees  
 `sinh`	Hyperbolic sine of argument in radians  
 `asinh`	Inverse hyperbolic sine  
+  
 `cos`	Cosine of argument in radians  
 `cosd`	Cosine of argument in degrees  
 `acos`	Inverse cosine in radians  
 `acosd`	Inverse cosine in degrees   
 `cosh`	Hyperbolic cosine  
 `acosh`	Inverse hyperbolic cosine  
+  
+`tan`	Tangent of argument in radians  
+`tand`	Tangent of argument in degrees  
+`atan`	Inverse tangent in radians  
+`atand`	Inverse tangent in degrees  
+`atan2`	Four-quadrant inverse tangent  
+`atan2d`	Four-quadrant inverse tangent in degrees  
+`tanh`	Hyperbolic tangent  
+`atanh`	Inverse hyperbolic tangent  
+  
 
 ### Exp and Log
 `exp`	Exponential  
