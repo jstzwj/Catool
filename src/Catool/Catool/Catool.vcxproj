@@ -113,6 +113,12 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="MainToolbox\Data\Stream\FileInputStream.h" />
+    <ClInclude Include="MainToolbox\Data\Stream\FileOutputStream.h" />
+    <ClInclude Include="MainToolbox\Data\Stream\InputStream.h" />
+    <ClInclude Include="MainToolbox\Data\Stream\OutputStream.h" />
+    <ClInclude Include="MainToolbox\Data\Stream\Stream.h" />
+    <ClInclude Include="MainToolbox\Data\Stream\StreamBase.h" />
     <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\Arithmetic.h" />
     <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\Array.h" />
     <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\Complex.h" />

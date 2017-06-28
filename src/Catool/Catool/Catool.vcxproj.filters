@@ -34,6 +34,12 @@
     <Filter Include="头文件\MainToolbox\Mathematics\Interpolation">
       <UniqueIdentifier>{3e19021c-eae7-4adc-b3f1-313d3a22c283}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\MainToolbox\Data">
+      <UniqueIdentifier>{c7cc2fc8-800d-4657-b3c1-1a92a7d5d847}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\MainToolbox\Data\Stream">
+      <UniqueIdentifier>{21f54960-e38b-48a6-8340-ff1d8a90c059}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -76,6 +82,24 @@
     </ClInclude>
     <ClInclude Include="Version.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MainToolbox\Data\Stream\FileInputStream.h">
+      <Filter>头文件\MainToolbox\Data\Stream</Filter>
+    </ClInclude>
+    <ClInclude Include="MainToolbox\Data\Stream\FileOutputStream.h">
+      <Filter>头文件\MainToolbox\Data\Stream</Filter>
+    </ClInclude>
+    <ClInclude Include="MainToolbox\Data\Stream\InputStream.h">
+      <Filter>头文件\MainToolbox\Data\Stream</Filter>
+    </ClInclude>
+    <ClInclude Include="MainToolbox\Data\Stream\OutputStream.h">
+      <Filter>头文件\MainToolbox\Data\Stream</Filter>
+    </ClInclude>
+    <ClInclude Include="MainToolbox\Data\Stream\Stream.h">
+      <Filter>头文件\MainToolbox\Data\Stream</Filter>
+    </ClInclude>
+    <ClInclude Include="MainToolbox\Data\Stream\StreamBase.h">
+      <Filter>头文件\MainToolbox\Data\Stream</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
