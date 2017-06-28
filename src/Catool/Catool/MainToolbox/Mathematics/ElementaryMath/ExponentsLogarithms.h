@@ -26,6 +26,73 @@ namespace catool
 					each = std::exp(each);
 				return result;
 			}
+			/*
+			log	Natural logarithm
+			*/
+			template<class T>
+			T log(const T & n)
+			{
+				return std::log(n);
+			}
+			template<class T>
+			Array<T> log(const Array<T>& n)
+			{
+				Array<T> result(n);
+				for (auto& each : result)
+					each = std::log(each);
+				return result;
+			}
+
+			/*
+			log10	Common logarithm (base 10)
+			*/
+			template<class T>
+			T log10(const T & n)
+			{
+				return std::log10(n);
+			}
+			template<class T>
+			Array<T> log10(const Array<T>& n)
+			{
+				Array<T> result(n);
+				for (auto& each : result)
+					each = std::log10(each);
+				return result;
+			}
+			/*
+			log2	Base 2 logarithm and dissect floating-point numbers into exponent and mantissa
+			*/
+			template<class T>
+			T log2(const T & n)
+			{
+				return std::log2(n);
+			}
+			template<class T>
+			Array<T> log2(const Array<T>& n)
+			{
+				Array<T> result(n);
+				for (auto& each : result)
+					each = std::log2(each);
+				return result;
+			}
+
+			/*
+			sqrt	Square root
+			*/
+			template<class T>
+			T sqrt(const T & n)
+			{
+				return std::sqrt(n);
+			}
+			template<class T>
+			Array<T> sqrt(const Array<T>& n)
+			{
+				Array<T> result(n);
+				for (auto& each : result)
+					each = std::sqrt(each);
+				return result;
+			}
+
 		}
 	}
 }
