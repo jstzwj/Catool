@@ -79,7 +79,12 @@ These compilers which have been tested are shown in the following list.
   
 
 ### Exp and Log
-`exp`	Exponential  
+`exp`	Exponential  
+`log`	Natural logarithm  
+`log10`	Common logarithm (base 10)  
+`log2`	Base 2 logarithm and dissect floating-point numbers into exponent and mantissa  
+`sqrt`	Square root  
+
 
 ### Complex Numbers
 `abs`	Absolute value and complex magnitude  
