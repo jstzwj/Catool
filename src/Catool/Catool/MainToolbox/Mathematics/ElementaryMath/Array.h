@@ -154,11 +154,31 @@ namespace catool
 			}
 			bool isMatrix()const
 			{
-				return dim.size() != 1;
+				int count = 0;
+				for (unsigned int i = 0; i < dim.size(); ++i)
+				{
+					if (dim[i]>1)
+					{
+						count++;
+						if (count >= 2)
+							return true;
+					}
+				}
+				return false;
 			}
 			bool isVector()const
 			{
-				return dim.size() == 1;
+				int count = 0;
+				for (unsigned int i = 0; i < dim.size();++i)
+				{
+					if (dim[i]>1)
+					{
+						count++;
+						if (count >= 2)
+							return false;
+					}
+				}
+				return true;
 			}
 			bool isRow()const
 			{
@@ -805,6 +825,27 @@ namespace catool
 		{
 			return n.isEmpty();
 		}
+		/*
+		transpose, .'
+		Transpose vector or matrix
+		*/
+		template<class T>
+		Array<T> transpose(const Array<T>& m)
+		{
+			if (m.dim_size() > 2)
+				throw std::runtime_error("error: transpose not defined for N-D objects");
+			Array<T> result(m.get_dim_data(1), m.get_dim_data(0));
+			for (int i = 0; i < m.get_dim_data(0);++i)
+			{
+				for (int j = 0; j < m.get_dim_data(1); ++j)
+				{
+					result[i*m.get_dim_data(1) + j] = m[j*m.get_dim_data(0)+i];
+				}
+			}
+			return result;
+		}
+
+
 	}
 }
 

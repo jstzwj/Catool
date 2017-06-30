@@ -287,10 +287,10 @@ namespace catool
 				{
 					for (int j = 0; j < b.get_dim_data(1); ++j)
 					{
-						int des = i*a.get_dim_data(0) + j;
-						for (int k = 0; k < a.get_dim_data(1); ++k)
+						int des = j*a.get_dim_data(0) + i;
+						for (int k = 0; k < b.get_dim_data(0); ++k)
 						{
-							result[des] += a[i*a.get_dim_data(1) + k] * b[k*b.get_dim_data(1) + j];
+							result[des] += a[k*a.get_dim_data(0) + i] * b[j*b.get_dim_data(0) + k];
 						}
 					}
 				}
