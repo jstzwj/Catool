@@ -42,7 +42,7 @@ These compilers which have been tested are shown in the following list.
 `power`	Element-wise power  
 `mtimes`	Matrix Multiplication 
 
-`cumprod`  Cumulative produc
+`cumprod`  Cumulative product  
 `cumsum`	Cumulative sum  
 
 
