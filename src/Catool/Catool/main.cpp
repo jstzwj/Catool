@@ -44,7 +44,10 @@ int main()
 	}*/
 	//var_dump(transpose(abc).isMatrix());
 	//mtimes(rand(1000, 1000), rand(1000, 1000));
-
+	/*{
+		var_dump(std::get<0>(lu(eye(2,2))));
+		var_dump(std::get<1>(lu(eye(2, 2))));
+	}*/
 	
 	system("pause");
 	return 0;

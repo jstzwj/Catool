@@ -59,13 +59,25 @@ namespace catool
 			lu
 			LU matrix factorization
 			*/
-			inline std::tuple<Array<double>, Array<double>> lu(Array<double> m)
+			inline std::tuple<Array<double>, Array<double>> lu(const Array<double> &m)
 			{
-				Array<double> u(m.get_dim()), l(m.get_dim());
-				int row = m.get_dim_data(1);
-				int col = m.get_dim_data(0);
-
-				//TODO
+				if (m.dim_size() > 2)
+					throw std::runtime_error("error: lu not defined for N-D objects");
+				Array<double> l, u(m);
+				l = eye(u.get_dim_data(0), u.get_dim_data(0));
+				for (int i = 0; i < u.get_dim_data(0);++i)
+				{
+					for (int j = i+1; j < u.get_dim_data(0);++j)
+					{
+						double scale = u[i*u.get_dim_data(0) + j] / u[i*u.get_dim_data(0) + i];
+						for (int k = 0; k < u.get_dim_data(1);++k)
+						{
+							u[k*u.get_dim_data(0) + j] += u[k*u.get_dim_data(0) + i] * (-scale);
+							l[i*u.get_dim_data(0) + j] = scale;
+						}
+					}
+				}
+				return std::make_tuple(l,u);
 			}
 		}
 	}
