@@ -43,6 +43,7 @@ These compilers which have been tested are shown in the following list.
 `mtimes`	Matrix Multiplication 
 
 `cumprod`  Cumulative produc
+`cumsum`	Cumulative sum  
 
 
 `ceil`	Round toward positive infinity  
@@ -112,6 +113,9 @@ These compilers which have been tested are shown in the following list.
 ## Linear Algebra
 
 `inv`	Matrix inverse  
+
+
+`lu`  LU matrix factorization  
 
 ## Random Number Generation
 
