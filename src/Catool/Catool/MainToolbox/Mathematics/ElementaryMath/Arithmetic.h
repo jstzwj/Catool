@@ -3,6 +3,7 @@
 #define CATOOL_MAINTOOLBOX_MATHEMATIC_ELEMENTARYMATH_ARITHMETIC_H
 
 #include<cmath>
+#include<limits>
 #include"../../Types.h"
 #include"Constants.h"
 #include"Array.h"
@@ -271,7 +272,7 @@ namespace catool
 			C = A*B is the matrix product of A and B.
 			*/
 			template<class T>
-			inline Array<T> mtimes(const Array<T>& a, const Array<T>& b)
+			Array<T> mtimes_normal(const Array<T>& a, const Array<T>& b)
 			{
 				if (a.dim_size() > 2 || b.dim_size() > 2)
 				{
@@ -291,6 +292,35 @@ namespace catool
 						for (int k = 0; k < b.get_dim_data(0); ++k)
 						{
 							result[des] += a[k*a.get_dim_data(0) + i] * b[j*b.get_dim_data(0) + k];
+						}
+					}
+				}
+				return result;
+			}
+			template<class T>
+			Array<T> mtimes(const Array<T>& a, const Array<T>& b)
+			{
+				if (a.dim_size() > 2 || b.dim_size() > 2)
+				{
+					throw std::runtime_error("Arguments must be 2 - D, or at least one argument must be scalar.Use TIMES(.*) for elementwise multiplication.");
+				}
+				if (a.get_dim_data(1) != b.get_dim_data(0))
+				{
+					throw std::runtime_error("Matrix dimensions must agree.");
+				}
+				Array<T> result(a.get_dim_data(0), b.get_dim_data(1));
+				//result.resize(a.rows()*b.cols());
+				for (int i = 0; i < a.get_dim_data(0); ++i)//a row
+				{
+					for (int j = 0; j < a.get_dim_data(1); ++j)//a col
+					{
+						if (std::abs(a[j*a.get_dim_data(0) + i]) <= std::numeric_limits<T>::epsilon())
+						{
+							continue;
+						}
+						for (int k = 0; k < b.get_dim_data(1); ++k)//b col
+						{
+							result[k*a.get_dim_data(0) + i] += a[j*a.get_dim_data(0) + i] * b[k*b.get_dim_data(0) + j];
 						}
 					}
 				}

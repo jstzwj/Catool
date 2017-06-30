@@ -42,8 +42,10 @@ int main()
 		var_dump(std::get<1>(meshgrid(abc, def, abc)));
 		var_dump(std::get<2>(meshgrid(abc, def, abc)));
 	}*/
-	var_dump(transpose(abc).isMatrix());
-	var_dump(mtimes(transpose(abc), def));
+	//var_dump(transpose(abc).isMatrix());
+	//mtimes(rand(1000, 1000), rand(1000, 1000));
+
+	
 	system("pause");
 	return 0;
 }
