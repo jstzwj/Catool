@@ -682,6 +682,13 @@ namespace catool
 		{
 			return meshgrid(x, x);
 		}
+		/*
+		ndgrid
+		Rectangular grid in N-D space
+		*/
+		//TODO
+
+
 
 		/*
 		length

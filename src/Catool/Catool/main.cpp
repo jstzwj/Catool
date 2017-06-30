@@ -44,11 +44,12 @@ int main()
 	}*/
 	//var_dump(transpose(abc).isMatrix());
 	//mtimes(rand(1000, 1000), rand(1000, 1000));
+	//mtimes(eye(10000, 1000), eye(1000, 10000));
 	/*{
 		var_dump(std::get<0>(lu(eye(2,2))));
 		var_dump(std::get<1>(lu(eye(2, 2))));
 	}*/
-	
+	//var_dump(cumsum(Array<double>({1,2,3,4,5})));
 	system("pause");
 	return 0;
 }

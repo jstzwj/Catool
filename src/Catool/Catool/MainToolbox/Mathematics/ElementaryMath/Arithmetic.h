@@ -427,13 +427,110 @@ namespace catool
 				cumprod_impl(result, dims, n.dim_size() - 1, dim, direction, nanflag);
 				return result;
 			}
+
+
 			/*
 			cumsum	Cumulative sum
-			diff	Differences and Approximate Derivatives
-			movsum	Moving sum
-			prod	Product of array elements
-			sum	Sum of array elements
 			*/
+			enum class CUMSUM_DIRECTION
+			{
+				DEFAULT,
+				REVERSE
+			};
+			enum class CUMSUM_NANFLAG
+			{
+				OMITNAN,
+				INCLUDENAN
+			};
+			template<class T>
+			void cumsum_impl(Array<T> & n,
+				std::vector<int> &dims,
+				int cur_dim,
+				int sum_dim,
+				CUMSUM_DIRECTION direction,
+				CUMSUM_NANFLAG nanflag)
+			{
+				if (cur_dim < 0)
+				{
+					int sum_index = 0;
+					for (unsigned int i = 0; i < dims.size(); ++i)
+					{
+						if (i != sum_dim)
+							sum_index += dims[i] * n.get_dim_acc(i);
+					}
+					T sum = 0;
+					if (direction == CUMSUM_DIRECTION::DEFAULT)
+					{
+						for (int i = 0; i < n.get_dim_data(sum_dim); ++i)
+						{
+							if (n[i*n.get_dim_acc(sum_dim) + sum_index] != CATOOL_NAN ||
+								nanflag != CUMSUM_NANFLAG::OMITNAN)
+							{
+								n[i*n.get_dim_acc(sum_dim) + sum_index] += sum;
+								sum = n[i*n.get_dim_acc(sum_dim) + sum_index];
+							}
+						}
+					}
+					else if (direction == CUMSUM_DIRECTION::REVERSE)
+					{
+						for (int i = n.get_dim_data(sum_dim) - 1; i >= 0; --i)
+						{
+							if (n[i*n.get_dim_acc(sum_dim) + sum_index] != CATOOL_NAN ||
+								nanflag != CUMSUM_NANFLAG::OMITNAN)
+							{
+								n[i*n.get_dim_acc(sum_dim) + sum_index] += sum;
+								sum = n[i*n.get_dim_acc(sum_dim) + sum_index];
+							}
+						}
+					}
+					else
+					{
+						throw std::runtime_error("Unknown CUMPROD_DIRECTION");
+					}
+				}
+				else
+				{
+					if (cur_dim != sum_dim)
+					{
+						int &i = dims[cur_dim];
+						for (i = 0; i < n.get_dim_data(cur_dim); ++i)
+						{
+							cumsum_impl(n, dims, cur_dim - 1, sum_dim, direction, nanflag);
+						}
+					}
+					else
+					{
+						cumsum_impl(n, dims, cur_dim - 1, sum_dim, direction, nanflag);
+					}
+				}
+			}
+			template<class T>
+			Array<T> cumsum(const Array<T> & n,
+				CUMSUM_DIRECTION direction = CUMSUM_DIRECTION::DEFAULT,
+				CUMSUM_NANFLAG nanflag = CUMSUM_NANFLAG::INCLUDENAN)
+			{
+				Array<T> result(n);
+				std::vector<int> dims;
+				dims.resize(n.dim_size());
+				cumsum_impl(result, dims, n.dim_size() - 1, n.dim_size() - 1, direction, nanflag);
+				return result;
+			}
+			/*
+			B = cumsum(A, dim)
+			*/
+			template<class T>
+			Array<T> cumsum(const Array<T> & n, int dim,
+				CUMSUM_DIRECTION direction = CUMSUM_DIRECTION::DEFAULT,
+				CUMSUM_NANFLAG nanflag = CUMSUM_NANFLAG::INCLUDENAN)
+			{
+				Array<T> result(n);
+				std::vector<int> dims;
+				dims.resize(n.dim_size());
+				cumsum_impl(result, dims, n.dim_size() - 1, dim, direction, nanflag);
+				return result;
+			}
+
+
 
 			/*
 			Y = fix(X) rounds each element of X to the nearest integer toward zero.
