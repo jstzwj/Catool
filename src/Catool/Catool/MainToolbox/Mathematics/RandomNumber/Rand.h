@@ -4,7 +4,7 @@
 #define CATOOL_MAINTOOLBOX_MATHEMATICS_RANDOMNUMBER_RAND_H
 
 #include<cmath>
-#include"../ElementaryMath/Array.h"
+#include"../../Array.h"
 
 namespace catool
 {

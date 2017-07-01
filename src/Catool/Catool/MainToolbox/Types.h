@@ -8,8 +8,8 @@
 #include<complex>
 #include<initializer_list>
 #include<typeinfo>
-#include"Mathematics\ElementaryMath\Array.h"
-#include"Mathematics\ElementaryMath\Complex.h"
+#include"Array.h"
+#include"Complex.h"
 
 namespace catool
 {

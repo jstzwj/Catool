@@ -73,7 +73,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <SDLCheck>true</SDLCheck>
+      <SDLCheck>false</SDLCheck>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -89,7 +89,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <SDLCheck>true</SDLCheck>
+      <SDLCheck>false</SDLCheck>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -113,6 +113,14 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="MainToolbox\Array.h" />
+    <ClInclude Include="MainToolbox\Complex.h" />
+    <ClInclude Include="MainToolbox\Data\Charset\Charset.h" />
+    <ClInclude Include="MainToolbox\Data\Charset\UTF16Charset.h" />
+    <ClInclude Include="MainToolbox\Data\Charset\UTF32Charset.h" />
+    <ClInclude Include="MainToolbox\Data\Charset\UTF8Charset.h" />
+    <ClInclude Include="MainToolbox\Data\Endian.h" />
+    <ClInclude Include="MainToolbox\Data\StandardFile\Audio\Wav.h" />
     <ClInclude Include="MainToolbox\Data\Stream\FileInputStream.h" />
     <ClInclude Include="MainToolbox\Data\Stream\FileOutputStream.h" />
     <ClInclude Include="MainToolbox\Data\Stream\InputStream.h" />
@@ -120,8 +128,6 @@
     <ClInclude Include="MainToolbox\Data\Stream\Stream.h" />
     <ClInclude Include="MainToolbox\Data\Stream\StreamBase.h" />
     <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\Arithmetic.h" />
-    <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\Array.h" />
-    <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\Complex.h" />
     <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\Constants.h" />
     <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\DiscreteMath.h" />
     <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\ExponentsLogarithms.h" />

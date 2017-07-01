@@ -5,7 +5,7 @@
 #include <limits>
 #include<tuple>
 #include<cmath>
-#include"../ElementaryMath/Array.h"
+#include"../../Array.h"
 
 namespace catool
 {

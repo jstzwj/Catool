@@ -40,6 +40,21 @@
     <Filter Include="头文件\MainToolbox\Data\Stream">
       <UniqueIdentifier>{21f54960-e38b-48a6-8340-ff1d8a90c059}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\MainToolbox\Data\Charset">
+      <UniqueIdentifier>{a7e1d231-c4f6-4f3e-a40f-01ad933a29c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\MainToolbox\Data\StandardFile">
+      <UniqueIdentifier>{78d27b7b-65b9-46d5-94f3-f3ea3e130583}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\MainToolbox\Data\StandardFile\Audio">
+      <UniqueIdentifier>{ff7fa2fa-58d7-42c5-a713-8bfd269cfec8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\MainToolbox\Data\StandardFile\Text">
+      <UniqueIdentifier>{d94a7b1d-49b0-4c09-87e6-f437448775b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\MainToolbox\Data\StandardFile\Image">
+      <UniqueIdentifier>{cc50bc77-ee05-42c3-924c-56257f47b9b7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -56,9 +71,6 @@
     <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\Constants.h">
       <Filter>头文件\MainToolbox\Mathematics\ElementaryMath</Filter>
     </ClInclude>
-    <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\Complex.h">
-      <Filter>头文件\MainToolbox\Mathematics\ElementaryMath</Filter>
-    </ClInclude>
     <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\DiscreteMath.h">
       <Filter>头文件\MainToolbox\Mathematics\ElementaryMath</Filter>
     </ClInclude>
@@ -70,9 +82,6 @@
     </ClInclude>
     <ClInclude Include="MainToolbox\Mathematics\RandomNumber\Rand.h">
       <Filter>头文件\MainToolbox\Mathematics\RandomNumber</Filter>
-    </ClInclude>
-    <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\Array.h">
-      <Filter>头文件\MainToolbox\Mathematics\ElementaryMath</Filter>
     </ClInclude>
     <ClInclude Include="MainToolbox\Types.h">
       <Filter>头文件\MainToolbox</Filter>
@@ -100,6 +109,30 @@
     </ClInclude>
     <ClInclude Include="MainToolbox\Data\Stream\StreamBase.h">
       <Filter>头文件\MainToolbox\Data\Stream</Filter>
+    </ClInclude>
+    <ClInclude Include="MainToolbox\Data\Charset\Charset.h">
+      <Filter>头文件\MainToolbox\Data\Charset</Filter>
+    </ClInclude>
+    <ClInclude Include="MainToolbox\Data\Charset\UTF16Charset.h">
+      <Filter>头文件\MainToolbox\Data\Charset</Filter>
+    </ClInclude>
+    <ClInclude Include="MainToolbox\Data\Charset\UTF8Charset.h">
+      <Filter>头文件\MainToolbox\Data\Charset</Filter>
+    </ClInclude>
+    <ClInclude Include="MainToolbox\Data\Charset\UTF32Charset.h">
+      <Filter>头文件\MainToolbox\Data\Charset</Filter>
+    </ClInclude>
+    <ClInclude Include="MainToolbox\Array.h">
+      <Filter>头文件\MainToolbox</Filter>
+    </ClInclude>
+    <ClInclude Include="MainToolbox\Complex.h">
+      <Filter>头文件\MainToolbox</Filter>
+    </ClInclude>
+    <ClInclude Include="MainToolbox\Data\StandardFile\Audio\Wav.h">
+      <Filter>头文件\MainToolbox\Data\StandardFile\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="MainToolbox\Data\Endian.h">
+      <Filter>头文件\MainToolbox\Data</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

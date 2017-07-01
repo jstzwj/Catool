@@ -1,13 +1,20 @@
 #include<iostream>
 #include<cassert>
 #include"MainToolbox\Types.h"
-#include"MainToolbox\Mathematics\ElementaryMath\Array.h"
+#include"MainToolbox\Array.h"
 #include"MainToolbox\Mathematics\ElementaryMath\Arithmetic.h"
 #include"MainToolbox\Mathematics\LinearAlgebra\LinearEquations.h"
-#include"MainToolbox\Mathematics\ElementaryMath\Complex.h"
+#include"MainToolbox\Complex.h"
 #include"MainToolbox\Mathematics\RandomNumber\Rand.h"
+#include"MainToolbox\Data\Endian.h"
+#include"MainToolbox\Data\StandardFile\Audio\Wav.h"
+
+
 using namespace catool::main_toolbox;
 using namespace catool::main_toolbox::mathematics;
+using namespace catool::main_toolbox::data;
+using namespace catool::main_toolbox::data::stream;
+using namespace catool::main_toolbox::data::audio;
 int main()
 {
 	Array<int> abc{ 1,2,3 };
@@ -50,6 +57,24 @@ int main()
 		var_dump(std::get<1>(lu(eye(2, 2))));
 	}*/
 	//var_dump(cumsum(Array<double>({1,2,3,4,5})));
+
+	//make noise
+	/*{
+		Array<uint16_t> audio_data = times(rand(44100*60, 2),1000);
+		std::FILE * file = nullptr;
+		file = std::fopen("b.wav", "wb");
+		if (file == nullptr)
+		{
+			throw std::runtime_error("fail to open file.");
+		}
+		FileOutputStream stream(file);
+		WaveWriter writer(std::move(stream));
+		writer.write(audio_data, 44100);
+	}*/
+	
+
+
+
 	system("pause");
 	return 0;
 }

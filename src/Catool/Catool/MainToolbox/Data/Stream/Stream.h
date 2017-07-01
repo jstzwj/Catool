@@ -7,24 +7,29 @@
 
 #include"StreamBase.h"
 
-namespace vocal_studio
+namespace catool
 {
-	namespace stream
+	namespace main_toolbox
 	{
-
-		template <typename T = char, typename Traits = StreamTraits>
-		class Stream :public StreamBase<T, Traits>
+		namespace data
 		{
-		public:
-			virtual bool isReadable() const override
+			namespace stream
 			{
-				return true;
+				template <typename T = char, typename Traits = StreamTraits>
+				class Stream :public StreamBase<T, Traits>
+				{
+				public:
+					virtual bool isReadable() const override
+					{
+						return true;
+					}
+					virtual bool isWriteable() const override
+					{
+						return true;
+					}
+				};
 			}
-			virtual bool isWriteable() const override
-			{
-				return true;
-			}
-		};
+		}
 	}
 }
 

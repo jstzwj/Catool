@@ -4,7 +4,7 @@
 
 #include<cmath>
 #include"../../Types.h"
-#include"Array.h"
+#include"../../Array.h"
 #include"Constants.h"
 namespace catool
 {

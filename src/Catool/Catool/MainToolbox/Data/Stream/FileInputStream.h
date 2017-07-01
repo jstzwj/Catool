@@ -6,88 +6,94 @@
 #include<exception>
 
 #include"InputStream.h"
-namespace vocal_studio
+namespace catool
 {
-	namespace stream
+	namespace main_toolbox
 	{
-		class FileInputStream :public InputStream<char>
+		namespace data
 		{
-		protected:
-			std::FILE * file;
-		public:
-			FileInputStream(std::FILE* file_) : file(file_) {}
-			FileInputStream(const FileInputStream& src) = delete;
-			FileInputStream(FileInputStream&& src) : file(src.file)
+			namespace stream
 			{
-				src.file = nullptr;
-			}
-			virtual ~FileInputStream() = default;
-
-			FileInputStream& operator =(const FileInputStream& src) = delete;
-			FileInputStream& operator =(FileInputStream&& src)
-			{
-				file = src.file;
-				src.file = nullptr;
-				return *this;
-			}
-			//read virtual function
-			virtual CharType read() override
-			{
-				CharType ret;
-				if (read(&ret, 1)!=0) 
-					return ret; 
-				else 
-					throw std::runtime_error("End of stream");
-			}
-			virtual std::size_t read(CharType * buffer, std::size_t count)override
-			{
-				std::size_t ret = std::fread(buffer, sizeof(CharType), count, file);
-				return ret;
-			}
-
-			virtual void skip()override
-			{
-				skip(1);
-			}
-			virtual void skip(std::size_t count)override
-			{
-				if (std::fseek(file, count, SEEK_CUR))
-					throw std::runtime_error("std::fseek failed");
-			}
-
-			//buffer virtual function
-			virtual void flush() {}
-
-			//seek virtual function
-			virtual bool isSeekable() const
-			{
-				return true;
-			}
-			virtual std::intmax_t seek(std::intmax_t offset, PosType method)
-			{
-				int seek_pos;
-				switch (method)
+				class FileInputStream :public InputStream<char>
 				{
-				case PosType::Begin:
-					seek_pos = SEEK_SET;
-					break;
-				case PosType::End:
-					seek_pos = SEEK_END;
-					break;
-				case PosType::Current:
-					seek_pos = SEEK_CUR;
-					break;
-				default:
-					throw std::runtime_error("Unknown postype.");
-				}
-				return std::fseek(file, offset, seek_pos);
-			}
+				protected:
+					std::FILE * file;
+				public:
+					FileInputStream(std::FILE* file_) : file(file_) {}
+					FileInputStream(const FileInputStream& src) = delete;
+					FileInputStream(FileInputStream&& src) : file(src.file)
+					{
+						src.file = nullptr;
+					}
+					virtual ~FileInputStream() = default;
 
-			virtual std::intmax_t getPosition()
-			{
-				return std::ftell(file);
+					FileInputStream& operator =(const FileInputStream& src) = delete;
+					FileInputStream& operator =(FileInputStream&& src)
+					{
+						file = src.file;
+						src.file = nullptr;
+						return *this;
+					}
+					//read virtual function
+					virtual CharType read() override
+					{
+						CharType ret;
+						if (read(&ret, 1) != 0)
+							return ret;
+						else
+							throw std::runtime_error("End of stream");
+					}
+					virtual std::size_t read(CharType * buffer, std::size_t count)override
+					{
+						std::size_t ret = std::fread(buffer, sizeof(CharType), count, file);
+						return ret;
+					}
+
+					virtual void skip()override
+					{
+						skip(1);
+					}
+					virtual void skip(std::size_t count)override
+					{
+						if (std::fseek(file, count, SEEK_CUR))
+							throw std::runtime_error("std::fseek failed");
+					}
+
+					//buffer virtual function
+					virtual void flush() {}
+
+					//seek virtual function
+					virtual bool isSeekable() const
+					{
+						return true;
+					}
+					virtual std::intmax_t seek(std::intmax_t offset, PosType method)
+					{
+						int seek_pos;
+						switch (method)
+						{
+						case PosType::Begin:
+							seek_pos = SEEK_SET;
+							break;
+						case PosType::End:
+							seek_pos = SEEK_END;
+							break;
+						case PosType::Current:
+							seek_pos = SEEK_CUR;
+							break;
+						default:
+							throw std::runtime_error("Unknown postype.");
+						}
+						return std::fseek(file, offset, seek_pos);
+					}
+
+					virtual std::intmax_t getPosition()
+					{
+						return std::ftell(file);
+					}
+				};
 			}
-		};
+		}
 	}
 }
 

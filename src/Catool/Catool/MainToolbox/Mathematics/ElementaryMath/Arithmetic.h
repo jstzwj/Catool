@@ -6,7 +6,7 @@
 #include<limits>
 #include"../../Types.h"
 #include"Constants.h"
-#include"Array.h"
+#include"../../Array.h"
 namespace catool
 {
 	namespace main_toolbox
