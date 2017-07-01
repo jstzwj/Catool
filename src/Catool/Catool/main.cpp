@@ -22,7 +22,7 @@ int main()
 	Array<double> rty{ 4.6,5.0,-4.1,0.0,6.9 };
 	Array<int> def{ 1,2,3,4,5 };
 	//var_dump(plus(def, abc));
-	//var_dump(main_toolbox::mathematics::mtimes(main_toolbox::fundamentals::ones(5,1), main_toolbox::fundamentals::ones(1, 5)));
+	//var_dump(mtimes(ones(5,1), ones(1, 5)));
 	//var_dump(rand(5,6,7,8));
 	//var_dump(randn(5, 6));
 	//var_dump(eye({3,6}));
