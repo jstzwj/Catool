@@ -4,7 +4,9 @@
 
 #include<memory>
 #include<type_traits>
+#include<utility>
 #include <cstddef>
+#include<cstdio>
 #include"../../Stream/FileInputStream.h"
 #include"../../Stream/FileOutputStream.h"
 #include"../../../Array.h"
@@ -132,17 +134,17 @@ namespace catool
 					WaveReader(T &&stream)
 						:data_source(new T(std::forward<T>(stream))) {}
 
-					Array<uint16_t> read()
+					std::tuple<Array<uint16_t>,int> read()
 					{
 						Array<uint16_t> result;
 						//Read Riff header
 						RIFF_header header;
 						data_source->read(header.szRiffID, sizeof(header.szRiffID));
-						if (strcmp(header.szRiffID, "RIFF"))
+						if (memcmp(header.szRiffID, "RIFF",4)==0)
 						{
 							header.dwRiffSize=stream::InputWrapper<uint32_t>::read(*data_source);
 							data_source->read(header.szRiffFormat, sizeof(header.szRiffFormat));
-							if (strcmp(header.szRiffFormat, "WAVE") != 0)
+							if (memcmp(header.szRiffFormat, "WAVE",4) != 0)
 							{
 								throw std::exception("Can not use WaveReader to read the file.");
 							}
@@ -156,7 +158,7 @@ namespace catool
 						FMT_block format;
 						WAVE_format wave_format;
 						data_source->read(format.szFmtID, sizeof(format.szFmtID));
-						if (strcmp(format.szFmtID, "fmt "))
+						if (memcmp(format.szFmtID, "fmt ",4)==0)
 						{
 							format.dwFmtSize = stream::InputWrapper<uint32_t>::read(*data_source);
 							//Read wave format
@@ -170,7 +172,7 @@ namespace catool
 							wave_format.dwAvgBytesPerSec		= stream::InputWrapper<uint32_t>::read(*data_source);
 							wave_format.wBlockAlign				= stream::InputWrapper<uint16_t>::read(*data_source);
 							wave_format.wBitsPerSample			= stream::InputWrapper<uint16_t>::read(*data_source);
-							data_source->seek(format.dwFmtSize - sizeof(wave_format.wChannels) - sizeof(wave_format.dwSamplesPerSec), StreamType::PosType::Current);
+							data_source->seek(format.dwFmtSize - sizeof(wave_format), StreamType::PosType::Current);
 						}
 						else
 						{
@@ -179,7 +181,7 @@ namespace catool
 						//Read fact and data blocks
 						FACT_block fact;
 						data_source->read(fact.szFactID, 4);
-						if (strcmp(fact.szFactID, "fact"))
+						if (memcmp(fact.szFactID, "fact",4)==0)
 						{
 							//TODO
 							data_source->seek(sizeof(FACT_block) - sizeof(fact.szFactID), StreamType::PosType::Current);
@@ -190,7 +192,7 @@ namespace catool
 						}
 						DATA_block data;
 						data_source->read(data.szDataID, 4);
-						if (strcmp(data.szDataID, "data"))
+						if (memcmp(data.szDataID, "data",4)==0)
 						{
 							data.dwDataSize = stream::InputWrapper<uint32_t>::read(*data_source);
 						}
@@ -245,10 +247,9 @@ namespace catool
 								}
 							}
 						}
-						return result;
+						return std::make_tuple(result,wave_format.dwSamplesPerSec);
 					}
 				};
-
 
 			}
 		}

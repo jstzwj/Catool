@@ -75,7 +75,7 @@ namespace catool
 						default:
 							throw std::runtime_error("Unknown postype.");
 						}
-						return std::fseek(file, offset, seek_pos);
+						return std::fseek(file, static_cast<long>(offset), seek_pos);
 					}
 
 					virtual std::intmax_t getPosition()

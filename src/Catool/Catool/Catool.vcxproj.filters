@@ -134,5 +134,8 @@
     <ClInclude Include="MainToolbox\Data\Endian.h">
       <Filter>头文件\MainToolbox\Data</Filter>
     </ClInclude>
+    <ClInclude Include="MainToolbox\Data\StandardFile\Audio\Audio.h">
+      <Filter>头文件\MainToolbox\Data\StandardFile\Audio</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
