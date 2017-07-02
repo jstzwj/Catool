@@ -20,29 +20,24 @@ namespace catool
 					if (begin == end)
 						return 0xFFFFFFFF;
 					char32_t codepoint = *begin++;
-					if (codepoint <= 0x10FFFF && (codepoint < 0xD800||codepoint>0xDFFF))
+					if (codepoint <= 0x10FFFF && (codepoint < 0xD800 || codepoint>0xDFFF))
 						return codepoint;
-					else 
+					else
 						return 0xFFFD;
 				}
 				static bool encode(T*& begin, T* end, char32_t codepoint)
 				{
 					if (begin == end)
 						return false;
-					if (codepoint <= 0x10FFFF &&(codepoint < 0xD800 || codepoint>0xDFFF))
+					if (codepoint <= 0x10FFFF && (codepoint < 0xD800 || codepoint>0xDFFF))
 						*begin++ = codepoint;
-					else 
+					else
 						*begin++ = 0xFFFD;
 					return true;
 				}
-
 			};
 		}
 	}
 }
-
-
-
-
 
 #endif // !CATOOL_MAINTOOLBOX_DATA_UTF32CHARSET

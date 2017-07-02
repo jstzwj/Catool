@@ -51,8 +51,6 @@ namespace catool
 			}
 		}
 	}
-	
 }
-
 
 #endif //VOCALSTUDIO_STREAM_STREAMBASE_H

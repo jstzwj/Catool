@@ -10,7 +10,6 @@
 #include"MainToolbox\Data\StandardFile\Audio\Wav.h"
 #include"MainToolbox\Data\StandardFile\Audio\Audio.h"
 
-
 using namespace catool::main_toolbox;
 using namespace catool::main_toolbox::mathematics;
 using namespace catool::main_toolbox::data;
@@ -64,7 +63,7 @@ int main()
 		Array<float> audio_data = times(rand(44100*60, 2),1000);
 		audiowrite("test.wav", audio_data);
 	}*/
-	
+
 	//read music
 	/*{
 		auto trace = audioread("ghyjn.wav");
@@ -72,6 +71,13 @@ int main()
 		std::cout << std::get<1>(trace) << std::endl;
 	}
 */
+	Array<double> test{ 1,4,7,2,5,8,3,6,9 };
+	Array<double> test2{ 0,-3,6 };
+	test.resize(3, 3);
+	test2.resize(3, 1);
+
+	//var_dump(mldivide(test,test2));
+	var_dump(inv(test));
 	system("pause");
 	return 0;
 }

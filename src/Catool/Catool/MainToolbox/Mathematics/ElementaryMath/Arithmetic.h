@@ -428,7 +428,6 @@ namespace catool
 				return result;
 			}
 
-
 			/*
 			cumsum	Cumulative sum
 			*/
@@ -530,8 +529,6 @@ namespace catool
 				return result;
 			}
 
-
-
 			/*
 			Y = fix(X) rounds each element of X to the nearest integer toward zero.
 			For positive X, the behavior of fix is the same as floor.
@@ -579,7 +576,7 @@ namespace catool
 				return std::ceil(x);
 			}
 			/*
-
+			round
 			*/
 			inline double round(double x)
 			{

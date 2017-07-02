@@ -11,7 +11,6 @@
 #include"../../Stream/FileOutputStream.h"
 #include"../../../Array.h"
 
-
 namespace catool
 {
 	namespace main_toolbox
@@ -84,7 +83,7 @@ namespace catool
 					WaveWriter(T &&stream)
 						:data_source(new T(std::forward<T>(stream))) {}
 					template<class SampleType>
-					void write(const Array<SampleType>& audio,int samplesPerSec= 44100)
+					void write(const Array<SampleType>& audio, int samplesPerSec = 44100)
 					{
 						//write riff header
 						data_source->write("RIFF", 4);
@@ -99,13 +98,13 @@ namespace catool
 						stream::OutputWrapper<uint32_t>::write(*data_source, samplesPerSec);
 						stream::OutputWrapper<uint32_t>::write(*data_source, sizeof(SampleType)*audio.get_dim_data(1)*samplesPerSec);
 						stream::OutputWrapper<uint16_t>::write(*data_source, sizeof(SampleType)*audio.get_dim_data(1));
-						stream::OutputWrapper<uint16_t>::write(*data_source, sizeof(SampleType)*8);
+						stream::OutputWrapper<uint16_t>::write(*data_source, sizeof(SampleType) * 8);
 
 						//write data block
 						data_source->write("data", 4);
 						stream::OutputWrapper<uint32_t>::write(*data_source, audio.size()*sizeof(SampleType));
 						//write data
-						if (audio.dim_size()==1)
+						if (audio.dim_size() == 1)
 						{
 							for (int i = 0; i < audio.get_dim_data(0); ++i)
 							{
@@ -120,7 +119,6 @@ namespace catool
 								stream::OutputWrapper<SampleType>::write(*data_source, audio[audio.get_dim_data(0) + i]);
 							}
 						}
-						
 					}
 				};
 
@@ -134,17 +132,17 @@ namespace catool
 					WaveReader(T &&stream)
 						:data_source(new T(std::forward<T>(stream))) {}
 
-					std::tuple<Array<uint16_t>,int> read()
+					std::tuple<Array<uint16_t>, int> read()
 					{
 						Array<uint16_t> result;
 						//Read Riff header
 						RIFF_header header;
 						data_source->read(header.szRiffID, sizeof(header.szRiffID));
-						if (memcmp(header.szRiffID, "RIFF",4)==0)
+						if (memcmp(header.szRiffID, "RIFF", 4) == 0)
 						{
-							header.dwRiffSize=stream::InputWrapper<uint32_t>::read(*data_source);
+							header.dwRiffSize = stream::InputWrapper<uint32_t>::read(*data_source);
 							data_source->read(header.szRiffFormat, sizeof(header.szRiffFormat));
-							if (memcmp(header.szRiffFormat, "WAVE",4) != 0)
+							if (memcmp(header.szRiffFormat, "WAVE", 4) != 0)
 							{
 								throw std::exception("Can not use WaveReader to read the file.");
 							}
@@ -158,7 +156,7 @@ namespace catool
 						FMT_block format;
 						WAVE_format wave_format;
 						data_source->read(format.szFmtID, sizeof(format.szFmtID));
-						if (memcmp(format.szFmtID, "fmt ",4)==0)
+						if (memcmp(format.szFmtID, "fmt ", 4) == 0)
 						{
 							format.dwFmtSize = stream::InputWrapper<uint32_t>::read(*data_source);
 							//Read wave format
@@ -167,11 +165,11 @@ namespace catool
 							{
 								throw std::exception("Do not support the wave format.");
 							}
-							wave_format.wChannels				= stream::InputWrapper<uint16_t>::read(*data_source);
-							wave_format.dwSamplesPerSec			= stream::InputWrapper<uint32_t>::read(*data_source);
-							wave_format.dwAvgBytesPerSec		= stream::InputWrapper<uint32_t>::read(*data_source);
-							wave_format.wBlockAlign				= stream::InputWrapper<uint16_t>::read(*data_source);
-							wave_format.wBitsPerSample			= stream::InputWrapper<uint16_t>::read(*data_source);
+							wave_format.wChannels = stream::InputWrapper<uint16_t>::read(*data_source);
+							wave_format.dwSamplesPerSec = stream::InputWrapper<uint32_t>::read(*data_source);
+							wave_format.dwAvgBytesPerSec = stream::InputWrapper<uint32_t>::read(*data_source);
+							wave_format.wBlockAlign = stream::InputWrapper<uint16_t>::read(*data_source);
+							wave_format.wBitsPerSample = stream::InputWrapper<uint16_t>::read(*data_source);
 							data_source->seek(format.dwFmtSize - sizeof(wave_format), StreamType::PosType::Current);
 						}
 						else
@@ -181,7 +179,7 @@ namespace catool
 						//Read fact and data blocks
 						FACT_block fact;
 						data_source->read(fact.szFactID, 4);
-						if (memcmp(fact.szFactID, "fact",4)==0)
+						if (memcmp(fact.szFactID, "fact", 4) == 0)
 						{
 							//TODO
 							data_source->seek(sizeof(FACT_block) - sizeof(fact.szFactID), StreamType::PosType::Current);
@@ -192,7 +190,7 @@ namespace catool
 						}
 						DATA_block data;
 						data_source->read(data.szDataID, 4);
-						if (memcmp(data.szDataID, "data",4)==0)
+						if (memcmp(data.szDataID, "data", 4) == 0)
 						{
 							data.dwDataSize = stream::InputWrapper<uint32_t>::read(*data_source);
 						}
@@ -201,32 +199,31 @@ namespace catool
 							throw std::exception("Unknown block type.");
 						}
 
-
-						if (wave_format.wChannels==1)
+						if (wave_format.wChannels == 1)
 						{
-							result.resize(data.dwDataSize/ wave_format.wBitsPerSample*8);
+							result.resize(data.dwDataSize / wave_format.wBitsPerSample * 8);
 						}
 						else
 						{
-							result.resize(2,data.dwDataSize / wave_format.wBitsPerSample * 4);
+							result.resize(2, data.dwDataSize / wave_format.wBitsPerSample * 4);
 						}
 						uint32_t blockAlign = wave_format.wChannels*wave_format.wBitsPerSample;
 						if (wave_format.wChannels == 2)
 						{
-							if (wave_format.wBitsPerSample==16)
+							if (wave_format.wBitsPerSample == 16)
 							{
 								for (uint32_t i = 0; i < data.dwDataSize / blockAlign; ++i)
 								{
-									result[i]							= stream::InputWrapper<uint16_t>::read(*data_source);
-									result[result.get_dim_data(0) + i]	= stream::InputWrapper<uint16_t>::read(*data_source);
+									result[i] = stream::InputWrapper<uint16_t>::read(*data_source);
+									result[result.get_dim_data(0) + i] = stream::InputWrapper<uint16_t>::read(*data_source);
 								}
 							}
 							else
 							{
 								for (uint32_t i = 0; i < data.dwDataSize / blockAlign; ++i)
 								{
-									result[i]							= stream::InputWrapper<uint8_t>::read(*data_source);
-									result[result.get_dim_data(0) + i]	= stream::InputWrapper<uint8_t>::read(*data_source);
+									result[i] = stream::InputWrapper<uint8_t>::read(*data_source);
+									result[result.get_dim_data(0) + i] = stream::InputWrapper<uint8_t>::read(*data_source);
 								}
 							}
 						}
@@ -247,17 +244,12 @@ namespace catool
 								}
 							}
 						}
-						return std::make_tuple(result,wave_format.dwSamplesPerSec);
+						return std::make_tuple(result, wave_format.dwSamplesPerSec);
 					}
 				};
-
 			}
 		}
 	}
 }
-
-
-
-
 
 #endif // !CATOOL_MAINTOOLBOX_DATA_STANDARDFILE_AUDIO_WAV

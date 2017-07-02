@@ -16,9 +16,6 @@ namespace catool
 		{
 			namespace stream
 			{
-				
-
-
 				class FileOutputStream :public OutputStream<char>
 				{
 				protected:
@@ -87,7 +84,5 @@ namespace catool
 		}
 	}
 }
-
-
 
 #endif // !VOCALSTUDIO_STREAM_FILEOUTPUTSTREAM_H

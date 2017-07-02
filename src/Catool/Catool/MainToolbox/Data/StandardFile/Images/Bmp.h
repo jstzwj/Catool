@@ -13,7 +13,6 @@
 #include"../../Stream/FileOutputStream.h"
 #include"../../../Array.h"
 
-
 namespace catool
 {
 	namespace main_toolbox
@@ -30,9 +29,6 @@ namespace catool
 					uint16_t bfReserved2;
 					uint32_t bfOffBits;
 				};
-
-
-
 			}
 		}
 	}

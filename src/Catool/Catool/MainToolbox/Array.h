@@ -157,7 +157,7 @@ namespace catool
 				int count = 0;
 				for (unsigned int i = 0; i < dim.size(); ++i)
 				{
-					if (dim[i]>1)
+					if (dim[i] > 1)
 					{
 						count++;
 						if (count >= 2)
@@ -169,9 +169,9 @@ namespace catool
 			bool isVector()const
 			{
 				int count = 0;
-				for (unsigned int i = 0; i < dim.size();++i)
+				for (unsigned int i = 0; i < dim.size(); ++i)
 				{
-					if (dim[i]>1)
+					if (dim[i] > 1)
 					{
 						count++;
 						if (count >= 2)
@@ -556,6 +556,41 @@ namespace catool
 		cat
 		Concatenate arrays along specified dimension
 		*/
+		//TODO
+		template<class T>
+		void cat_one(Array<T>& result, int dim, int cur_dim_cum, int cur_dim, std::vector<int> & dims, const Array<T>& A)
+		{
+			int index = 0;
+			for (int j = 0; j < dims.size(); ++j)
+			{
+				index += result.get_dim_acc(j)*dims[j];
+			}
+			int & i = dims[cur_dim];
+			for (i = 0; i < dims.size(); ++i)
+			{
+				//result[index+]
+				cat_one(result, dim, cur_dim_cum + A.get_dim_data(dim), cur_dim - 1, dims, A);
+			}
+		}
+		template<class T, class ...Targs>
+		void cat_impl(Array<T>& result, int dim, int cur_dim_cum, const Array<T>& A, Targs ...args)
+		{
+			int & i
+		}
+
+		template<class T, class ...Targs>
+		Array<T> cat(int dim, const Array<T>& A, Targs ...args)
+		{
+			Array<T> result;
+			int cat_dim_sum = dimSum(dim, args...);
+
+			std::vector<int> dims = A.get_dim();
+			dims[dim] = cat_dim_sum;
+			result.resize(dim);
+
+			cat_impl(result, dim, 0, dims, A, args...);
+			return result;
+		}
 
 		/*
 		y = linspace(x1,x2)
@@ -687,8 +722,6 @@ namespace catool
 		Rectangular grid in N-D space
 		*/
 		//TODO
-
-
 
 		/*
 		length
@@ -833,6 +866,11 @@ namespace catool
 			return n.isEmpty();
 		}
 		/*
+		sort
+		Sort array elements
+		*/
+
+		/*
 		transpose, .'
 		Transpose vector or matrix
 		*/
@@ -842,17 +880,34 @@ namespace catool
 			if (m.dim_size() > 2)
 				throw std::runtime_error("error: transpose not defined for N-D objects");
 			Array<T> result(m.get_dim_data(1), m.get_dim_data(0));
-			for (int i = 0; i < m.get_dim_data(0);++i)
+			for (int i = 0; i < m.get_dim_data(0); ++i)
 			{
 				for (int j = 0; j < m.get_dim_data(1); ++j)
 				{
-					result[i*m.get_dim_data(1) + j] = m[j*m.get_dim_data(0)+i];
+					result[i*m.get_dim_data(1) + j] = m[j*m.get_dim_data(0) + i];
 				}
 			}
 			return result;
 		}
-
-
+		/*
+		ctranspose
+		Complex conjugate transpose
+		*/
+		template<class T>
+		Array<T> transpose(const Array<T>& m)
+		{
+			if (m.dim_size() > 2)
+				throw std::runtime_error("error: transpose not defined for N-D objects");
+			Array<T> result(m.get_dim_data(1), m.get_dim_data(0));
+			for (int i = 0; i < m.get_dim_data(0); ++i)
+			{
+				for (int j = 0; j < m.get_dim_data(1); ++j)
+				{
+					result[i*m.get_dim_data(1) + j] = std::conj(m[j*m.get_dim_data(0) + i]);
+				}
+			}
+			return result;
+		}
 	}
 }
 

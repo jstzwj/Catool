@@ -2,7 +2,6 @@
 #ifndef VOCALSTUDIO_STREAM_OUTPUTSTREAM_H
 #define VOCALSTUDIO_STREAM_OUTPUTSTREAM_H
 
-
 #include<cstdint>
 #include"StreamBase.h"
 #include"../Endian.h"
@@ -15,10 +14,6 @@ namespace catool
 		{
 			namespace stream
 			{
-
-				
-
-
 				template <typename T = char, typename Traits = StreamTraits>
 				class OutputStream :public StreamBase<T, Traits>
 				{
@@ -50,7 +45,6 @@ namespace catool
 						throw std::runtime_error("stream is not readable.");
 					}
 				};
-
 
 				template<class T, class CharType = char>
 				class OutputWrapper

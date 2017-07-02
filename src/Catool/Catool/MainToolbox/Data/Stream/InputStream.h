@@ -14,7 +14,6 @@ namespace catool
 		{
 			namespace stream
 			{
-
 				template <typename T = char, typename Traits = StreamTraits>
 				class InputStream :public StreamBase<T, Traits>
 				{

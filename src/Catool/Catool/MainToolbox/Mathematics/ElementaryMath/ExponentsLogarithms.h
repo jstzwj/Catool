@@ -92,7 +92,6 @@ namespace catool
 					each = std::sqrt(each);
 				return result;
 			}
-
 		}
 	}
 }

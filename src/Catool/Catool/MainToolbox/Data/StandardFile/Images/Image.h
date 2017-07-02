@@ -13,7 +13,6 @@
 #include"../../Stream/FileOutputStream.h"
 #include"../../../Array.h"
 
-
 namespace catool
 {
 	namespace main_toolbox
@@ -22,7 +21,6 @@ namespace catool
 		{
 			namespace images
 			{
-
 			}
 		}
 	}

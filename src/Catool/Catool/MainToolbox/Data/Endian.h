@@ -6,26 +6,24 @@
 #include<cstdint>
 #include <cstddef>
 
-
 namespace catool
 {
 	namespace main_toolbox
 	{
 		namespace data
 		{
-
 			inline bool isLE()
 			{
 				uint16_t i(1);
-				return *(reinterpret_cast<const char *>(&i))!=0;
+				return *(reinterpret_cast<const char *>(&i)) != 0;
 			}
 			inline bool isBE()
 			{
 				uint16_t i(1);
-				return *(reinterpret_cast<const char *>(&i))==0;
+				return *(reinterpret_cast<const char *>(&i)) == 0;
 			}
 
-			template<class T,int Tsize=sizeof(T)>
+			template<class T, int Tsize = sizeof(T)>
 			class SwapEndian
 			{
 			public:
@@ -50,7 +48,7 @@ namespace catool
 				static T swap(T t)
 				{
 					uint8_t * data = reinterpret_cast<uint8_t *>(&t);
-					std::swap(data[0],data[1]);
+					std::swap(data[0], data[1]);
 					return t;
 				}
 			};
@@ -105,9 +103,9 @@ namespace catool
 				static T swap(T t)
 				{
 					uint8_t * data = reinterpret_cast<uint8_t *>(&t);
-					for (int i = 0; i < 16;++i)
+					for (int i = 0; i < 16; ++i)
 					{
-						std::swap(data[i],data[31-i]);
+						std::swap(data[i], data[31 - i]);
 					}
 					return t;
 				}
@@ -129,9 +127,5 @@ namespace catool
 		}
 	}
 }
-
-
-
-
 
 #endif // !CATOOL_MAINTOOLBOX_DATA_ENDIAN

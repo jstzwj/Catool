@@ -4,7 +4,6 @@
 
 #include <cstddef>
 
-
 namespace catool
 {
 	namespace main_toolbox
@@ -12,7 +11,7 @@ namespace catool
 		namespace data
 		{
 			template <typename T>
-			class Charset 
+			class Charset
 			{
 			public:
 				using CharType = T;
@@ -21,14 +20,9 @@ namespace catool
 
 				static char32_t decode(const T*& p, const T* q) { return 0; }
 				static bool encode(T*& p, T* q, char32_t codepoint) { return false; }
-
 			};
 		}
 	}
 }
-
-
-
-
 
 #endif // !CATOOL_MAINTOOLBOX_DATA_CHARSET

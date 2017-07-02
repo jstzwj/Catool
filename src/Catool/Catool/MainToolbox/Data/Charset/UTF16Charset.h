@@ -17,14 +17,9 @@ namespace catool
 
 				static char32_t decode(const T*& p, const T* q) { return 0; }
 				static bool encode(T*& p, T* q, char32_t codepoint) { return false; }
-
 			};
 		}
 	}
 }
-
-
-
-
 
 #endif // !CATOOL_MAINTOOLBOX_DATA_UTF16CHARSET
