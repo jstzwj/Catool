@@ -87,7 +87,7 @@ namespace catool
 					{
 						stream::FileOutputStream stream(file);
 						WaveWriter writer(std::move(stream));
-						writer.write(y, samples);
+						writer.write<uint16_t>(y, samples);
 					}
 					else
 					{

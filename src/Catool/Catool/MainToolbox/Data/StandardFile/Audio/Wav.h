@@ -205,14 +205,13 @@ namespace catool
 						}
 						else
 						{
-							result.resize(2, data.dwDataSize / wave_format.wBitsPerSample * 4);
+							result.resize(data.dwDataSize / wave_format.wBitsPerSample * 4, 2);
 						}
-						uint32_t blockAlign = wave_format.wChannels*wave_format.wBitsPerSample;
 						if (wave_format.wChannels == 2)
 						{
 							if (wave_format.wBitsPerSample == 16)
 							{
-								for (uint32_t i = 0; i < data.dwDataSize / blockAlign; ++i)
+								for (uint32_t i = 0; i < data.dwDataSize / wave_format.wBlockAlign; ++i)
 								{
 									result[i] = stream::InputWrapper<uint16_t>::read(*data_source);
 									result[result.get_dim_data(0) + i] = stream::InputWrapper<uint16_t>::read(*data_source);
@@ -220,7 +219,7 @@ namespace catool
 							}
 							else
 							{
-								for (uint32_t i = 0; i < data.dwDataSize / blockAlign; ++i)
+								for (uint32_t i = 0; i < data.dwDataSize / wave_format.wBlockAlign; ++i)
 								{
 									result[i] = stream::InputWrapper<uint8_t>::read(*data_source);
 									result[result.get_dim_data(0) + i] = stream::InputWrapper<uint8_t>::read(*data_source);
@@ -231,14 +230,14 @@ namespace catool
 						{
 							if (wave_format.wBitsPerSample == 16)
 							{
-								for (uint32_t i = 0; i < data.dwDataSize / blockAlign; ++i)
+								for (uint32_t i = 0; i < data.dwDataSize / wave_format.wBlockAlign; ++i)
 								{
 									result[i] = stream::InputWrapper<uint16_t>::read(*data_source);
 								}
 							}
 							else
 							{
-								for (uint32_t i = 0; i < data.dwDataSize / blockAlign; ++i)
+								for (uint32_t i = 0; i < data.dwDataSize / wave_format.wBlockAlign; ++i)
 								{
 									result[i] = stream::InputWrapper<uint8_t>::read(*data_source);
 								}

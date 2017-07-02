@@ -69,8 +69,22 @@ int main()
 		auto trace = audioread("ghyjn.wav");
 		std::cout << std::get<0>(trace).size() << std::endl;
 		std::cout << std::get<1>(trace) << std::endl;
+	}*/
+	//read and write
+	/*try {
+		auto trace = audioread("ghyjn.wav");
+		std::cout << std::get<0>(trace).size() << std::endl;
+		std::cout << std::get<1>(trace) << std::endl;
+		auto rand_matrix = rand(std::get<0>(trace).get_dim_data(0), 2);
+		auto scaled_rand = times(rand_matrix, 100);
+		auto result = plus(scaled_rand, std::get<0>(trace));
+		audiowrite("test.wav", result);
 	}
-	*/
+	catch (std::exception e)
+	{
+		std::cout << e.what();
+	}*/
+	
 	//{
 	//	Array<double> test{ 1,4,7,2,5,8,3,6,9 };
 	//	Array<double> test2{ 0,-3,6 };
@@ -82,14 +96,14 @@ int main()
 	//}
 
 	//rot90
-	{
+	/*{
 		Array<double> test{ 1,4,7,2,5,8,3,6,9 };
 		test.resize(3, 3);
 		var_dump(rot90(test, 0));
 		var_dump(rot90(test, 1));
 		var_dump(rot90(test, 2));
 		var_dump(rot90(test, 3));
-	}
+	}*/
 
 	system("pause");
 	return 0;
