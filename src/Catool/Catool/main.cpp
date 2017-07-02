@@ -70,14 +70,27 @@ int main()
 		std::cout << std::get<0>(trace).size() << std::endl;
 		std::cout << std::get<1>(trace) << std::endl;
 	}
-*/
-	Array<double> test{ 1,4,7,2,5,8,3,6,9 };
-	Array<double> test2{ 0,-3,6 };
-	test.resize(3, 3);
-	test2.resize(3, 1);
+	*/
+	//{
+	//	Array<double> test{ 1,4,7,2,5,8,3,6,9 };
+	//	Array<double> test2{ 0,-3,6 };
+	//	test.resize(3, 3);
+	//	test2.resize(3, 1);
 
-	//var_dump(mldivide(test,test2));
-	var_dump(inv(test));
+	//	//var_dump(mldivide(test,test2));
+	//	var_dump(inv(test));
+	//}
+
+	//rot90
+	{
+		Array<double> test{ 1,4,7,2,5,8,3,6,9 };
+		test.resize(3, 3);
+		var_dump(rot90(test, 0));
+		var_dump(rot90(test, 1));
+		var_dump(rot90(test, 2));
+		var_dump(rot90(test, 3));
+	}
+
 	system("pause");
 	return 0;
 }

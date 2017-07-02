@@ -871,6 +871,66 @@ namespace catool
 		*/
 
 		/*
+		rot90
+		Rotate array 90 degrees
+		*/
+		//Not support N-D matrix now.
+		template<class T>
+		Array<T> rot90(const Array<T>& m)
+		{
+			if (m.dim_size() > 2)
+				throw std::runtime_error("error: rot90 not defined for N-D objects");
+			Array<T> result(m.get_dim_data(1), m.get_dim_data(0));
+			for (int i = 0; i < m.get_dim_data(0); ++i)
+			{
+				for (int j = 0; j < m.get_dim_data(1); ++j)
+				{
+					int des_m = m.get_dim_data(1) - 1 - j, des_n = i;
+					result[des_n*m.get_dim_data(0) + des_m] = m[j*m.get_dim_data(0) + i];
+				}
+			}
+			return result;
+		}
+		template<class T>
+		Array<T> rot90(const Array<T>& m, int k)
+		{
+			if (m.dim_size() > 2)
+				throw std::runtime_error("error: rot90 not defined for N-D objects");
+			Array<T> result(m.get_dim_data(1), m.get_dim_data(0));
+			for (int i = 0; i < m.get_dim_data(0); ++i)
+			{
+				for (int j = 0; j < m.get_dim_data(1); ++j)
+				{
+					int mod = k % 4;
+					int des_m, des_n;
+					switch (mod)
+					{
+					case 0:
+						des_m = i;
+						des_n = j;
+						result[des_n*m.get_dim_data(0) + des_m] = m[j*m.get_dim_data(0) + i];
+						break;
+					case 1:
+						des_m = m.get_dim_data(1) - 1 - j;
+						des_n = i;
+						result[des_n*m.get_dim_data(0) + des_m] = m[j*m.get_dim_data(0) + i];
+						break;
+					case 2:
+						des_m = m.get_dim_data(0) - 1 - i;
+						des_n = m.get_dim_data(1) - 1 - j;
+						result[des_n*m.get_dim_data(0) + des_m] = m[j*m.get_dim_data(0) + i];
+						break;
+					case 3:
+						des_m = j;
+						des_n = m.get_dim_data(0) - 1 - i;
+						result[des_n*m.get_dim_data(0) + des_m] = m[j*m.get_dim_data(0) + i];
+						break;
+					}
+				}
+			}
+			return result;
+		}
+		/*
 		transpose, .'
 		Transpose vector or matrix
 		*/
@@ -894,7 +954,7 @@ namespace catool
 		Complex conjugate transpose
 		*/
 		template<class T>
-		Array<T> transpose(const Array<T>& m)
+		Array<T> ctranspose(const Array<T>& m)
 		{
 			if (m.dim_size() > 2)
 				throw std::runtime_error("error: transpose not defined for N-D objects");
