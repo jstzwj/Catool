@@ -28,6 +28,10 @@ These compilers which have been tested are shown in the following list.
 `iscolumn`	Determine whether input is column vector  
 `isempty`	Determine whether array is empty  
 
+`rot90`	Rotate array 90 degrees  
+`transpose`	Transpose vector or matrix  
+`ctranspose`	Complex conjugate transpose  
+
 ## Elementary Math
 
 ### Arithmetic
@@ -111,8 +115,10 @@ These compilers which have been tested are shown in the following list.
 `isnan`	Array elements that are NaN  
 
 ## Linear Algebra
-
+`mldivide`	Solve systems of linear equations Ax = B for x  
+`mrdivide`	Solve systems of linear equations xA = B for x  
 `inv`	Matrix inverse  
+`pinv`	Moore-Penrose pseudoinverse of matrix  
 
 
 `lu`  LU matrix factorization  
@@ -124,6 +130,11 @@ These compilers which have been tested are shown in the following list.
 `randi`	Uniformly distributed pseudorandom integers  
 
 `rng`	Control random number generation  
+
+## Data Import and Analysis
+
+`audioread`	Read audio file  
+`audiowrite`	Write audio file  
 
 
 
