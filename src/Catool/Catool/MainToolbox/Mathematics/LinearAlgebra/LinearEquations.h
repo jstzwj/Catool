@@ -146,8 +146,26 @@ namespace catool
 				return std::make_tuple(l, u);
 			}
 			/*
-
+			mpower, ^
+			Matrix power
 			*/
+			template<class T>
+			Array<T> mpower(const Array<T>& A,int n)
+			{
+				Array<T> result(A);
+				int time = 1;
+				while (time*2<n)
+				{
+					result = mtimes(result,result);
+					time *= 2;
+				}
+				while (time<n)
+				{
+					result = mtimes(result,A);
+					time++;
+				}
+				return result;
+			}
 		}
 	}
 }
