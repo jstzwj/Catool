@@ -55,6 +55,9 @@
     <Filter Include="头文件\MainToolbox\Data\StandardFile\Image">
       <UniqueIdentifier>{cc50bc77-ee05-42c3-924c-56257f47b9b7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\MainToolbox\Graphics">
+      <UniqueIdentifier>{6b6ebd85-c056-497b-88a5-d55a47c850c4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -136,6 +139,18 @@
     </ClInclude>
     <ClInclude Include="MainToolbox\Data\StandardFile\Audio\Audio.h">
       <Filter>头文件\MainToolbox\Data\StandardFile\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="MainToolbox\Data\StandardFile\Images\Bmp.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MainToolbox\Data\StandardFile\Images\Image.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MainToolbox\Graphics\Plots.h">
+      <Filter>头文件\MainToolbox\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="MainToolbox\Graphics\Gnuplot.h">
+      <Filter>头文件\MainToolbox\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -9,12 +9,14 @@
 #include"MainToolbox\Data\Endian.h"
 #include"MainToolbox\Data\StandardFile\Audio\Wav.h"
 #include"MainToolbox\Data\StandardFile\Audio\Audio.h"
+#include"MainToolbox\Graphics\Gnuplot.h"
 
 using namespace catool::main_toolbox;
 using namespace catool::main_toolbox::mathematics;
 using namespace catool::main_toolbox::data;
 using namespace catool::main_toolbox::data::stream;
 using namespace catool::main_toolbox::data::audio;
+using namespace catool::main_toolbox::graphics;
 int main()
 {
 	Array<int> abc{ 1,2,3 };
@@ -104,7 +106,7 @@ int main()
 		var_dump(rot90(test, 2));
 		var_dump(rot90(test, 3));
 	}*/
-
+	callplot("plot [-3.14:3.14] sin(x)\n");
 	system("pause");
 	return 0;
 }
