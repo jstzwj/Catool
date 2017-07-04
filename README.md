@@ -53,7 +53,7 @@ These compilers which have been tested are shown in the following list.
 `ceil`	Round toward positive infinity  
 `fix`	Round toward zero  
 `floor`	Round toward negative infinity<br/>
-`mod`	Remainder after division (modulo operation) ....coming  
+`mod`	Remainder after division (modulo operation)  
 `rem`	Remainder after division  
 `round`	Round to nearest decimal or integer  
 
@@ -130,6 +130,10 @@ These compilers which have been tested are shown in the following list.
 `randi`	Uniformly distributed pseudorandom integers  
 
 `rng`	Control random number generation  
+
+## Graphics
+Attension: this function needs GnuPlot interface.
+
 
 ## Data Import and Analysis
 
