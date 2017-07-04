@@ -575,6 +575,14 @@ namespace catool
 			{
 				return std::ceil(x);
 			}
+			template<class T>
+			inline Array<T> ceil(const Array<T> & t)
+			{
+				Array<T> result(t);
+				for (auto & each : result)
+					each = std::ceil(each);
+				return result;
+			}
 			/*
 			round
 			*/
@@ -582,6 +590,47 @@ namespace catool
 			{
 				return std::round(x);
 			}
+			template<class T>
+			inline Array<T> round(const Array<T> & t)
+			{
+				Array<T> result(t);
+				for (auto & each : result)
+					each = std::round(each);
+				return result;
+			}
+			/*
+			rem
+			*/
+			template<class T,class U>
+			inline double rem(T a,U b)
+			{
+				return std::remainder(a,b);
+			}
+			template<class T,class U>
+			inline Array<T> rem(const Array<T> & a,U b)
+			{
+				Array<T> result(t);
+				for (auto & each : result)
+					each = std::remainder(each,b);
+				return result;
+			}
+			/*
+			mod
+			*/
+			template<class T, class U>
+			inline double mod(T a, U b)
+			{
+				return std::modf(a, b);
+			}
+			template<class T, class U>
+			inline Array<T> mod(const Array<T> & a, U b)
+			{
+				Array<T> result(t);
+				for (auto & each : result)
+					each = std::modf(each, b);
+				return result;
+			}
+
 			/*
 			rat:
 			R = rat(X) returns the rational fraction approximation of X to within the default tolerance, 1e-6*norm(X(:),1). The approximation is a character array containing the truncated continued fractional expansion.
