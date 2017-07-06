@@ -601,17 +601,17 @@ namespace catool
 			/*
 			rem
 			*/
-			template<class T,class U>
-			inline double rem(T a,U b)
+			template<class T, class U>
+			inline double rem(T a, U b)
 			{
-				return std::remainder(a,b);
+				return std::remainder(a, b);
 			}
-			template<class T,class U>
-			inline Array<T> rem(const Array<T> & a,U b)
+			template<class T, class U>
+			inline Array<T> rem(const Array<T> & a, U b)
 			{
 				Array<T> result(t);
 				for (auto & each : result)
-					each = std::remainder(each,b);
+					each = std::remainder(each, b);
 				return result;
 			}
 			/*

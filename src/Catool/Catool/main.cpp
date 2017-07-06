@@ -86,7 +86,7 @@ int main()
 	{
 		std::cout << e.what();
 	}*/
-	
+
 	//{
 	//	Array<double> test{ 1,4,7,2,5,8,3,6,9 };
 	//	Array<double> test2{ 0,-3,6 };
@@ -106,7 +106,7 @@ int main()
 		var_dump(rot90(test, 2));
 		var_dump(rot90(test, 3));
 	}*/
-	callplot("plot [-3.14:3.14] sin(x)\n");
+	//callplot("plot [-3.14:3.14] sin(x)\n");
 	system("pause");
 	return 0;
 }

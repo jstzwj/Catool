@@ -150,18 +150,18 @@ namespace catool
 			Matrix power
 			*/
 			template<class T>
-			Array<T> mpower(const Array<T>& A,int n)
+			Array<T> mpower(const Array<T>& A, int n)
 			{
 				Array<T> result(A);
 				int time = 1;
-				while (time*2<n)
+				while (time * 2 < n)
 				{
-					result = mtimes(result,result);
+					result = mtimes(result, result);
 					time *= 2;
 				}
-				while (time<n)
+				while (time < n)
 				{
-					result = mtimes(result,A);
+					result = mtimes(result, A);
 					time++;
 				}
 				return result;

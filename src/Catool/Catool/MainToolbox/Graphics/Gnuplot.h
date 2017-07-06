@@ -26,7 +26,7 @@ namespace catool
 
 				if (gp == NULL)
 					return -1;
-				std::fprintf(gp, "%s/n",cmd);
+				std::fprintf(gp, "%s/n", cmd);
 				std::fflush(gp);
 				//fprintf(gp, cmd);
 				/*fprintf(gp, "set isosample 100/n");
