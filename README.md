@@ -123,6 +123,8 @@ These compilers which have been tested are shown in the following list.
 
 `lu`  LU matrix factorization  
 
+`rank`	Rank of matrix  
+
 ## Random Number Generation
 
 `rand`	Uniformly distributed random numbers  
