@@ -180,6 +180,11 @@ namespace catool
 			std::cout << com.imag();
 			std::cout << "i" << std::endl;
 		}
+		template<class T>
+		void disp(const T & obj)
+		{
+			var_dump(obj);
+		}
 	}
 }
 

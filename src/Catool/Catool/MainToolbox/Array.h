@@ -417,7 +417,7 @@ namespace catool
 				Array<T> result(min);
 				for (int i = 0; i < min; ++i)
 				{
-					result[i] = v[i*n + i];
+					result[i] = v[i*n + i];		//maybe a bug n=>m
 				}
 				return result;
 			}

@@ -198,6 +198,32 @@ namespace catool
 				}
 				return result;
 			}
+
+
+			/*
+			trace
+			Sum of diagonal elements
+			*/
+			template<class T>
+			T trace(const Array<T>& a)
+			{
+				if (a.dim_size() > 2)
+				{
+					throw std::runtime_error("Matrix must be 2-dimensional");
+				}
+
+				int m = a.get_dim_data(0);
+				int n = a.get_dim_data(1);
+				int min = m > n ? n : m;
+				T result=T();
+				for (int i = 0; i < min; ++i)
+				{
+					result+= a[i*m + i];
+				}
+				return result;
+			}
+
+
 		}
 	}
 }
