@@ -35,34 +35,18 @@ namespace catool
 			using KeyType = SparseKey;
 			using ValueType = T;
 
-			SparseMatrix() noexcept {}
-			SparseMatrix(int row_,int col_) noexcept
+			SparseMatrix(int row_=1,int col_=1) noexcept
 			{
 				if (row_ < 0)row = 0;
 				else row = row_;
 				if (col_ < 0)col = 0;
 				else col = col_;
 			}
-			SparseMatrix(const std::vector<int> &dims) noexcept
-				:dim(dims) {}
-			template<class ...K>
-			SparseMatrix(K ...arg)
-			{
-				MatrixConstructor(arg...);
-			}
-			template<typename T1, typename... T2>
-			void MatrixConstructor(T1 p, T2... arg)
-			{
-				if (p < 0)p = 0;
-				dim.push_back(p);
-				MatrixConstructor(arg...);
-			}
-			void MatrixConstructor() {}
 
 			SparseMatrix(std::initializer_list<T> list)
 			{
-				dim.push_back(1);
-				dim.push_back(list.size());
+				row = 1;
+				col = list.size();
 
 				for (unsigned int i = 0; i < list.size(); ++i)
 				{
@@ -72,10 +56,10 @@ namespace catool
 
 			template<class U>
 			explicit SparseMatrix(const SparseMatrix<U>& other)
-				:dim(other.get_dim()), data(other.begin(), other.end()) {}
+				:row(other.row),col(other.col),data(other.begin(), other.end()) {}
 
 			SparseMatrix(const SparseMatrix<T>& other)
-				: dim(other.get_dim()), data(other.begin(), other.end()) {}
+				:row(other.row), col(other.col), data(other.begin(), other.end()) {}
 
 			//using iterator = std::vector<T>::iterator;
 			//using const_iterator = std::vector<T>::const_iterator;
@@ -84,66 +68,47 @@ namespace catool
 			{
 				for (auto& each_entry : data)
 				{
-					if (each_entry.first == n)
+					if (each_entry.first.row+ each_entry.first.col*row == n)
 						return each_entry.second;
 				}
 				data.push_back(EntryType(n, T()));
 				return data.back();
 			}
-			int size() const { return data.size(); }
-			/*void resize(int size) { data.resize(size); }*/
-			std::vector<int> & get_dim() { return dim; }
-			const std::vector<int> & get_dim() const { return dim; }
-			std::vector<T> & get_data() { return data; }
-			const std::vector<T> & get_data() const { return data; }
 
-			int dim_size()const { return dim.size(); }
-			int get_dim_data(int n) const
+			T& at(int row_, int col_)
 			{
-				if (n >= static_cast<int>(dim.size()))
-					return 1;
-				else
-					return dim[n];
-			}
-			int get_dim_acc(int n)const
-			{
-				int acc = 1;
-				for (int i = 0; i < n; ++i)
+				for (auto& each_entry : data)
 				{
-					acc *= dim[i];
+					if (each_entry.first.row==row_&&each_entry.first.col == col_)
+						return each_entry.second;
 				}
-				return acc;
-			}
-			template<typename T1, typename... T2>
-			void resize(T1 p, T2... arg)
-			{
-				dim.clear();
-				dim.push_back(p);
-				resize_impl(arg...);
-			}
-			template<typename T1, typename... T2>
-			void resize_impl(T1 p, T2... arg)
-			{
-				dim.push_back(p);
-				resize_impl(arg...);
-			}
-			void resize_impl() {}
-
-			void resize(const std::vector<int> & sz)
-			{
-				dim = sz;
+				data.push_back(EntryType(SparseKey(row_,col_), T()));
+				return data.back();
 			}
 
-			void resize(const Array<int> & sz)
+			bool contain(int row_, int col_)
 			{
-				if (sz.dim_size() > 2)
+				for (auto& each_entry : data)
 				{
-					throw std::runtime_error("the size array shall be one dimension array.");
+					if (each_entry.first.row == row_&&each_entry.first.col == col_)
+						return true;
 				}
-				dim = sz.get_data();
+				return false;
 			}
 
-			bool isMatrix()const
+			int data_size() const { return data.size(); }
+			int size() const { return row*col; }
+			int row()const { return row; }
+			int col()const { return col; }
+			
+
+			void resize(int row_,int col_)
+			{
+				row = row_;
+				col = col_;
+			}
+
+			/*bool isMatrix()const
 			{
 				int count = 0;
 				for (unsigned int i = 0; i < dim.size(); ++i)
@@ -190,6 +155,7 @@ namespace catool
 					if (dim[i] == 0)return true;
 				return true;
 			}
+			*/
 		};
 
 
@@ -258,12 +224,16 @@ namespace catool
 			{
 				for (int j = 0; j < a.get_dim_data(1);++j)
 				{
-
+					rst.at(i, j) = a[j*a.get_dim_data(0)+i];
 				}
 			}
 			return rst;
 		}
-
+		template<class T>
+		SparseMatrix<T> sparse(int m,int n)
+		{
+			return SparseMatrix<T>(m, n);
+		}
 	}
 }
 
