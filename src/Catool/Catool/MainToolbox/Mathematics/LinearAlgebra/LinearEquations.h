@@ -62,53 +62,85 @@ namespace catool
 				}
 				return result;
 			}
+
+			inline void swapRow(Array<double> &m, int a, int b)
+			{
+				if (m.dim_size() > 2)
+					throw std::runtime_error("error: swapRow not defined for N-D objects");
+				for (int i = 0; i < m.get_dim_data(1);++i)
+				{
+					std::swap(m[i*m.get_dim_data(0)+a], m[i*m.get_dim_data(0) + b]);
+				}
+			}
+
+
+			inline int rank(Array<double> m)
+			{
+				if (m.dim_size() > 2)
+					throw std::runtime_error("error: rank not defined for N-D objects");
+				int echelon_line = 0;
+				int rank_rst = 0;
+				//遍历行
+				for (int i = 0; i < m.get_dim_data(0);++i,++echelon_line)
+				{
+					//已经形成阶梯型
+					if (echelon_line>=m.get_dim_data(1))	break;
+					//当前行阶梯线上为0
+					while (std::abs(m[echelon_line*m.get_dim_data(0) + i]) < std::numeric_limits<double>::epsilon())
+					{
+						//遍历当前行下面所有行的阶梯线，找个不为零的行
+						int k;
+						for ( k= i + 1; k < m.get_dim_data(0); ++k)
+						{
+							if (std::abs(m[echelon_line*m.get_dim_data(0) + k]) >= std::numeric_limits<double>::epsilon())
+							{
+								swapRow(m,i,k);
+								break;
+							}
+						}
+						//当前阶梯线所在列全是0......
+						if (k == m.get_dim_data(0))
+						{
+							++echelon_line;
+						}
+					}
+					++rank_rst;
+					//目标行
+					for (int j = i+1; j < m.get_dim_data(0);++j)
+					{
+						if (std::abs(m[echelon_line*m.get_dim_data(0) + j]) < std::numeric_limits<double>::epsilon())
+							continue;
+						double scale = m[echelon_line*m.get_dim_data(0) + j] / m[echelon_line*m.get_dim_data(0) + i];
+						//两行相减
+						for (int k = 0; k < m.get_dim_data(1);++k)
+						{
+							m[k*m.get_dim_data(0) + j] += -scale*m[k*m.get_dim_data(0) + i];
+						}
+					}
+				}
+				return rank_rst;
+			}
+
 			/*
 			pinv
 			Moore - Penrose pseudoinverse of matrix
 			*/
-			//TODOD
-			Array<double> pinv(Array<double> m)
+			inline Array<double> pinv(Array<double> m)
 			{
-				//inverse: A must be a square matrix
-				if (!(m.dim_size() == 2 && m.get_dim_data(0) == m.get_dim_data(1)))
+				//满秩分解法 计算
+				//计算矩阵秩
+				int rnk = rank(m);
+				Array<double> tran_m = transpose(m);
+				if (rnk == m.get_dim_data(0))
 				{
-					throw std::runtime_error("inverse: A must be a square matrix");
+					//行满秩
+					return mtimes(tran_m, inv(mtimes(m, tran_m)));
 				}
-				int m_sz = m.get_dim_data(0);
-				Array<double> result = eye<double>(m_sz, m_sz);
-				for (int i = 0; i < m_sz; ++i)
+				else
 				{
-					double scale = m[i*m_sz + i];
-					//warning
-
-					if (std::abs(scale) < std::numeric_limits<double>::epsilon())
-					{
-#ifdef CATOOL_ENABLE_WARNING
-						throw "warning: matrix singular to machine precision.";
-#endif // CATOOL_ENABLE_WARNING
-					}
-
-					//Unitized row
-					for (int j = 0; j < m_sz; ++j)
-					{
-						m[j*m_sz + i] /= scale;
-						result[j*m_sz + i] /= scale;
-					}
-					//Elementary row transformation
-					for (int j = 0; j < m_sz; ++j)
-					{
-						if (j != i)
-						{
-							double scale_each = m[i*m_sz + j] / m[i*m_sz + i];
-							for (int k = 0; k < m_sz; ++k)
-							{
-								m[k*m_sz + j] = m[k*m_sz + j] - scale_each*m[k*m_sz + i];
-								result[k*m_sz + j] = result[k*m_sz + j] - scale_each*result[k*m_sz + i];
-							}
-						}
-					}
+					//列满秩
+					return mtimes(inv(mtimes(tran_m, m)), tran_m);
 				}
-				return result;
 			}
 
 			/*

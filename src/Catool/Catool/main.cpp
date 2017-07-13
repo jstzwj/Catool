@@ -113,6 +113,13 @@ int main()
 		var_dump(nd.first);
 		var_dump(nd.second);
 	}*/
+	//rank and pinv
+	{
+		var_dump(pinv(def));
+		//Array<double> tst{ 1,1,1,2,2,2,3,3,3,4,4,5 };
+		//tst.resize(3,4);
+		//var_dump(rank(tst));
+	}
 	
 	system("pause");
 	return 0;
