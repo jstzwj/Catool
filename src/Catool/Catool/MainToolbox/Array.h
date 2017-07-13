@@ -60,7 +60,7 @@ namespace catool
 			}
 
 			template<class U>
-			Array(const Array<U>& other)
+			explicit Array(const Array<U>& other)
 				:dim(other.get_dim()), data(other.begin(), other.end()) {}
 
 			Array(const Array<T>& other)
@@ -575,7 +575,7 @@ namespace catool
 		template<class T, class ...Targs>
 		void cat_impl(Array<T>& result, int dim, int cur_dim_cum, const Array<T>& A, Targs ...args)
 		{
-			int & i
+			//TODO
 		}
 
 		template<class T, class ...Targs>
@@ -967,6 +967,16 @@ namespace catool
 				}
 			}
 			return result;
+		}
+
+		/*
+		isequal
+		Determine array equality
+		*/
+		template<class T>
+		bool isequal(const Array<T>& m, const Array<T>& n)
+		{
+			return m == n;
 		}
 	}
 }

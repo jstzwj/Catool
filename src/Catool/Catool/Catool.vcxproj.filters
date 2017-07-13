@@ -140,17 +140,20 @@
     <ClInclude Include="MainToolbox\Data\StandardFile\Audio\Audio.h">
       <Filter>头文件\MainToolbox\Data\StandardFile\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="MainToolbox\Data\StandardFile\Images\Bmp.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MainToolbox\Data\StandardFile\Images\Image.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="MainToolbox\Graphics\Plots.h">
       <Filter>头文件\MainToolbox\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="MainToolbox\Graphics\Gnuplot.h">
       <Filter>头文件\MainToolbox\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="MainToolbox\SparseMatrix.h">
+      <Filter>头文件\MainToolbox</Filter>
+    </ClInclude>
+    <ClInclude Include="MainToolbox\Data\StandardFile\Images\Bmp.h">
+      <Filter>头文件\MainToolbox\Data\StandardFile\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="MainToolbox\Data\StandardFile\Images\Image.h">
+      <Filter>头文件\MainToolbox\Data\StandardFile\Image</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

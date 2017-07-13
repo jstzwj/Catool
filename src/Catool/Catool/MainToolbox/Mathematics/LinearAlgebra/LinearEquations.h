@@ -67,12 +67,11 @@ namespace catool
 			{
 				if (m.dim_size() > 2)
 					throw std::runtime_error("error: swapRow not defined for N-D objects");
-				for (int i = 0; i < m.get_dim_data(1);++i)
+				for (int i = 0; i < m.get_dim_data(1); ++i)
 				{
-					std::swap(m[i*m.get_dim_data(0)+a], m[i*m.get_dim_data(0) + b]);
+					std::swap(m[i*m.get_dim_data(0) + a], m[i*m.get_dim_data(0) + b]);
 				}
 			}
-
 
 			inline int rank(Array<double> m)
 			{
@@ -81,20 +80,20 @@ namespace catool
 				int echelon_line = 0;
 				int rank_rst = 0;
 				//遍历行
-				for (int i = 0; i < m.get_dim_data(0);++i,++echelon_line)
+				for (int i = 0; i < m.get_dim_data(0); ++i, ++echelon_line)
 				{
 					//已经形成阶梯型
-					if (echelon_line>=m.get_dim_data(1))	break;
+					if (echelon_line >= m.get_dim_data(1))	break;
 					//当前行阶梯线上为0
 					while (std::abs(m[echelon_line*m.get_dim_data(0) + i]) < std::numeric_limits<double>::epsilon())
 					{
 						//遍历当前行下面所有行的阶梯线，找个不为零的行
 						int k;
-						for ( k= i + 1; k < m.get_dim_data(0); ++k)
+						for (k = i + 1; k < m.get_dim_data(0); ++k)
 						{
 							if (std::abs(m[echelon_line*m.get_dim_data(0) + k]) >= std::numeric_limits<double>::epsilon())
 							{
-								swapRow(m,i,k);
+								swapRow(m, i, k);
 								break;
 							}
 						}
@@ -106,13 +105,13 @@ namespace catool
 					}
 					++rank_rst;
 					//目标行
-					for (int j = i+1; j < m.get_dim_data(0);++j)
+					for (int j = i + 1; j < m.get_dim_data(0); ++j)
 					{
 						if (std::abs(m[echelon_line*m.get_dim_data(0) + j]) < std::numeric_limits<double>::epsilon())
 							continue;
 						double scale = m[echelon_line*m.get_dim_data(0) + j] / m[echelon_line*m.get_dim_data(0) + i];
 						//两行相减
-						for (int k = 0; k < m.get_dim_data(1);++k)
+						for (int k = 0; k < m.get_dim_data(1); ++k)
 						{
 							m[k*m.get_dim_data(0) + j] += -scale*m[k*m.get_dim_data(0) + i];
 						}
@@ -162,7 +161,7 @@ namespace catool
 				if (m.dim_size() > 2)
 					throw std::runtime_error("error: lu not defined for N-D objects");
 				Array<double> l, u(m);
-				l = eye(u.get_dim_data(0), u.get_dim_data(0));
+				l = eye<double>(u.get_dim_data(0), u.get_dim_data(0));
 				for (int i = 0; i < u.get_dim_data(0); ++i)
 				{
 					for (int j = i + 1; j < u.get_dim_data(0); ++j)
@@ -198,7 +197,34 @@ namespace catool
 				}
 				return result;
 			}
+			/*
+			isdiag
+			Determine if matrix is diagonal
+			*/
+			template<class T>
+			bool isdiag(const Array<T>& a)
+			{
+				if (a.dim_size() > 2)
+				{
+					throw std::runtime_error("Matrix must be 2-dimensional");
+				}
 
+				int m = a.get_dim_data(0);
+				int n = a.get_dim_data(1);
+				int min = m > n ? n : m;
+				T result = T();
+				for (int i = 0; i < a.get_dim_data(0); ++i)
+				{
+					for (int j = 0; j < a.get_dim_data(1); ++j)
+					{
+						if (i != j&&std::abs(a[j*a.get_dim_data(0) + i]) >= std::numeric_limits<double>::epsilon())
+						{
+							return false;
+						}
+					}
+				}
+				return true;
+			}
 
 			/*
 			trace
@@ -215,15 +241,13 @@ namespace catool
 				int m = a.get_dim_data(0);
 				int n = a.get_dim_data(1);
 				int min = m > n ? n : m;
-				T result=T();
+				T result = T();
 				for (int i = 0; i < min; ++i)
 				{
-					result+= a[i*m + i];
+					result += a[i*m + i];
 				}
 				return result;
 			}
-
-
 		}
 	}
 }

@@ -32,7 +32,7 @@ namespace catool
 					{
 						throw std::runtime_error("stream is not readable.");
 					}
-					virtual std::size_t read(T* buffer, std::size_t count) override
+					virtual std::size_t read(T* /*buffer*/, std::size_t /*count*/) override
 					{
 						throw std::runtime_error("stream is not readable.");
 					}
@@ -40,7 +40,7 @@ namespace catool
 					{
 						throw std::runtime_error("stream is not readable.");
 					}
-					virtual void skip(std::size_t count) override
+					virtual void skip(std::size_t /*count*/) override
 					{
 						throw std::runtime_error("stream is not readable.");
 					}

@@ -4,6 +4,7 @@
 #include"MainToolbox\Array.h"
 #include"MainToolbox\Mathematics\ElementaryMath\Arithmetic.h"
 #include"MainToolbox\Mathematics\LinearAlgebra\LinearEquations.h"
+#include"MainToolbox\Mathematics\ElementaryMath\ExponentsLogarithms.h"
 #include"MainToolbox\Complex.h"
 #include"MainToolbox\Mathematics\RandomNumber\Rand.h"
 #include"MainToolbox\Data\Endian.h"
@@ -114,7 +115,7 @@ int main()
 		var_dump(nd.second);
 	}*/
 	//rank, trace and pinv
-	
+
 	//{
 		//var_dump(pinv(def));
 		//Array<double> tst{ 1.0,1.0,1.0,2.0,2.0,2,3,3,3,4,4,5 };
@@ -126,9 +127,10 @@ int main()
 	//disp
 	//disp(def);
 
+	//nextpow2
+	//disp(nextpow2(1023));
 
-	
-	
+
 	system("pause");
 	return 0;
 }

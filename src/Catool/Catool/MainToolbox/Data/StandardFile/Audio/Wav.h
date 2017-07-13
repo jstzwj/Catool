@@ -5,8 +5,10 @@
 #include<memory>
 #include<type_traits>
 #include<utility>
+#include<stdexcept>
 #include <cstddef>
 #include<cstdio>
+#include<cstring>
 #include"../../Stream/FileInputStream.h"
 #include"../../Stream/FileOutputStream.h"
 #include"../../../Array.h"
@@ -138,32 +140,32 @@ namespace catool
 						//Read Riff header
 						RIFF_header header;
 						data_source->read(header.szRiffID, sizeof(header.szRiffID));
-						if (memcmp(header.szRiffID, "RIFF", 4) == 0)
+						if (std::memcmp(header.szRiffID, "RIFF", 4) == 0)
 						{
 							header.dwRiffSize = stream::InputWrapper<uint32_t>::read(*data_source);
 							data_source->read(header.szRiffFormat, sizeof(header.szRiffFormat));
-							if (memcmp(header.szRiffFormat, "WAVE", 4) != 0)
+							if (std::memcmp(header.szRiffFormat, "WAVE", 4) != 0)
 							{
-								throw std::exception("Can not use WaveReader to read the file.");
+								throw std::runtime_error("Can not use WaveReader to read the file.");
 							}
 						}
 						else
 						{
-							throw std::exception("Wave file header can not be found.");
+							throw std::runtime_error("Wave file header can not be found.");
 						}
 
 						//Read riff format
 						FMT_block format;
 						WAVE_format wave_format;
 						data_source->read(format.szFmtID, sizeof(format.szFmtID));
-						if (memcmp(format.szFmtID, "fmt ", 4) == 0)
+						if (std::memcmp(format.szFmtID, "fmt ", 4) == 0)
 						{
 							format.dwFmtSize = stream::InputWrapper<uint32_t>::read(*data_source);
 							//Read wave format
 							wave_format.wFormatTag = stream::InputWrapper<uint16_t>::read(*data_source);
 							if (wave_format.wFormatTag != FORMAT_TAG::WAVE_FORMAT_PCM)
 							{
-								throw std::exception("Do not support the wave format.");
+								throw std::runtime_error("Do not support the wave format.");
 							}
 							wave_format.wChannels = stream::InputWrapper<uint16_t>::read(*data_source);
 							wave_format.dwSamplesPerSec = stream::InputWrapper<uint32_t>::read(*data_source);
@@ -174,12 +176,12 @@ namespace catool
 						}
 						else
 						{
-							throw std::exception("Wave file format can not be found.");
+							throw std::runtime_error("Wave file format can not be found.");
 						}
 						//Read fact and data blocks
 						FACT_block fact;
 						data_source->read(fact.szFactID, 4);
-						if (memcmp(fact.szFactID, "fact", 4) == 0)
+						if (std::memcmp(fact.szFactID, "fact", 4) == 0)
 						{
 							//TODO
 							data_source->seek(sizeof(FACT_block) - sizeof(fact.szFactID), StreamType::PosType::Current);
@@ -190,13 +192,13 @@ namespace catool
 						}
 						DATA_block data;
 						data_source->read(data.szDataID, 4);
-						if (memcmp(data.szDataID, "data", 4) == 0)
+						if (std::memcmp(data.szDataID, "data", 4) == 0)
 						{
 							data.dwDataSize = stream::InputWrapper<uint32_t>::read(*data_source);
 						}
 						else
 						{
-							throw std::exception("Unknown block type.");
+							throw std::runtime_error("Unknown block type.");
 						}
 
 						if (wave_format.wChannels == 1)

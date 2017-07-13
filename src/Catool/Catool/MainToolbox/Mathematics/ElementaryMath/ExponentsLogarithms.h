@@ -75,6 +75,16 @@ namespace catool
 					each = std::log2(each);
 				return result;
 			}
+			/*
+			nextpow2
+			Exponent of next higher power of 2
+			*/
+			template<class T>
+			T nextpow2(T n)
+			{
+				double num = std::log2(n);
+				return static_cast<int>(num + 1);
+			}
 
 			/*
 			sqrt	Square root

@@ -355,7 +355,7 @@ namespace catool
 					int sum_index = 0;
 					for (unsigned int i = 0; i < dims.size(); ++i)
 					{
-						if (i != cum_dim)
+						if (i != (unsigned int)cum_dim)
 							sum_index += dims[i] * n.get_dim_acc(i);
 					}
 					double cum = 1;
@@ -610,7 +610,7 @@ namespace catool
 			template<class T, class U>
 			inline Array<T> rem(const Array<T> & a, U b)
 			{
-				Array<T> result(t);
+				Array<T> result(a);
 				for (auto & each : result)
 					each = std::remainder(each, b);
 				return result;
@@ -626,7 +626,7 @@ namespace catool
 			template<class T, class U>
 			inline Array<T> mod(const Array<T> & a, U b)
 			{
-				Array<T> result(t);
+				Array<T> result(a);
 				for (auto & each : result)
 					each = std::modf(each, b);
 				return result;
@@ -640,7 +640,7 @@ namespace catool
 			3 + 1/(7 + 1/(16 + 1/(-294)))
 			*/
 
-			inline std::pair<double,double> rat(double x, double tol)
+			inline std::pair<double, double> rat(double x, double tol)
 			{
 				int n, d;
 				double float_part = x;
@@ -677,16 +677,16 @@ namespace catool
 			}
 
 			template<class T>
-			std::pair<Array<double>,Array<double>> rat(const Array<T> & x,double tol=1e-6)
+			std::pair<Array<double>, Array<double>> rat(const Array<T> & x, double tol = 1e-6)
 			{
-				Array<double> n(x.get_dim()),d(x.get_dim());
-				for (int i = 0; i < x.size();++i)
+				Array<double> n(x.get_dim()), d(x.get_dim());
+				for (int i = 0; i < x.size(); ++i)
 				{
 					auto each_rst = rat(x[i], tol);
 					n[i] = each_rst.first;
-					d[i]= each_rst.second;
+					d[i] = each_rst.second;
 				}
-				return {n,d};
+				return{ n,d };
 			}
 			/*
 			S = rats(X) returns a character vector containing the rational approximations to the elements of X using the default length of 13.
@@ -695,7 +695,7 @@ namespace catool
 			*/
 			inline string rats(double x)
 			{
-				std::pair<double,double> result = rat(x);
+				std::pair<double, double> result = rat(x);
 				return std::to_string(result.first) + "/" + std::to_string(result.second);
 			}
 		}

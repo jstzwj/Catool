@@ -28,11 +28,11 @@ namespace catool
 					{
 						return false;
 					}
-					virtual void write(T value) override
+					virtual void write(T /*value*/) override
 					{
 						throw std::runtime_error("stream is not writeable.");
 					}
-					virtual void write(const T* buffer, std::size_t count) override
+					virtual void write(const T* /*buffer*/, std::size_t /*count*/) override
 					{
 						throw std::runtime_error("stream is not writeable.");
 					}

@@ -153,6 +153,17 @@ namespace catool
 					throw std::runtime_error("Unknown rang type.");
 				}
 			}
+			/*
+			RandStream
+			TODO
+			*/
+			enum class RandGenType {};
+			enum class RandParam { Seed, NormalTransform};
+			class RandStream
+			{
+			public:
+				//RandStream(RandGenType gentype, RandParam name,int value);
+			};
 		}
 	}
 }
