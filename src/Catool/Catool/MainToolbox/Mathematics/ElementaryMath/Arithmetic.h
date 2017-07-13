@@ -4,6 +4,7 @@
 
 #include<cmath>
 #include<limits>
+#include<utility>
 #include"../../Types.h"
 #include"Constants.h"
 #include"../../Array.h"
@@ -639,7 +640,7 @@ namespace catool
 			3 + 1/(7 + 1/(16 + 1/(-294)))
 			*/
 
-			inline Array<int> rat(double x, double tol)
+			inline std::pair<double,double> rat(double x, double tol)
 			{
 				int n, d;
 				double float_part = x;
@@ -670,9 +671,22 @@ namespace catool
 					return{ n,d };
 			}
 
-			inline Array<int> rat(double x)
+			inline std::pair<double, double> rat(double x)
 			{
 				return rat(x, 1e-6);
+			}
+
+			template<class T>
+			std::pair<Array<double>,Array<double>> rat(const Array<T> & x,double tol=1e-6)
+			{
+				Array<double> n(x.get_dim()),d(x.get_dim());
+				for (int i = 0; i < x.size();++i)
+				{
+					auto each_rst = rat(x[i], tol);
+					n[i] = each_rst.first;
+					d[i]= each_rst.second;
+				}
+				return {n,d};
 			}
 			/*
 			S = rats(X) returns a character vector containing the rational approximations to the elements of X using the default length of 13.
@@ -681,8 +695,8 @@ namespace catool
 			*/
 			inline string rats(double x)
 			{
-				Array<int> result = rat(x);
-				return std::to_string(result[0]) + "/" + std::to_string(result[1]);
+				std::pair<double,double> result = rat(x);
+				return std::to_string(result.first) + "/" + std::to_string(result.second);
 			}
 		}
 	}

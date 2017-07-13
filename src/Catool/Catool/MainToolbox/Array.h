@@ -30,7 +30,7 @@ namespace catool
 				dim.push_back(1);
 				data.resize(row_);
 			}
-			Array(const std::vector<int> dims) noexcept
+			Array(const std::vector<int> &dims) noexcept
 				:dim(dims)
 			{
 				this->resize_from_dim();

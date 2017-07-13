@@ -107,6 +107,13 @@ int main()
 		var_dump(rot90(test, 3));
 	}*/
 	//callplot("plot [-3.14:3.14] sin(x)\n");
+	//rat
+	/*{
+		auto nd = rat(rty, 1e-6);
+		var_dump(nd.first);
+		var_dump(nd.second);
+	}*/
+	
 	system("pause");
 	return 0;
 }
