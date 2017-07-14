@@ -114,7 +114,6 @@ namespace catool
 				dim.push_back(p);
 				resize_impl(arg...);
 			}
-			
 
 			void resize(const std::vector<int> & sz)
 			{
@@ -213,7 +212,7 @@ namespace catool
 				ans += ")";
 				return ans;
 			}
-			
+
 			std::string to_string()const
 			{
 				std::string rst;
@@ -278,7 +277,7 @@ namespace catool
 				}
 				return rst;
 			}
-		//private method
+			//private method
 		private:
 
 			template<typename T1, typename... T2>
@@ -303,7 +302,6 @@ namespace catool
 			{
 				resize_from_dim();
 			}
-
 
 			std::string to_string_impl(std::vector<int>& loop, int cur_loop)const
 			{

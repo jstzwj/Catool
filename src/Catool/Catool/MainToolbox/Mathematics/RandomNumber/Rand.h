@@ -158,7 +158,7 @@ namespace catool
 			TODO
 			*/
 			enum class RandGenType {};
-			enum class RandParam { Seed, NormalTransform};
+			enum class RandParam { Seed, NormalTransform };
 			class RandStream
 			{
 			public:

@@ -129,7 +129,7 @@ int main()
 
 	//nextpow2
 	//disp(nextpow2(1023));
-	disp(def);
+	//disp(def);
 
 	system("pause");
 	return 0;

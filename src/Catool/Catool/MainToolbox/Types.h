@@ -181,19 +181,17 @@ namespace catool
 			std::cout << "i" << std::endl;
 		}
 
-
-		template<class T=void>
+		template<class T = void>
 		using void_t = void;
 
-
-		template<class T,class=void_t<>>
+		template<class T, class = void_t<>>
 		struct HasMemberTostring
 		{
 			using type = std::false_type;
 		};
 
 		template<class T>
-		struct HasMemberTostring<T,void_t<decltype(&T::to_string)>>
+		struct HasMemberTostring<T, void_t<decltype(&T::to_string)>>
 		{
 			using type = std::true_type;
 		};
@@ -209,11 +207,10 @@ namespace catool
 			std::cout << obj << std::endl;
 		}
 
-
 		template<class T>
 		void disp(const T & obj)
 		{
-			disp_impl(obj,typename HasMemberTostring<T>::type());
+			disp_impl(obj, typename HasMemberTostring<T>::type());
 		}
 		template<>
 		void disp<Complex>(const Complex & obj)
@@ -221,10 +218,6 @@ namespace catool
 			std::cout << obj.real() << "+";
 			std::cout << obj.imag() << "i";
 		}
-
-
-
-
 	}
 }
 

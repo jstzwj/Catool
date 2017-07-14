@@ -6,7 +6,9 @@
 #include<map>
 #include<utility>
 #include<stdexcept>
+#include<limits>
 #include<cstdint>
+#include<cmath>
 
 #include"Array.h"
 
@@ -18,7 +20,7 @@ namespace catool
 		{
 		public:
 			SparseKey() :row(), col() {}
-			SparseKey(int row_,int col_) :row(row_), col(col_) {}
+			SparseKey(int row_, int col_) :row(row_), col(col_) {}
 			int row;
 			int col;
 		};
@@ -35,7 +37,7 @@ namespace catool
 			using KeyType = SparseKey;
 			using ValueType = T;
 
-			SparseMatrix(int row_=1,int col_=1) noexcept
+			SparseMatrix(int row_ = 1, int col_ = 1) noexcept
 			{
 				if (row_ < 0)row = 0;
 				else row = row_;
@@ -56,7 +58,7 @@ namespace catool
 
 			template<class U>
 			explicit SparseMatrix(const SparseMatrix<U>& other)
-				:row(other.row),col(other.col),data(other.begin(), other.end()) {}
+				:row(other.row), col(other.col), data(other.begin(), other.end()) {}
 
 			SparseMatrix(const SparseMatrix<T>& other)
 				:row(other.row), col(other.col), data(other.begin(), other.end()) {}
@@ -68,7 +70,7 @@ namespace catool
 			{
 				for (auto& each_entry : data)
 				{
-					if (each_entry.first.row+ each_entry.first.col*row == n)
+					if (each_entry.first.row + each_entry.first.col*row == n)
 						return each_entry.second;
 				}
 				data.push_back(EntryType(n, T()));
@@ -79,10 +81,10 @@ namespace catool
 			{
 				for (auto& each_entry : data)
 				{
-					if (each_entry.first.row==row_&&each_entry.first.col == col_)
+					if (each_entry.first.row == row_&&each_entry.first.col == col_)
 						return each_entry.second;
 				}
-				data.push_back(EntryType(SparseKey(row_,col_), T()));
+				data.push_back(EntryType(SparseKey(row_, col_), T()));
 				return data.back();
 			}
 
@@ -96,13 +98,12 @@ namespace catool
 				return false;
 			}
 
-			int data_size() const { return data.size(); }
-			int size() const { return row*col; }
+			IndexType data_size() const { return data.size(); }
+			IndexType size() const { return row*col; }
 			int row()const { return row; }
 			int col()const { return col; }
-			
 
-			void resize(int row_,int col_)
+			void resize(int row_, int col_)
 			{
 				row = row_;
 				col = col_;
@@ -158,20 +159,17 @@ namespace catool
 			*/
 		};
 
-
-
 		/*
 		spalloc
 		Allocate space for sparse matrix
 		*/
 		template<class T = int>
-		SparseMatrix<T> spalloc(int m, int n,uint64_t nz)
+		SparseMatrix<T> spalloc(int m, int n, uint64_t nz)
 		{
 			SparseMatrix<T> rst(m, n);
 			rst.get_data().reserve(nz);
 			return rst;
 		}
-
 
 		/*
 		speye
@@ -181,12 +179,12 @@ namespace catool
 		S = speye(n)
 		S = speye
 		*/
-		template<class T=int>
-		SparseMatrix<T> speye(int m,int n)
+		template<class T = int>
+		SparseMatrix<T> speye(int m, int n)
 		{
-			SparseMatrix<T> rst(m,n);
+			SparseMatrix<T> rst(m, n);
 			int min_dim = m > n ? n : m;
-			for (int i = 0; i < min_dim;++i)
+			for (int i = 0; i < min_dim; ++i)
 			{
 				rst[i*m + i] = 1;
 			}
@@ -212,7 +210,7 @@ namespace catool
 		S = sparse(i,j,v)
 		S = sparse(i,j,v,m,n)
 		S = sparse(i,j,v,m,n,nz)
-		
+
 		*/
 		template<class T>
 		SparseMatrix<T> sparse(const Array<T>& a)
@@ -222,18 +220,49 @@ namespace catool
 			SparseMatrix<T> rst(a.get_dim_data(0), a.get_dim_data(1));
 			for (int i = 0; i < a.get_dim_data(0); ++i)
 			{
-				for (int j = 0; j < a.get_dim_data(1);++j)
+				for (int j = 0; j < a.get_dim_data(1); ++j)
 				{
-					rst.at(i, j) = a[j*a.get_dim_data(0)+i];
+					rst.at(i, j) = a[j*a.get_dim_data(0) + i];
 				}
 			}
 			return rst;
 		}
 		template<class T>
-		SparseMatrix<T> sparse(int m,int n)
+		SparseMatrix<T> sparse(const Array<T>& a,double & compressed_percent)
+		{
+			if (n.dim_size() > 2)
+				throw std::runtime_error("error: sparse not defined for N-D objects");
+			SparseMatrix<T> rst(a.get_dim_data(0), a.get_dim_data(1));
+			for (int i = 0; i < a.get_dim_data(0); ++i)
+			{
+				for (int j = 0; j < a.get_dim_data(1); ++j)
+				{
+					if(std::abs(a[j*a.get_dim_data(0) + i])>=std::numeric_limits<double>::epsilon())
+						rst.at(i, j) = a[j*a.get_dim_data(0) + i];
+				}
+			}
+			compressed_percent = (double)rst.data_size() / a.size();
+			return rst;
+		}
+		template<class T>
+		SparseMatrix<T> sparse(int m, int n)
 		{
 			return SparseMatrix<T>(m, n);
 		}
+
+
+
+		/*
+		nnz
+		Number of nonzero matrix elements
+		*/
+		template<class T>
+		uint64_t nnz(const SparseMatrix<T> & m)
+		{
+			return m.size()-m.data_size();
+		}
+
+
 	}
 }
 
