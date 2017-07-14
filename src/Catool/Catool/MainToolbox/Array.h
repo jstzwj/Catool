@@ -41,17 +41,6 @@ namespace catool
 			{
 				ArrayConstructor(arg...);
 			}
-			template<typename T1, typename... T2>
-			void ArrayConstructor(T1 p, T2... arg)
-			{
-				if (p < 0)p = 0;
-				dim.push_back(p);
-				ArrayConstructor(arg...);
-			}
-			void ArrayConstructor()
-			{
-				resize_from_dim();
-			}
 
 			Array(std::initializer_list<T> list)
 				:data(list)
@@ -97,9 +86,9 @@ namespace catool
 			int size() const { return data.size(); }
 			/*void resize(int size) { data.resize(size); }*/
 			std::vector<int> & get_dim() { return dim; }
-			std::vector<int> get_dim() const { return dim; }
+			const std::vector<int>& get_dim() const { return dim; }
 			std::vector<T> & get_data() { return data; }
-			std::vector<T> get_data() const { return data; }
+			const std::vector<T>& get_data() const { return data; }
 
 			int dim_size()const { return dim.size(); }
 			int get_dim_data(int n) const
@@ -125,16 +114,7 @@ namespace catool
 				dim.push_back(p);
 				resize_impl(arg...);
 			}
-			template<typename T1, typename... T2>
-			void resize_impl(T1 p, T2... arg)
-			{
-				dim.push_back(p);
-				resize_impl(arg...);
-			}
-			void resize_impl()
-			{
-				resize_from_dim();
-			}
+			
 
 			void resize(const std::vector<int> & sz)
 			{
@@ -233,40 +213,7 @@ namespace catool
 				ans += ")";
 				return ans;
 			}
-
-			std::string to_string_impl(std::vector<int>& loop, int cur_loop)const
-			{
-				std::string rst;
-				int &i = loop[cur_loop];
-				for (i = 0; i < this->get_dim_data(cur_loop); ++i)
-				{
-					if (cur_loop < 2)
-					{
-						rst += compose_index(loop) + "\t=" + "\n";
-
-						int prefix_index = 0;
-						for (unsigned int i = 2; i < loop.size(); ++i)
-						{
-							prefix_index += this->get_dim_acc(i)*loop[i];
-						}
-
-						for (int i = 0; i < this->get_dim_data(0); ++i)
-						{
-							for (int j = 0; j < this->get_dim_data(1); ++j)
-							{
-								rst += std::to_string(at(prefix_index + j*this->get_dim_data(0) + i)) + " ";
-							}
-							rst += "\n";
-						}
-						break;
-					}
-					else
-					{
-						rst += to_string_impl(loop, cur_loop - 1);
-					}
-				}
-				return rst;
-			}
+			
 			std::string to_string()const
 			{
 				std::string rst;
@@ -327,6 +274,66 @@ namespace catool
 					for (i = 0; i < this->get_dim_data(this->dim_size() - 1); ++i)
 					{
 						rst += to_string_impl(loop, this->dim_size() - 2);
+					}
+				}
+				return rst;
+			}
+		//private method
+		private:
+
+			template<typename T1, typename... T2>
+			void ArrayConstructor(T1 p, T2... arg)
+			{
+				if (p < 0)p = 0;
+				dim.push_back(p);
+				ArrayConstructor(arg...);
+			}
+			void ArrayConstructor()
+			{
+				resize_from_dim();
+			}
+
+			template<typename T1, typename... T2>
+			void resize_impl(T1 p, T2... arg)
+			{
+				dim.push_back(p);
+				resize_impl(arg...);
+			}
+			void resize_impl()
+			{
+				resize_from_dim();
+			}
+
+
+			std::string to_string_impl(std::vector<int>& loop, int cur_loop)const
+			{
+				std::string rst;
+				int &i = loop[cur_loop];
+				for (i = 0; i < this->get_dim_data(cur_loop); ++i)
+				{
+					if (cur_loop < 2)
+					{
+						rst += compose_index(loop) + "\t=" + "\n";
+
+						int prefix_index = 0;
+						for (unsigned int i = 2; i < loop.size(); ++i)
+						{
+							prefix_index += this->get_dim_acc(i)*loop[i];
+						}
+
+						for (int i = 0; i < this->get_dim_data(0); ++i)
+						{
+							for (int j = 0; j < this->get_dim_data(1); ++j)
+							{
+								rst += std::to_string(at(prefix_index + j*this->get_dim_data(0) + i)) + " ";
+							}
+							rst += "\n";
+						}
+						break;
+					}
+					else
+					{
+						rst += to_string_impl(loop, cur_loop - 1);
 					}
 				}
 				return rst;
