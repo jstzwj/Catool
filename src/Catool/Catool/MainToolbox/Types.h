@@ -180,11 +180,51 @@ namespace catool
 			std::cout << com.imag();
 			std::cout << "i" << std::endl;
 		}
+
+
+		template<class T=void>
+		using void_t = void;
+
+
+		template<class T,class=void_t<>>
+		struct HasMemberTostring
+		{
+			using type = std::false_type;
+		};
+
+		template<class T>
+		struct HasMemberTostring<T,void_t<decltype(&T::to_string)>>
+		{
+			using type = std::true_type;
+		};
+
+		template<class T>
+		void disp_impl(const T & obj, std::true_type /*to_string_tag*/)
+		{
+			std::cout << obj.to_string() << std::endl;
+		}
+		template<class T>
+		void disp_impl(const T & obj, std::false_type /*to_string_tag*/)
+		{
+			std::cout << obj << std::endl;
+		}
+
+
 		template<class T>
 		void disp(const T & obj)
 		{
-			var_dump(obj);
+			disp_impl(obj,typename HasMemberTostring<T>::type());
 		}
+		template<>
+		void disp<Complex>(const Complex & obj)
+		{
+			std::cout << obj.real() << "+";
+			std::cout << obj.imag() << "i";
+		}
+
+
+
+
 	}
 }
 

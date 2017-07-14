@@ -3,6 +3,7 @@
 #define CATOOL_FUNDAMENTALS_ARRAY
 
 #include<vector>
+#include<string>
 #include<algorithm>
 #include<tuple>
 #include<cstdlib>
@@ -77,6 +78,16 @@ namespace catool
 			{
 				return data[n];
 			}
+
+			T& at(int n)
+			{
+				return data[n];
+			}
+			const T& at(int n)const
+			{
+				return data[n];
+			}
+
 			typename std::vector<T>::iterator begin() { return data.begin(); }
 			typename std::vector<T>::iterator end() { return data.end(); }
 			typename std::vector<T>::const_iterator begin() const { return data.begin(); }
@@ -199,7 +210,129 @@ namespace catool
 					if (dim[i] == 0)return true;
 				return true;
 			}
+
+			//tostring
+			static std::string compose_index(std::vector<int>& loop)
+			{
+				std::string ans = "(";
+				for (unsigned int i = 0; i < loop.size(); ++i)
+				{
+					if (i == 0)
+					{
+						ans += ":";
+					}
+					else if (i == 1)
+					{
+						ans += ",:";
+					}
+					else
+					{
+						ans += "," + std::to_string(loop[i]);
+					}
+				}
+				ans += ")";
+				return ans;
+			}
+
+			std::string to_string_impl(std::vector<int>& loop, int cur_loop)const
+			{
+				std::string rst;
+				int &i = loop[cur_loop];
+				for (i = 0; i < this->get_dim_data(cur_loop); ++i)
+				{
+					if (cur_loop < 2)
+					{
+						rst += compose_index(loop) + "\t=" + "\n";
+
+						int prefix_index = 0;
+						for (unsigned int i = 2; i < loop.size(); ++i)
+						{
+							prefix_index += this->get_dim_acc(i)*loop[i];
+						}
+
+						for (int i = 0; i < this->get_dim_data(0); ++i)
+						{
+							for (int j = 0; j < this->get_dim_data(1); ++j)
+							{
+								rst += std::to_string(at(prefix_index + j*this->get_dim_data(0) + i)) + " ";
+							}
+							rst += "\n";
+						}
+						break;
+					}
+					else
+					{
+						rst += to_string_impl(loop, cur_loop - 1);
+					}
+				}
+				return rst;
+			}
+			std::string to_string()const
+			{
+				std::string rst;
+				//dimension empty
+				for (int i = 0; i < this->dim_size(); ++i)
+				{
+					if (this->get_dim_data(i) <= 0)
+					{
+						//print empty dimension matrix
+						rst += "[](";
+						for (int j = 0; j < this->dim_size(); ++j)
+						{
+							if (j == 0)
+							{
+								rst += std::to_string(this->get_dim_data(j));
+							}
+							else
+							{
+								rst += "x" + std::to_string(this->get_dim_data(j));
+							}
+						}
+						//change [](0) to [](0x1)
+						if (this->dim_size() == 1)
+						{
+							rst += "x1";
+						}
+						rst += ")\n";
+						return rst;
+					}
+				}
+				//all dimension are not empty
+				if (this->dim_size() - 1 < 2)
+				{
+					if (this->dim_size() == 1)
+					{
+						for (int j = 0; j < this->get_dim_data(0); ++j)
+						{
+							rst += std::to_string(at(j)) + "\n";
+						}
+					}
+					else
+					{
+						for (int i = 0; i < this->get_dim_data(0); ++i)
+						{
+							for (int j = 0; j < this->get_dim_data(1); ++j)
+							{
+								rst += std::to_string(at(j*this->get_dim_data(0) + i)) + " ";
+							}
+							rst += "\n";
+						}
+					}
+				}
+				else
+				{
+					std::vector<int> loop;
+					loop.resize(this->dim_size());
+					int &i = loop[this->dim_size() - 1];
+					for (i = 0; i < this->get_dim_data(this->dim_size() - 1); ++i)
+					{
+						rst += to_string_impl(loop, this->dim_size() - 2);
+					}
+				}
+				return rst;
+			}
 		};
+
 		//functions
 		/*
 		zeros: Create array of all zeros
