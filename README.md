@@ -2,7 +2,9 @@
 A technical computing tool.
 
 # Introduction
-The library was inspired by Octave. Catool is a computing toolbox written in c++.
+The library was inspired by Octave. Catool is a computing toolbox written in c++.  
+Catool provide an easy-used technical computing c++ environment.  
+Cuda or opencl acceleration will be added in latter versions.
 
 
 # Compatibility
@@ -143,5 +145,14 @@ Attension: this function needs GnuPlot interface.
 `audioread`	Read audio file  
 `audiowrite`	Write audio file  
 
+## Sparse Matrices
+`spalloc`	Allocate space for sparse matrix  
+`spdiags`	Extract and create sparse band and diagonal matrices  coming  
+`speye`	Sparse identity matrix  
+`sprand`	Sparse uniformly distributed random matrix coming  
+`sprandn`	Sparse normally distributed random matrix coming  
+`sparse`	Create sparse matrix  
 
+`issparse`	Determine whether input is sparse  coming  
+`nnz`	Number of nonzero matrix elements  
 
