@@ -5,9 +5,16 @@
 #include<cmath>
 #include<limits>
 #include<utility>
+#include"../../../Version.h"
 #include"../../Types.h"
 #include"Constants.h"
 #include"../../Array.h"
+
+
+#ifdef CATOOL_ENABLE_SSE
+#include <emmintrin.h>  
+#endif // CATOOL_ENABLE_SSE
+
 namespace catool
 {
 	namespace main_toolbox
@@ -299,6 +306,44 @@ namespace catool
 				return result;
 			}
 			template<class T>
+			Array<T> mtimes_impl(const Array<T>& a, const Array<T>& b)
+			{
+				int a_d0=a.get_dim_data(0), a_d1=a.get_dim_data(1);
+				int b_d0=b.get_dim_data(0), b_d1=b.get_dim_data(1);
+				Array<T> result(a_d0, b_d1);
+				//result.resize(a.rows()*b.cols());
+				for (int i = 0; i < b_d1; ++i)//b col
+				{
+					for (int j = 0; j < b_d0; ++j)//b row
+					{
+						if (std::abs(a[i*b_d0 + j]) > std::numeric_limits<T>::epsilon())
+						{
+							for (int k = 0; k < a_d0; ++k)//a row
+							{
+								result[i*a_d0 + k] += a[j*a_d0 + k] * b[i*b_d0 + j];
+							}
+						}
+					}
+				}
+				return result;
+			}
+			template<class T>
+			Array<T> copySubMatrix(const Array<T>& m,int dim0,int len0,int dim1,int len1)
+			{
+				Array<T> result(len0,len1);
+				int m_d0= m.get_dim_data(0);
+				for (int i=0;i<len1;++i)
+				{
+					for (int j=0;j<len0;++j)
+					{
+						result[i*len0 + j] = m[(dim1+i)*m_d0+j+dim0];
+					}
+				}
+				return result;
+			}
+
+
+			template<class T>
 			Array<T> mtimes(const Array<T>& a, const Array<T>& b)
 			{
 				if (a.dim_size() > 2 || b.dim_size() > 2)
@@ -309,23 +354,7 @@ namespace catool
 				{
 					throw std::runtime_error("Matrix dimensions must agree.");
 				}
-				Array<T> result(a.get_dim_data(0), b.get_dim_data(1));
-				//result.resize(a.rows()*b.cols());
-				for (int i = 0; i < a.get_dim_data(0); ++i)//a row
-				{
-					for (int j = 0; j < a.get_dim_data(1); ++j)//a col
-					{
-						if (std::abs(a[j*a.get_dim_data(0) + i]) <= std::numeric_limits<T>::epsilon())
-						{
-							continue;
-						}
-						for (int k = 0; k < b.get_dim_data(1); ++k)//b col
-						{
-							result[k*a.get_dim_data(0) + i] += a[j*a.get_dim_data(0) + i] * b[k*b.get_dim_data(0) + j];
-						}
-					}
-				}
-				return result;
+				return mtimes_impl(a, b);
 			}
 
 			/*
