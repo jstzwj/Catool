@@ -130,8 +130,8 @@ int main()
 	//nextpow2
 	//disp(nextpow2(1023));
 	//disp(def);
-	mtimes(ones<int>(1000, 1000), ones<int>(1000, 1000));
-	//mtimes(def, transpose(def));
+	//mtimes(ones<int>(1000, 1000), ones<int>(1000, 1000));
+	var_dump(pinv(ones<double>(4,4)));
 	system("pause");
 	return 0;
 }

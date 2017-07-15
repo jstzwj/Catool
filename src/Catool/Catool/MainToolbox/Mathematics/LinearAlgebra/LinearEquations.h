@@ -73,10 +73,11 @@ namespace catool
 				}
 			}
 
-			inline int rank(Array<double> m)
+			inline int rank(const Array<double> &a)
 			{
-				if (m.dim_size() > 2)
+				if (a.dim_size() > 2)
 					throw std::runtime_error("error: rank not defined for N-D objects");
+				Array<double> m(a);
 				int echelon_line = 0;
 				int rank_rst = 0;
 				//遍历行
@@ -101,6 +102,8 @@ namespace catool
 						if (k == m.get_dim_data(0))
 						{
 							++echelon_line;
+							//已经形成阶梯型
+							if (echelon_line >= m.get_dim_data(1))	return rank_rst;
 						}
 					}
 					++rank_rst;
@@ -135,10 +138,16 @@ namespace catool
 					//行满秩
 					return mtimes(tran_m, inv(mtimes(m, tran_m)));
 				}
-				else
+				else if(rnk == m.get_dim_data(1))
 				{
 					//列满秩
 					return mtimes(inv(mtimes(tran_m, m)), tran_m);
+				}
+				else
+				{
+					//不是行满秩也不是列满秩
+					//化为hermite标准型
+					//满秩分解
 				}
 			}
 

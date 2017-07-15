@@ -378,29 +378,30 @@ namespace catool
 		{
 			return 1;
 		}
-		inline Array<int> ones(int n)
+		template<class T>
+		inline Array<T> ones(int n)
 		{
-			Array<int> result(n, n);
+			Array<T> result(n, n);
 			result.fill(1);
 			return result;
 		}
 
-		template<typename T1, typename... T2>
-		inline Array<int> ones(T1 p, T2... arg)
+		template<class T=int,typename T1, typename... T2>
+		inline Array<T> ones(T1 p, T2... arg)
 		{
-			Array<int> result;
+			Array<T> result;
 			result.resize(p, arg...);
 			result.fill(1);
 			return result;
 		}
-
-		inline Array<int> ones(const Array<int> & sz)
+		template<class T=int>
+		inline Array<T> ones(const Array<int> & sz)
 		{
 			if (sz.dim_size() != 1)
 			{
 				throw std::runtime_error("the size array shall be one dimension array.");
 			}
-			Array<int> result;
+			Array<T> result;
 			result.get_dim() = sz.get_data();
 			result.resize_from_dim();
 			result.fill(1);
@@ -1077,12 +1078,13 @@ namespace catool
 		{
 			if (m.dim_size() > 2)
 				throw std::runtime_error("error: transpose not defined for N-D objects");
-			Array<T> result(m.get_dim_data(1), m.get_dim_data(0));
-			for (int i = 0; i < m.get_dim_data(0); ++i)
+			int d0=m.get_dim_data(0), d1=m.get_dim_data(1);
+			Array<T> result(d1, d0);
+			for (int i = 0; i < d0; ++i)
 			{
-				for (int j = 0; j < m.get_dim_data(1); ++j)
+				for (int j = 0; j < d1; ++j)
 				{
-					result[i*m.get_dim_data(1) + j] = m[j*m.get_dim_data(0) + i];
+					result[i*d1 + j] = m[j*d0 + i];
 				}
 			}
 			return result;
