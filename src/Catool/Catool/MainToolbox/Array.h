@@ -346,15 +346,16 @@ namespace catool
 		{
 			return 0;
 		}
-		inline Array<int> zeros(int n)
+		template<class T>
+		inline Array<T> zeros(int n)
 		{
-			return Array<int>(n, n);
+			return Array<T>(n, n);
 		}
 
-		template<typename T1, typename... T2>
-		inline Array<int> zeros(T1 p, T2... arg)
+		template<class T = int, typename T1, typename... T2>
+		inline Array<T> zeros(T1 p, T2... arg)
 		{
-			Array<int> result;
+			Array<T> result;
 			result.resize(p, arg...);
 			return result;
 		}
