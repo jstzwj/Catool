@@ -144,6 +144,7 @@
     <ClInclude Include="MainToolbox\Mathematics\Interpolation\Interpolation.h" />
     <ClInclude Include="MainToolbox\Mathematics\LinearAlgebra\LinearEquations.h" />
     <ClInclude Include="MainToolbox\Mathematics\RandomNumber\Rand.h" />
+    <ClInclude Include="MainToolbox\Range.h" />
     <ClInclude Include="MainToolbox\SparseMatrix.h" />
     <ClInclude Include="MainToolbox\Types.h" />
     <ClInclude Include="Version.h" />

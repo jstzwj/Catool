@@ -155,5 +155,8 @@
     <ClInclude Include="MainToolbox\Data\StandardFile\Images\Image.h">
       <Filter>头文件\MainToolbox\Data\StandardFile\Image</Filter>
     </ClInclude>
+    <ClInclude Include="MainToolbox\Range.h">
+      <Filter>头文件\MainToolbox</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

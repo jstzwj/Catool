@@ -6,8 +6,11 @@
 #include<string>
 #include<algorithm>
 #include<tuple>
+#include<functional>
 #include<cstdlib>
 #include<ctime>
+
+#include"Range.h"
 
 namespace catool
 {
@@ -189,6 +192,69 @@ namespace catool
 					if (dim[i] == 0)return true;
 				return true;
 			}
+
+
+			void swapRow(int a, int b)
+			{
+				if (dim_size() > 2)
+					throw std::runtime_error("error: swapRow not defined for N-D objects");
+				int d0= get_dim_data(0), d1= get_dim_data(1);
+				for (int i = 0; i < d1; ++i)
+				{
+					std::swap(at(i*d0 + a), at(i*d0 + b));
+				}
+			}
+			void swapCol(int a, int b)
+			{
+				if (dim_size() > 2)
+					throw std::runtime_error("error: swapCol not defined for N-D objects");
+				int d0 = get_dim_data(0), d1 = get_dim_data(1);
+				for (int i = 0; i < d0; ++i)
+				{
+					std::swap(at(a*d0 + i), at(b*d0 + i));
+				}
+			}
+
+			void addRow(double val, int from, int to)
+			{
+				if (dim_size() > 2)
+					throw std::runtime_error("error: swapRow not defined for N-D objects");
+				int d0 = get_dim_data(0), d1 = get_dim_data(1);
+				for (int i = 0; i < d1; ++i)
+				{
+					data[i*d0 + a] += data[i*d0 + b]*val;
+				}
+			}
+			void addCol(double val, int from, int to)
+			{
+				if (dim_size() > 2)
+					throw std::runtime_error("error: swapRow not defined for N-D objects");
+				int d0 = get_dim_data(0), d1 = get_dim_data(1);
+				for (int i = 0; i < d0; ++i)
+				{
+					data[a*d0 + i] += data[b*d0 + i] * val;
+				}
+			}
+			void loop_impl(std::vector<int>& dims,int cur_dim,const std::vector<Range>& loop_range
+				,std::function<void(const Array<T>& m, const std::vector<int>&)> &f)
+			{
+				if (cur_dim < 0)return;
+				Range range = loop_range[cur_dim];
+				dims[cur_dim] = range.begin;
+				for (int &i= dims[cur_dim];i<range.end;i+= range.interval)
+				{
+					if (cur_dim == 0)
+						f(*this,dims);
+					loop_impl(dims,loop_range,f);
+				}
+			}
+			void loop(const std::vector<Range>& loop_range, std::function<void(const Array<T>& m,const std::vector<int>&)> &f)
+			{
+				std::vector<int> dims;
+				dims.resize(dim.size());
+				loop_impl(dims,dim.size()-1,loop_range,f);
+			}
+
 
 			//tostring
 			static std::string compose_index(std::vector<int>& loop)

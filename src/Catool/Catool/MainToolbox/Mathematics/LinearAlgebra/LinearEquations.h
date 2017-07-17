@@ -63,15 +63,7 @@ namespace catool
 				return result;
 			}
 
-			inline void swapRow(Array<double> &m, int a, int b)
-			{
-				if (m.dim_size() > 2)
-					throw std::runtime_error("error: swapRow not defined for N-D objects");
-				for (int i = 0; i < m.get_dim_data(1); ++i)
-				{
-					std::swap(m[i*m.get_dim_data(0) + a], m[i*m.get_dim_data(0) + b]);
-				}
-			}
+			
 
 			inline int rank(const Array<double> &a)
 			{
@@ -94,7 +86,7 @@ namespace catool
 						{
 							if (std::abs(m[echelon_line*m.get_dim_data(0) + k]) >= std::numeric_limits<double>::epsilon())
 							{
-								swapRow(m, i, k);
+								m.swapRow(i, k);
 								break;
 							}
 						}
