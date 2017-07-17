@@ -134,6 +134,7 @@
     <ClInclude Include="MainToolbox\Data\Stream\OutputStream.h" />
     <ClInclude Include="MainToolbox\Data\Stream\Stream.h" />
     <ClInclude Include="MainToolbox\Data\Stream\StreamBase.h" />
+    <ClInclude Include="MainToolbox\Data\Variables\Mat.h" />
     <ClInclude Include="MainToolbox\Graphics\Gnuplot.h" />
     <ClInclude Include="MainToolbox\Graphics\Plots.h" />
     <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\Arithmetic.h" />

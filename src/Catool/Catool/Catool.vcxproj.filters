@@ -58,6 +58,9 @@
     <Filter Include="头文件\MainToolbox\Graphics">
       <UniqueIdentifier>{6b6ebd85-c056-497b-88a5-d55a47c850c4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="头文件\MainToolbox\Data\Variables">
+      <UniqueIdentifier>{869c3acf-4466-40a5-a989-ccae0a716e4e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -157,6 +160,9 @@
     </ClInclude>
     <ClInclude Include="MainToolbox\Range.h">
       <Filter>头文件\MainToolbox</Filter>
+    </ClInclude>
+    <ClInclude Include="MainToolbox\Data\Variables\Mat.h">
+      <Filter>头文件\MainToolbox\Data\Variables</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

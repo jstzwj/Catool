@@ -27,17 +27,23 @@ namespace catool
 			std::vector<T> data;
 		public:
 			Array() noexcept {}
-			Array(int row_) noexcept
+			Array(int row_)
 			{
 				if (row_ < 0)row_ = 0;
 				dim.push_back(row_);
 				dim.push_back(1);
 				data.resize(row_);
 			}
-			Array(const std::vector<int> &dims) noexcept
+			Array(const std::vector<int> &dims)
 				:dim(dims)
 			{
 				this->resize_from_dim();
+			}
+			Array(const std::vector<Range> &dims)
+			{
+				for (const auto & each_range:dims)
+					dim.push_back((each_range.end - each_range.begin)/each_range.interval);
+				resize_from_dim();
 			}
 			template<class ...K>
 			Array(K ...arg)
@@ -235,29 +241,44 @@ namespace catool
 					data[a*d0 + i] += data[b*d0 + i] * val;
 				}
 			}
-			void loop_impl(std::vector<int>& dims,int cur_dim,const std::vector<Range>& loop_range
-				,std::function<void(const Array<T>& m, const std::vector<int>&)> &f)
+			std::vector<Range> getFullLoop()const
 			{
-				if (cur_dim < 0)return;
-				Range range = loop_range[cur_dim];
-				dims[cur_dim] = range.begin;
-				for (int &i= dims[cur_dim];i<range.end;i+= range.interval)
-				{
-					if (cur_dim == 0)
-						f(*this,dims);
-					loop_impl(dims,loop_range,f);
-				}
+				std::vector<Range> rst;
+				for (const auto& each:dim)
+					rst.emplace_back(0,each,1);
+				return rst;
 			}
-			void loop(const std::vector<Range>& loop_range, std::function<void(const Array<T>& m,const std::vector<int>&)> &f)
+			int composeIndex(const std::vector<int> &dims)const
+			{
+				int index = 0;
+				for (int i=0;i<dims.size();++i)
+					index += dims[i] * get_dim_acc(i);
+				return index;
+			}
+			void loop(const std::vector<Range>& loop_range, 
+				std::function<void(const Array<T>& m,const std::vector<int>&dims)> f)const
 			{
 				std::vector<int> dims;
 				dims.resize(dim.size());
 				loop_impl(dims,dim.size()-1,loop_range,f);
 			}
 
+			
+			Array<T> subArray(const std::vector<Range>& loop_range)const
+			{
+				Array<T> rst(loop_range);
+				loop(loop_range, [&rst,&loop_range](const Array<T>& m, const std::vector<int>&dims) 
+				{
+					int index = 0;
+					for (unsigned int i = 0; i<dims.size(); ++i)
+						index += (dims[i]-loop_range[i].begin) * rst.get_dim_acc(i);
+					rst[index] = m[m.composeIndex(dims)];
+				});
+				return rst;
+			}
 
 			//tostring
-			static std::string compose_index(std::vector<int>& loop)
+			static std::string composeIndexToString(std::vector<int>& loop)
 			{
 				std::string ans = "(";
 				for (unsigned int i = 0; i < loop.size(); ++i)
@@ -369,6 +390,20 @@ namespace catool
 				resize_from_dim();
 			}
 
+			void loop_impl(std::vector<int>& dims, int cur_dim, const std::vector<Range>& loop_range
+				, std::function<void(const Array<T>& m, const std::vector<int>&)> &f)const
+			{
+				if (cur_dim < 0)return;
+				Range range = loop_range[cur_dim];
+				dims[cur_dim] = range.begin;
+				for (int &i = dims[cur_dim]; i<range.end; i += range.interval)
+				{
+					if (cur_dim == 0)
+						f(*this, dims);
+					loop_impl(dims,cur_dim-1, loop_range, f);
+				}
+			}
+
 			std::string to_string_impl(std::vector<int>& loop, int cur_loop)const
 			{
 				std::string rst;
@@ -377,7 +412,7 @@ namespace catool
 				{
 					if (cur_loop < 2)
 					{
-						rst += compose_index(loop) + "\t=" + "\n";
+						rst += composeIndexToString(loop) + "\t=" + "\n";
 
 						int prefix_index = 0;
 						for (unsigned int i = 2; i < loop.size(); ++i)

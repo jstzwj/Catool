@@ -133,6 +133,9 @@ int main()
 	//mtimes(ones<int>(1000, 1000), ones<int>(1000, 1000));
 	//mtimes(zeros<double>(1000, 1000), zeros<double>(1000, 1000));
 	//var_dump(pinv(ones<double>(4,4)));
+	std::vector<Range> ran = def.getFullLoop();
+	ran[1] = Range(0, 2);
+	var_dump(def.subArray(ran));
 	system("pause");
 	return 0;
 }

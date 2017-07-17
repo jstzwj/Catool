@@ -280,7 +280,7 @@ namespace catool
 			C = A*B is the matrix product of A and B.
 			*/
 			template<class T>
-			Array<T> mtimes_normal(const Array<T>& a, const Array<T>& b)
+			Array<T> mtimes_slow(const Array<T>& a, const Array<T>& b)
 			{
 				if (a.dim_size() > 2 || b.dim_size() > 2)
 				{
