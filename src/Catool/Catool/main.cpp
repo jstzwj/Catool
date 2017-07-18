@@ -11,6 +11,7 @@
 #include"MainToolbox\Data\StandardFile\Audio\Wav.h"
 #include"MainToolbox\Data\StandardFile\Audio\Audio.h"
 #include"MainToolbox\Graphics\Gnuplot.h"
+#include"MainToolbox\Data\DescriptiveStatistics.h"
 
 using namespace catool::main_toolbox;
 using namespace catool::main_toolbox::mathematics;
@@ -141,6 +142,14 @@ catch (std::exception e)
 //}
 //cat
 //var_dump(cat(0,abc, def,abc));
+
+
+//min
+//{
+//	Array<double> tst{ 1.0,1.0,1.0,2.0,2.0,2,3,3,3,4,4,5 };
+//	tst.resize(3,4);
+//	var_dump(max(tst,1));
+//}
 	system("pause");
 	return 0;
 }

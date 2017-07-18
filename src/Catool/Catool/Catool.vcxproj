@@ -123,6 +123,7 @@
     <ClInclude Include="MainToolbox\Data\Charset\UTF16Charset.h" />
     <ClInclude Include="MainToolbox\Data\Charset\UTF32Charset.h" />
     <ClInclude Include="MainToolbox\Data\Charset\UTF8Charset.h" />
+    <ClInclude Include="MainToolbox\Data\DescriptiveStatistics.h" />
     <ClInclude Include="MainToolbox\Data\Endian.h" />
     <ClInclude Include="MainToolbox\Data\StandardFile\Audio\Audio.h" />
     <ClInclude Include="MainToolbox\Data\StandardFile\Audio\Wav.h" />
@@ -147,6 +148,7 @@
     <ClInclude Include="MainToolbox\Mathematics\RandomNumber\Rand.h" />
     <ClInclude Include="MainToolbox\Range.h" />
     <ClInclude Include="MainToolbox\SparseMatrix.h" />
+    <ClInclude Include="MainToolbox\String.h" />
     <ClInclude Include="MainToolbox\Types.h" />
     <ClInclude Include="Version.h" />
   </ItemGroup>

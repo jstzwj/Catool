@@ -164,5 +164,11 @@
     <ClInclude Include="MainToolbox\Data\Variables\Mat.h">
       <Filter>头文件\MainToolbox\Data\Variables</Filter>
     </ClInclude>
+    <ClInclude Include="MainToolbox\String.h">
+      <Filter>头文件\MainToolbox</Filter>
+    </ClInclude>
+    <ClInclude Include="MainToolbox\Data\DescriptiveStatistics.h">
+      <Filter>头文件\MainToolbox\Data</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
