@@ -797,39 +797,42 @@ namespace catool
 		cat
 		Concatenate arrays along specified dimension
 		*/
-		//TODO
 		template<class T>
-		void cat_one(Array<T>& result, int dim, int cur_dim_cum, int cur_dim, std::vector<int> & dims, const Array<T>& A)
+		void cat_impl(Array<T> &result, int dim, int cur_pos)
 		{
-			int index = 0;
-			for (int j = 0; j < dims.size(); ++j)
-			{
-				index += result.get_dim_acc(j)*dims[j];
-			}
-			int & i = dims[cur_dim];
-			for (i = 0; i < dims.size(); ++i)
-			{
-				//result[index+]
-				cat_one(result, dim, cur_dim_cum + A.get_dim_data(dim), cur_dim - 1, dims, A);
-			}
+			return;
 		}
 		template<class T, class ...Targs>
-		void cat_impl(Array<T>& result, int dim, int cur_dim_cum, const Array<T>& A, Targs ...args)
+		void cat_impl(Array<T> &result,int dim,int cur_pos, const Array<T>& A, Targs ...args)
 		{
-			//TODO
-		}
+			std::vector<Range> range = A.getFullLoop();
+			A.loop(range, [&result,&dim,&cur_pos](const Array<T>& m, const std::vector<int>&dims) 
+			{
+				int index = 0;
+				for (unsigned int i = 0; i < dims.size(); ++i)
+				{
+					if (i == dim)
+						index += (dims[i]+cur_pos) * result.get_dim_acc(i);
+					else
+						index += dims[i] * result.get_dim_acc(i);
+				}
+				result[index] = m[m.composeIndex(dims)];
+			});
 
+			cat_impl(result, dim, cur_pos+A.get_dim_data(dim),args...);
+		}
+		
 		template<class T, class ...Targs>
 		Array<T> cat(int dim, const Array<T>& A, Targs ...args)
 		{
 			Array<T> result;
-			int cat_dim_sum = dimSum(dim, args...);
+			int cat_dim_sum = dimSum(dim, A,args...);
 
 			std::vector<int> dims = A.get_dim();
 			dims[dim] = cat_dim_sum;
-			result.resize(dim);
+			result.resize(dims);
 
-			cat_impl(result, dim, 0, dims, A, args...);
+			cat_impl(result, dim, 0, A, args...);
 			return result;
 		}
 

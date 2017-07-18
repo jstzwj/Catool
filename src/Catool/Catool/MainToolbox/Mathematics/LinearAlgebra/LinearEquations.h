@@ -140,7 +140,7 @@ namespace catool
 					//不是行满秩也不是列满秩
 					//化为hermite标准型
 					//满秩分解
-
+					return m;
 				}
 			}
 
