@@ -19,6 +19,23 @@ These compilers which have been tested are shown in the following list.
 ## Fundamentals
 
 ### Array and matrix
+`zeros`	Create array of all zeros  
+`ones`	Create array of all ones  
+`rand`	Uniformly distributed random numbers  
+`true`	Logical 1 (true)  
+`false`	Logical 0 (false)  
+`eye`	Identity matrix  
+`diag`	Create diagonal matrix or get diagonal elements of matrix  
+`blkdiag`	Construct block diagonal matrix from input arguments  
+`cat`	Concatenate arrays along specified dimension  
+`horzcat`	Concatenate arrays horizontally  
+`vertcat`	Concatenate arrays vertically  
+
+`linspace`	Generate linearly spaced vector  
+`logspace`	Generate logarithmically spaced vector  
+`meshgrid`	2-D and 3-D grids  
+
+
 `length`	Length of largest array dimension  
 `size`	Array size  
 `ndims`	Number of array dimensions  
@@ -33,6 +50,7 @@ These compilers which have been tested are shown in the following list.
 `rot90`	Rotate array 90 degrees  
 `transpose`	Transpose vector or matrix  
 `ctranspose`	Complex conjugate transpose  
+`reshape`	Reshape array
 
 ## Elementary Math
 
