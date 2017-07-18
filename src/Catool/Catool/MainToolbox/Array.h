@@ -836,6 +836,27 @@ namespace catool
 			return result;
 		}
 
+
+
+		/*
+		horzcat
+		Concatenate arrays horizontally
+		*/
+		template<class T, class ...Targs>
+		Array<T> horzcat(const Array<T>& A, Targs ...args)
+		{
+			return cat(1,A,args...);
+		}
+		/*
+		vertcat
+		Concatenate arrays vertically
+		*/
+		template<class T, class ...Targs>
+		Array<T> vertcat(const Array<T>& A, Targs ...args)
+		{
+			return cat(0, A, args...);
+		}
+
 		/*
 		y = linspace(x1,x2)
 		y = linspace(x1,x2,n)
@@ -1211,6 +1232,22 @@ namespace catool
 					result[i*m.get_dim_data(1) + j] = std::conj(m[j*m.get_dim_data(0) + i]);
 				}
 			}
+			return result;
+		}
+		/*
+		reshape
+		Reshape array
+		*/
+		template<class T>
+		Array<T> reshape(const Array<T>& m, const std::vector<int>&new_dims)
+		{
+			int new_size = 1;
+			for (const auto &each : new_dims)
+				new_size *= each;
+			if (new_size != m.size())
+				throw std::runtime_error("error: reshape: can't reshape.");
+			Array<T> result(m);
+			m.get_dim() = new_dims;
 			return result;
 		}
 
