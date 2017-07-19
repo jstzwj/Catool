@@ -1,4 +1,5 @@
 #include<iostream>
+#include<ctime>
 #include<cassert>
 #include"MainToolbox\Types.h"
 #include"MainToolbox\Array.h"
@@ -170,6 +171,21 @@ catch (std::exception e)
 //	tst.resize(3, 4);
 //	var_dump(diff(tst, 1, 0));
 //}
+//sort
+//{
+//		Array<int> tst{ 1,5,7,2,4,5,7,3,9,0,4,2 };
+//		tst.resize(3, 4);
+//		var_dump(tst);
+//		var_dump(sort(tst, 1));
+//}
+
+//var_dump(shiftdim(ones(2,3,4),-2));
+
+
+clock_t strt = clock();
+
+clock_t nd = clock();
+std::cout << nd - strt << std::endl;
 	system("pause");
 	return 0;
 }

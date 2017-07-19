@@ -68,6 +68,10 @@ These compilers which have been tested are shown in the following list.
 
 `cumprod`  Cumulative product  
 `cumsum`	Cumulative sum  
+`diff`	Differences and Approximate Derivatives  
+`movsum`	Moving sum  
+`prod`	Product of array elements  
+`sum`	Sum of array elements   
 
 
 `ceil`	Round toward positive infinity  
