@@ -251,7 +251,7 @@ namespace catool
 			int composeIndex(const std::vector<int> &dims)const
 			{
 				int index = 0;
-				for (int i=0;i<dims.size();++i)
+				for (unsigned int i=0;i<dims.size();++i)
 					index += dims[i] * get_dim_acc(i);
 				return index;
 			}
@@ -261,6 +261,28 @@ namespace catool
 				std::vector<int> dims;
 				dims.resize(dim.size());
 				loop_impl(dims,dim.size()-1,loop_range,f);
+			}
+			void dimloop_impl(std::vector<int>& dims,int cur_dim,int loop_dim,
+				std::function<void(const Array<T>& m, std::vector<int>&dims)> &f)const
+			{
+				if (cur_dim < 0)
+				{
+					f(*this, dims);
+					return;
+				}
+				if (cur_dim == loop_dim)
+					dimloop_impl(dims, cur_dim - 1, loop_dim, f);
+				else
+					for (int &i = dims[cur_dim]; i<dim[cur_dim]; ++i)
+						dimloop_impl(dims, cur_dim - 1, loop_dim, f);
+				
+			}
+			void dimloop(int loop_dim,
+				std::function<void(const Array<T>& m, std::vector<int>&dims)> f)const
+			{
+				std::vector<int> dims;
+				dims.resize(dim.size());
+				dimloop_impl(dims, dim.size() - 1, loop_dim, f);
 			}
 
 			

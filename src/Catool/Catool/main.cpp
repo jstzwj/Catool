@@ -150,6 +150,20 @@ catch (std::exception e)
 //	tst.resize(3,4);
 //	var_dump(max(tst,1));
 //}
+
+
+//sum
+//{
+//		Array<double> tst{ 1.0,1.0,1.0,2.0,2.0,2,3,3,3,4,4,5 };
+//		tst.resize(3,4);
+//		var_dump(prod(tst,1));
+//}
+//movsum
+{
+			Array<double> tst{ 1.0,1.0,1.0,2.0,2.0,2,3,3,3,4,4,5 };
+			tst.resize(3,4);
+			var_dump(movsum(tst,1,1,1));
+}
 	system("pause");
 	return 0;
 }

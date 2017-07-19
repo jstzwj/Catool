@@ -11,7 +11,7 @@ namespace catool
 	{
 		/*min	Smallest elements in array*/
 		template<class T>
-		Array<T> min(const Array<T>& m,int dim)
+		Array<T> min(const Array<T>& m,int dim=0)
 		{
 			Array<T> result;
 			std::vector<int> dims = m.get_dim();
@@ -47,7 +47,7 @@ namespace catool
 
 		/*max	Largest elements in array*/
 		template<class T>
-		Array<T> max(const Array<T>& m, int dim)
+		Array<T> max(const Array<T>& m, int dim=0)
 		{
 			Array<T> result;
 			std::vector<int> dims = m.get_dim();
@@ -82,7 +82,7 @@ namespace catool
 		}
 		/*bounds	Smallest and largest elements*/
 		template<class T>
-		std::tuple<Array<T>, Array<T>> bounds(const Array<T>& m, int dim)
+		std::tuple<Array<T>, Array<T>> bounds(const Array<T>& m, int dim=0)
 		{
 			Array<T> result_min,result_max;
 			std::vector<int> dims = m.get_dim();
@@ -121,7 +121,12 @@ namespace catool
 		}
 
 		/*mean	Average or mean value of array*/
+		template<class T>
+		Array<double> mean(const Array<T> & m,int dim=0)
+		{
 
+
+		}
 	}
 }
 

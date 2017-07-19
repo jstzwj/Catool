@@ -558,7 +558,89 @@ namespace catool
 				cumsum_impl(result, dims, n.dim_size() - 1, dim, direction, nanflag);
 				return result;
 			}
+			/*
+			diff	Differences and Approximate Derivatives
+			*/
+			/*
+			movsum	Moving sum
+			kb:小坐标方向
+			kf:大坐标方向
+			*/
+			template<class T>
+			Array<T> movsum(const Array<T>& m,int kb=1,int kf=1, int dim = 0)
+			{
+				Array<T> result(m.get_dim());
+				m.dimloop(dim, [&result,&dim,&kb,&kf](const Array<T>& m, std::vector<int>&dims)
+				{
+					dims[dim] = 0;
+					int index = m.composeIndex(dims);
+					int acc = m.get_dim_acc(dim);
+					int len = m.get_dim_data(dim);
+					
+					for (int &i = dims[dim]; i < len; ++i)
+						for (int j = -kb; j <= kf; ++j)
+							if (i + j >= 0 && i + j < len)
+								result[result.composeIndex(dims)] += m[index+acc*(i+j)];
+				});
+				return result;
+			}
+			/*
+			prod	Product of array elements
+			*/
+			template<class T>
+			Array<T> prod(const Array<T>& m, int dim = 0)
+			{
+				Array<T> result;
+				std::vector<int> dims = m.get_dim();
+				dims[dim] = 1;
+				result.resize(dims);
+				result.fill(1);
 
+				std::vector<Range> range = m.getFullLoop();
+				for (int i = 0; i<m.get_dim_data(dim); ++i)
+				{
+					range[dim] = Range(i);
+					m.loop(range, [&result, &dim](const Array<T>& m, const std::vector<int>&dims)
+					{
+						int index = 0;
+						for (unsigned int i = 0; i < dims.size(); ++i)
+						{
+							if (i != dim)
+								index += dims[i] * result.get_dim_acc(i);
+						}
+						result[index] *= m[m.composeIndex(dims)];
+					});
+				}
+				return result;
+			}
+			/*
+			sum	Sum of array elements
+			*/
+			template<class T>
+			Array<T> sum(const Array<T>& m, int dim = 0)
+			{
+				Array<T> result;
+				std::vector<int> dims = m.get_dim();
+				dims[dim] = 1;
+				result.resize(dims);
+
+				std::vector<Range> range = m.getFullLoop();
+				for (int i = 0; i<m.get_dim_data(dim); ++i)
+				{
+					range[dim] = Range(i);
+					m.loop(range, [&result, &dim](const Array<T>& m, const std::vector<int>&dims)
+					{
+						int index = 0;
+						for (unsigned int i = 0; i < dims.size(); ++i)
+						{
+							if (i != dim)
+								index += dims[i] * result.get_dim_acc(i);
+						}
+						result[index] += m[m.composeIndex(dims)];
+					});
+				}
+				return result;
+			}
 			/*
 			Y = fix(X) rounds each element of X to the nearest integer toward zero.
 			For positive X, the behavior of fix is the same as floor.
