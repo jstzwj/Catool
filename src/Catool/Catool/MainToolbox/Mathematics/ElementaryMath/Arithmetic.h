@@ -561,6 +561,29 @@ namespace catool
 			/*
 			diff	Differences and Approximate Derivatives
 			*/
+			template<class T>
+			Array<T> diff(const Array<T>& arry, int n = 1, int dim = 0)
+			{
+				Array<T> tmp_m(arry);
+				if (n < 0)
+					throw std::runtime_error("error: diff: order K must be non-negative");
+				if(dim<0||dim>=arry.dim_size())
+					throw std::runtime_error("error: diff: DIM must be a valid dimension");
+				tmp_m.dimloop(dim, [&n,&dim](Array<T>& m, std::vector<int>&dims)
+				{
+					dims[dim] = 0;
+					int index = m.composeIndex(dims);
+					int acc = m.get_dim_acc(dim);
+					int len = m.get_dim_data(dim);
+
+					for (int i=0;i<n;++i)
+						for (int &j= dims[dim];j<len-i-1;++j)
+							m[index + acc*j] = m[index + acc*(j+1)]- m[index + acc*j];
+				});
+				std::vector<Range> sub_range = tmp_m.getFullLoop();
+				sub_range[dim].end -= n;
+				return tmp_m.subArray(sub_range);
+			}
 			/*
 			movsum	Moving sum
 			kb:小坐标方向

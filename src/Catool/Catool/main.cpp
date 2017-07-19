@@ -159,11 +159,17 @@ catch (std::exception e)
 //		var_dump(prod(tst,1));
 //}
 //movsum
-{
-			Array<double> tst{ 1.0,1.0,1.0,2.0,2.0,2,3,3,3,4,4,5 };
-			tst.resize(3,4);
-			var_dump(movsum(tst,1,1,1));
-}
+//{
+//			Array<double> tst{ 1.0,1.0,1.0,2.0,2.0,2,3,3,3,4,4,5 };
+//			tst.resize(3,4);
+//			var_dump(movsum(tst,1,1,1));
+//}
+//diff
+//{
+//	Array<double> tst{ 1.0,1.0,1.0,2.0,2.0,2,3,3,3,4,4,5 };
+//	tst.resize(3, 4);
+//	var_dump(diff(tst, 1, 0));
+//}
 	system("pause");
 	return 0;
 }

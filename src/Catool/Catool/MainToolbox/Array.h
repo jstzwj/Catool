@@ -7,6 +7,8 @@
 #include<algorithm>
 #include<tuple>
 #include<functional>
+#include <type_traits>
+#include <iterator>
 #include<cstdlib>
 #include<ctime>
 
@@ -26,6 +28,7 @@ namespace catool
 			std::vector<int> dim;
 			std::vector<T> data;
 		public:
+			using SizeType = int;
 			Array() noexcept {}
 			Array(int row_)
 			{
@@ -255,6 +258,7 @@ namespace catool
 					index += dims[i] * get_dim_acc(i);
 				return index;
 			}
+			//用于完全遍历
 			void loop(const std::vector<Range>& loop_range, 
 				std::function<void(const Array<T>& m,const std::vector<int>&dims)> f)const
 			{
@@ -262,23 +266,17 @@ namespace catool
 				dims.resize(dim.size());
 				loop_impl(dims,dim.size()-1,loop_range,f);
 			}
-			void dimloop_impl(std::vector<int>& dims,int cur_dim,int loop_dim,
-				std::function<void(const Array<T>& m, std::vector<int>&dims)> &f)const
-			{
-				if (cur_dim < 0)
-				{
-					f(*this, dims);
-					return;
-				}
-				if (cur_dim == loop_dim)
-					dimloop_impl(dims, cur_dim - 1, loop_dim, f);
-				else
-					for (int &i = dims[cur_dim]; i<dim[cur_dim]; ++i)
-						dimloop_impl(dims, cur_dim - 1, loop_dim, f);
-				
-			}
+			//用于按某一维度遍历
 			void dimloop(int loop_dim,
 				std::function<void(const Array<T>& m, std::vector<int>&dims)> f)const
+			{
+				std::vector<int> dims;
+				dims.resize(dim.size());
+				dimloop_impl(dims, dim.size() - 1, loop_dim, f);
+			}
+
+			void dimloop(int loop_dim,
+				std::function<void(Array<T>& m, std::vector<int>&dims)> f)
 			{
 				std::vector<int> dims;
 				dims.resize(dim.size());
@@ -425,6 +423,35 @@ namespace catool
 					loop_impl(dims,cur_dim-1, loop_range, f);
 				}
 			}
+			void dimloop_impl(std::vector<int>& dims, int cur_dim, int loop_dim,
+				std::function<void(const Array<T>& m, std::vector<int>&dims)> &f)const
+			{
+				if (cur_dim < 0)
+				{
+					f(*this, dims);
+					return;
+				}
+				if (cur_dim == loop_dim)
+					dimloop_impl(dims, cur_dim - 1, loop_dim, f);
+				else
+					for (int &i = dims[cur_dim]; i<dim[cur_dim]; ++i)
+						dimloop_impl(dims, cur_dim - 1, loop_dim, f);
+			}
+
+			void dimloop_impl(std::vector<int>& dims, int cur_dim, int loop_dim,
+				std::function<void(Array<T>& m, std::vector<int>&dims)> &f)
+			{
+				if (cur_dim < 0)
+				{
+					f(*this, dims);
+					return;
+				}
+				if (cur_dim == loop_dim)
+					dimloop_impl(dims, cur_dim - 1, loop_dim, f);
+				else
+					for (int &i = dims[cur_dim]; i<dim[cur_dim]; ++i)
+						dimloop_impl(dims, cur_dim - 1, loop_dim, f);
+			}
 
 			std::string to_string_impl(std::vector<int>& loop, int cur_loop)const
 			{
@@ -458,6 +485,49 @@ namespace catool
 					}
 				}
 				return rst;
+			}
+		};
+		//Array的interval迭代器
+		template<typename T>
+		struct ArrayIntervalIterator :public std::iterator<std::random_access_iterator_tag, T> 
+		{
+			typedef ArrayIntervalIterator<T>      Self;
+			typedef Array<T>					Container;
+			typedef T&                          reference;
+			typedef T*                          pointer;
+			typedef typename Array<T>::SizeType			SizeType;
+			const Array<T> &arry;
+			SizeType index;
+			SizeType interval;
+			
+			explicit ArrayIntervalIterator(Container & arry, SizeType index, SizeType interval)noexcept
+				:arry(arry), index(index), interval(interval) {}
+			ArrayIntervalIterator(const ArrayIntervalIterator &)=default;
+			Self& operator=(const ArrayIntervalIterator &)=default;
+			Self& operator++()noexcept {
+				index += interval;
+				return *this;
+			}
+			Self operator++(int) {
+				Self tmp = *this;
+				++(*this);
+				return tmp;
+			}
+			reference operator*() const noexcept
+			{
+				return arry[index];
+			}
+			pointer operator->() const noexcept
+			{
+				return &arry[index];
+			}
+			bool operator==(const Self& v) const noexcept
+			{
+				return &arry == &v.arry&&index == v.index&&interval == v.interval;
+			}
+			bool operator!=(const Self& v) const noexcept
+			{
+				return &arry != &v.arry || index != v.index || interval != v.interval;
 			}
 		};
 
