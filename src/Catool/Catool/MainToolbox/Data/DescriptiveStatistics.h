@@ -74,41 +74,32 @@ namespace catool
 			result_min.resize(dims);
 			result_max.resize(dims);
 
-			std::vector<Range> range = m.getFullLoop();
-			for (int i = 0; i<m.get_dim_data(dim); ++i)
+			m.dimloop(dim, [&result_min,&result_max, &dim](const Array<T>& m, std::vector<int>&dims)
 			{
-				range[dim] = Range(i);
-				m.loop(range, [&result_min,&result_max, &dim](const Array<T>& m, const std::vector<int>&dims)
+				int rst_index = 0;
+				for (unsigned int i = 0; i < dims.size(); ++i)
 				{
-					int index = 0;
-					for (unsigned int i = 0; i < dims.size(); ++i)
-					{
-						if (i != dim)
-							index += dims[i] * result.get_dim_acc(i);
-					}
-					//init min and max
-					if (dims[dim] == 0)
-					{
-						result_min[index] = m[m.composeIndex(dims)];
-						result_max[index] = m[m.composeIndex(dims)];
-					}
-					else
-					{
-						if (result_max[index] < m[m.composeIndex(dims)])
-							result_max[index] = m[m.composeIndex(dims)];
-						if (result_min[index] > m[m.composeIndex(dims)])
-							result_min[index] = m[m.composeIndex(dims)];
-					}
-				});
-			}
-			return {result_min,result_max};
+					if (i != dim)
+						rst_index += dims[i] * result_min.get_dim_acc(i);
+				}
+				int index = m.composeIndex(dims);
+				int acc = m.get_dim_acc(dim);
+				int len = m.get_dim_data(dim);
+
+				typename Array<T>::ConstIntervalIterator begin(m, index, acc);
+				typename Array<T>::ConstIntervalIterator end(m, index + len*acc, acc);
+				auto minmax_pair = std::minmax_element(begin, end);
+				result_min[rst_index] = minmax_pair.first;
+				result_max[rst_index] = minmax_pair.second;
+			});
+			return { result_min ,result_max };
 		}
 
 		/*mean	Average or mean value of array*/
 		template<class T>
 		Array<double> mean(const Array<T> & m,int dim=0)
 		{
-			return rdivide(sum(static_cast<Array<double>>(m),dim),size(m,dim));
+			return rdivide((Array<double>)sum(m,dim),size(m,dim));
 		}
 	}
 }

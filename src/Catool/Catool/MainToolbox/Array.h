@@ -235,7 +235,7 @@ namespace catool
 				int d0 = get_dim_data(0), d1 = get_dim_data(1);
 				for (int i = 0; i < d1; ++i)
 				{
-					data[i*d0 + a] += data[i*d0 + b]*val;
+					data[i*d0 + to] += data[i*d0 + from]*val;
 				}
 			}
 			void addCol(double val, int from, int to)
@@ -245,7 +245,7 @@ namespace catool
 				int d0 = get_dim_data(0), d1 = get_dim_data(1);
 				for (int i = 0; i < d0; ++i)
 				{
-					data[a*d0 + i] += data[b*d0 + i] * val;
+					data[to*d0 + i] += data[from*d0 + i] * val;
 				}
 			}
 			std::vector<Range> getFullLoop()const
@@ -1566,7 +1566,7 @@ namespace catool
 		std::tuple<Array<T>,int> shiftdim(const Array<T>& X)
 		{
 			int nsize = 0;
-			for (const auto &each:rst.get_dim())
+			for (const auto &each:X.get_dim())
 			{
 				if (each == 1)
 					++nsize;

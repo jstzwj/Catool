@@ -316,7 +316,8 @@ namespace catool
 				{
 					for (int j = 0; j < b_d0; ++j)//b row
 					{
-						if (std::abs(a[i*b_d0 + j]) > std::numeric_limits<T>::epsilon())
+						T abs_tmp = std::abs(a[i*b_d0 + j]);
+						if (abs_tmp> std::numeric_limits<T>::epsilon())
 						{
 							for (int k = 0; k < a_d0; ++k)//a row
 							{

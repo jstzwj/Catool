@@ -183,7 +183,7 @@ catch (std::exception e)
 //var_dump(mean(abc,1));
 
 clock_t strt = clock();
-max(ones(10000,10000));
+mtimes(ones(10000, 1000), ones(1000, 10000));
 clock_t nd = clock();
 std::cout << nd - strt << std::endl;
 	system("pause");
