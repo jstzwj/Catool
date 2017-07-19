@@ -180,10 +180,10 @@ catch (std::exception e)
 //}
 
 //var_dump(shiftdim(ones(2,3,4),-2));
-
+//var_dump(mean(abc,1));
 
 clock_t strt = clock();
-
+max(ones(10000,10000));
 clock_t nd = clock();
 std::cout << nd - strt << std::endl;
 	system("pause");

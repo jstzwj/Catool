@@ -1175,7 +1175,7 @@ namespace catool
 		template<class T>
 		int size(const Array<T> &n, int dim)
 		{
-			if (dim <= 0)
+			if (dim < 0)
 				throw std::runtime_error("error: size: requested dimension DIM out of range");
 			return n.get_dim_data(dim);
 		}

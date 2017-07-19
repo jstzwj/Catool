@@ -124,8 +124,7 @@ namespace catool
 		template<class T>
 		Array<double> mean(const Array<T> & m,int dim=0)
 		{
-
-
+			return rdivide(sum(static_cast<Array<double>>(m),dim),size(m,dim));
 		}
 	}
 }

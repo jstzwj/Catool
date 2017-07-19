@@ -191,8 +191,8 @@ namespace catool
 			/*
 			x = A./B divides each element of A by the corresponding element of B.
 			*/
-			template<class T>
-			inline Array<T> rdivide(const Array<T>& a, const Array<T>& b)
+			template<class T,class U>
+			inline Array<T> rdivide(const Array<T>& a, const Array<U>& b)
 			{
 				Array<T> result(a);
 				if (a.get_dim() != b.get_dim())
@@ -203,21 +203,21 @@ namespace catool
 				}
 				return result;
 			}
-			template<class T>
-			inline Array<T> rdivide(const Array<T>& a, const T & b)
+			template<class T, class U>
+			inline Array<T> rdivide(const Array<T>& a, const U & b)
 			{
 				Array<T> result(a);
-				for (unsigned int i = 0; i < a.size(); ++i)
+				for (int i = 0; i < a.size(); ++i)
 				{
 					result[i] = a[i] / b;
 				}
 				return result;
 			}
-			template<class T>
-			inline Array<T> rdivide(const T &  a, const Array<T>& b)
+			template<class T, class U>
+			inline Array<T> rdivide(const T &  a, const Array<U>& b)
 			{
 				Array<T> result(b);
-				for (unsigned int i = 0; i < b.size(); ++i)
+				for (int i = 0; i < b.size(); ++i)
 				{
 					result[i] = a / b[i];
 				}
@@ -227,8 +227,8 @@ namespace catool
 			/*
 			x = B.\A divides each element of A by the corresponding element of B.
 			*/
-			template<class T>
-			inline Array<T> ldivide(const Array<T>& a, const Array<T>& b)
+			template<class T, class U>
+			inline Array<T> ldivide(const Array<T>& a, const Array<U>& b)
 			{
 				Array<T> result(a);
 				if (a.get_dim() != b.get_dim())
@@ -239,8 +239,8 @@ namespace catool
 				}
 				return result;
 			}
-			template<class T>
-			inline Array<T> ldivide(const Array<T>& a, const T & b)
+			template<class T, class U>
+			inline Array<T> ldivide(const Array<T>& a, const U & b)
 			{
 				Array<T> result(a);
 				for (unsigned int i = 0; i < a.size(); ++i)
@@ -249,8 +249,8 @@ namespace catool
 				}
 				return result;
 			}
-			template<class T>
-			inline Array<T> ldivide(const T &  a, const Array<T>& b)
+			template<class T, class U>
+			inline Array<T> ldivide(const T &  a, const Array<U>& b)
 			{
 				Array<T> result(b);
 				for (unsigned int i = 0; i < b.size(); ++i)
