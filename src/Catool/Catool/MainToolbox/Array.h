@@ -19,7 +19,9 @@ namespace catool
 	namespace main_toolbox
 	{
 		template<typename T>
-		struct ArrayIntervalIterator;
+		struct ArrayIntervalIterator; 
+		template<typename T>
+		struct ArrayConstIntervalIterator;
 		/*
 		array
 		*/
@@ -32,6 +34,7 @@ namespace catool
 		public:
 			using SizeType = int;
 			using IntervalIterator = ArrayIntervalIterator<T>;
+			using ConstIntervalIterator = ArrayConstIntervalIterator<T>;
 			Array() noexcept {}
 			Array(int row_)
 			{
@@ -594,6 +597,111 @@ namespace catool
 				return arry != v.arry || index != v.index || interval != v.interval;
 			}
 		};
+
+
+		template<typename T>
+		struct ArrayConstIntervalIterator :public std::iterator<std::random_access_iterator_tag, T>
+		{
+			typedef ArrayConstIntervalIterator<T>      Self;
+			typedef Array<T>					Container;
+			typedef const T&                          reference;
+			typedef const T*                          pointer;
+			typedef typename Array<T>::SizeType			SizeType;
+			const Array<T> *arry;
+			SizeType index;
+			SizeType interval;
+
+			explicit ArrayConstIntervalIterator(const Container & arry, SizeType index, SizeType interval)noexcept
+				:arry(&arry), index(index), interval(interval) {}
+			ArrayConstIntervalIterator(const ArrayConstIntervalIterator &) = default;
+			Self& operator=(const ArrayConstIntervalIterator &) = default;
+
+
+			Self& operator+=(SizeType n)
+			{
+				index += n*interval;
+				return *this;
+			}
+			Self operator+(SizeType n)const
+			{
+				Self tmp = *this;
+				tmp.index += n*tmp.interval;
+				return tmp;
+			}
+			Self& operator-=(SizeType n)
+			{
+				index -= n*interval;
+				return *this;
+			}
+			Self operator-(SizeType n)const
+			{
+				Self tmp = *this;
+				tmp.index -= n*tmp.interval;
+				return tmp;
+			}
+			SizeType operator-(const Self & other)const
+			{
+				return (index - other.index) / interval;
+			}
+			reference operator[](SizeType n)const
+			{
+				return (*arry)[index + n*interval];
+			}
+			bool operator<(const Self & other)const
+			{
+				return index < other.index;
+			}
+			bool operator>(const Self & other)const
+			{
+				return index > other.index;
+			}
+			bool operator<=(const Self & other)const
+			{
+				return index <= other.index;
+			}
+			bool operator>=(const Self & other)const
+			{
+				return index >= other.index;
+			}
+
+			Self& operator++()noexcept {
+				index += interval;
+				return *this;
+			}
+			Self operator++(int) {
+				Self tmp = *this;
+				++(*this);
+				return tmp;
+			}
+			Self& operator--()noexcept {
+				index -= interval;
+				return *this;
+			}
+			Self operator--(int) {
+				Self tmp = *this;
+				--(*this);
+				return tmp;
+			}
+			reference operator*() const noexcept
+			{
+				return (*arry)[index];
+			}
+			pointer operator->() const noexcept
+			{
+				return &(*arry)[index];
+			}
+			bool operator==(const Self& v) const noexcept
+			{
+				return arry == v.arry&&index == v.index&&interval == v.interval;
+			}
+			bool operator!=(const Self& v) const noexcept
+			{
+				return arry != v.arry || index != v.index || interval != v.interval;
+			}
+		};
+
+
+
 
 		//functions
 		/*

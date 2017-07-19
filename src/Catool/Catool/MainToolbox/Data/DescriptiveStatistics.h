@@ -18,30 +18,22 @@ namespace catool
 			dims[dim] = 1;
 			result.resize(dims);
 
-			std::vector<Range> range = m.getFullLoop();
-			for (int i=0;i<m.get_dim_data(dim);++i)
+			m.dimloop(dim, [&result, &dim](const Array<T>& m, std::vector<int>&dims)
 			{
-				range[dim] = Range(i);
-				m.loop(range, [&result, &dim](const Array<T>& m, const std::vector<int>&dims)
+				int rst_index = 0;
+				for (unsigned int i = 0; i < dims.size(); ++i)
 				{
-					int index = 0;
-					for (unsigned int i = 0; i < dims.size(); ++i)
-					{
-						if (i != dim)
-							index += dims[i] * result.get_dim_acc(i);
-					}
-					//init min
-					if (dims[dim]==0)
-					{
-						result[index] = m[m.composeIndex(dims)];
-					}
-					else
-					{
-						if (result[index] > m[m.composeIndex(dims)])
-							result[index] = m[m.composeIndex(dims)];
-					}
-				});
-			}
+					if (i != dim)
+						rst_index += dims[i] * result.get_dim_acc(i);
+				}
+				int index = m.composeIndex(dims);
+				int acc = m.get_dim_acc(dim);
+				int len = m.get_dim_data(dim);
+
+				typename Array<T>::ConstIntervalIterator begin(m, index, acc);
+				typename Array<T>::ConstIntervalIterator end(m, index + len*acc, acc);
+				result[rst_index] = *(std::min_element(begin, end));
+			});
 			return result;
 		}
 
@@ -54,30 +46,22 @@ namespace catool
 			dims[dim] = 1;
 			result.resize(dims);
 
-			std::vector<Range> range = m.getFullLoop();
-			for (int i = 0; i<m.get_dim_data(dim); ++i)
+			m.dimloop(dim, [&result, &dim](const Array<T>& m, std::vector<int>&dims)
 			{
-				range[dim] = Range(i);
-				m.loop(range, [&result, &dim](const Array<T>& m, const std::vector<int>&dims)
+				int rst_index = 0;
+				for (unsigned int i = 0; i < dims.size(); ++i)
 				{
-					int index = 0;
-					for (unsigned int i = 0; i < dims.size(); ++i)
-					{
-						if (i != dim)
-							index += dims[i] * result.get_dim_acc(i);
-					}
-					//init max
-					if (dims[dim] == 0)
-					{
-						result[index] = m[m.composeIndex(dims)];
-					}
-					else
-					{
-						if (result[index] < m[m.composeIndex(dims)])
-							result[index] = m[m.composeIndex(dims)];
-					}
-				});
-			}
+					if (i != dim)
+						rst_index += dims[i] * result.get_dim_acc(i);
+				}
+				int index = m.composeIndex(dims);
+				int acc = m.get_dim_acc(dim);
+				int len = m.get_dim_data(dim);
+
+				typename Array<T>::ConstIntervalIterator begin(m, index, acc);
+				typename Array<T>::ConstIntervalIterator end(m, index + len*acc, acc);
+				result[rst_index]=*(std::max_element(begin, end));
+			});
 			return result;
 		}
 		/*bounds	Smallest and largest elements*/
