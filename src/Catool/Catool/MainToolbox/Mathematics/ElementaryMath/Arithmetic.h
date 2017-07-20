@@ -16,6 +16,9 @@
 #include <intrin.h> 
 #endif // CATOOL_ENABLE_SSE
 
+#define KC 64
+#define MC 64
+
 namespace catool
 {
 	namespace main_toolbox
@@ -332,8 +335,8 @@ namespace catool
 				}
 				return result;
 			}
-#ifdef CATOOL_ENABLE_SSE
-			Array<double> mtimes_impl_small_sse(const Array<double>& a, const Array<double>& b)
+#if defined CATOOL_ENABLE_AVX
+			Array<double> mtimes_impl_small(const Array<double>& a, const Array<double>& b)
 			{
 				int a_d0 = a.get_dim_data(0), a_d1 = a.get_dim_data(1);
 				int b_d0 = b.get_dim_data(0), b_d1 = b.get_dim_data(1);
@@ -347,19 +350,19 @@ namespace catool
 						const double* p_a = &a[j*a_d0];
 						double b_tmp = *p_b++;
 
-						int k;
-						for (; k < a_d0-1; k+=4)//a row
+						__m256d b_mm = _mm256_set1_pd(b_tmp);
+
+						int k = 0;
+						for (; k < a_d0 - 1; k += 4)//a row
 						{
-							__m128d a_mm=_mm_load_pd(p_a);
-							__m128d b_mm=_mm_set_pd(b_tmp,b_tmp);
-							__m128d rst_mm = _mm_load_pd(p_des);
+							__m256d a_mm = _mm256_load_pd(p_a);
+							__m256d rst_mm = _mm256_load_pd(p_des);
 
-							a_mm=_mm_mul_pd(a_mm,b_mm);
-							rst_mm = _mm_add_pd(a_mm,rst_mm);
+							rst_mm = _mm256_add_pd(_mm256_mul_pd(a_mm, b_mm), rst_mm);
 
-							_mm_store_pd(p_des, rst_mm);
-							p_des+=2;
-							p_a+=2;
+							_mm256_store_pd(p_des, rst_mm);
+							p_des += 4;
+							p_a += 4;
 						}
 						for (; k < a_d0; ++k)//a row
 						{
@@ -369,7 +372,7 @@ namespace catool
 				}
 				return result;
 			}
-			Array<float> mtimes_impl_small_sse(const Array<float>& a, const Array<float>& b)
+			Array<float> mtimes_impl_small(const Array<float>& a, const Array<float>& b)
 			{
 				int a_d0 = a.get_dim_data(0), a_d1 = a.get_dim_data(1);
 				int b_d0 = b.get_dim_data(0), b_d1 = b.get_dim_data(1);
@@ -383,15 +386,86 @@ namespace catool
 						const float* p_a = &a[j*a_d0];
 						float b_tmp = *p_b++;
 
-						int k;
+						__m256 b_mm = _mm256_set1_ps(b_tmp);
+						int k = 0;
+						for (; k < a_d0 - 3; k += 8)//a row
+						{
+							__m256 a_mm = _mm256_load_ps(p_a);
+							__m256 rst_mm = _mm256_load_ps(p_des);
+
+							rst_mm = _mm256_add_ps(_mm256_mul_ps(a_mm, b_mm), rst_mm);
+
+							_mm256_store_ps(p_des, rst_mm);
+							p_des += 8;
+							p_a += 8;
+						}
+						for (; k < a_d0; ++k)//a row
+						{
+							(*p_des++) += (*p_a++) * b_tmp;
+						}
+					}
+				}
+				return result;
+			}
+#elif defined CATOOL_ENABLE_SSE
+			Array<double> mtimes_impl_small(const Array<double>& a, const Array<double>& b)
+			{
+				int a_d0 = a.get_dim_data(0), a_d1 = a.get_dim_data(1);
+				int b_d0 = b.get_dim_data(0), b_d1 = b.get_dim_data(1);
+				Array<double> result(a_d0, b_d1);
+				for (int i = 0; i < b_d1; ++i)//b col
+				{
+					const double * p_b = &b[i*b_d0];
+					for (int j = 0; j < b_d0; ++j)//b row
+					{
+						double * p_des = &result[i*a_d0];
+						const double* p_a = &a[j*a_d0];
+						double b_tmp = *p_b++;
+
+						__m128d b_mm = _mm_set1_pd(b_tmp);
+
+						int k=0;
+						for (; k < a_d0-1; k+=2)//a row
+						{
+							__m128d a_mm=_mm_load_pd(p_a);
+							__m128d rst_mm = _mm_load_pd(p_des);
+
+							rst_mm = _mm_add_pd(_mm_mul_pd(a_mm, b_mm),rst_mm);
+
+							_mm_store_pd(p_des, rst_mm);
+							p_des+=2;
+							p_a+=2;
+						}
+						for (; k < a_d0; ++k)//a row
+						{
+							(*p_des++) += (*p_a++) * b_tmp;
+						}
+					}
+				}
+				return result;
+			}
+			Array<float> mtimes_impl_small(const Array<float>& a, const Array<float>& b)
+			{
+				int a_d0 = a.get_dim_data(0), a_d1 = a.get_dim_data(1);
+				int b_d0 = b.get_dim_data(0), b_d1 = b.get_dim_data(1);
+				Array<float> result(a_d0, b_d1);
+				for (int i = 0; i < b_d1; ++i)//b col
+				{
+					const float * p_b = &b[i*b_d0];
+					for (int j = 0; j < b_d0; ++j)//b row
+					{
+						float * p_des = &result[i*a_d0];
+						const float* p_a = &a[j*a_d0];
+						float b_tmp = *p_b++;
+
+						__m128 b_mm = _mm_set1_ps(b_tmp);
+						int k=0;
 						for (; k < a_d0 - 3; k += 4)//a row
 						{
 							__m128 a_mm = _mm_load_ps(p_a);
-							__m128 b_mm = _mm_set_ps(b_tmp, b_tmp, b_tmp, b_tmp);
 							__m128 rst_mm = _mm_load_ps(p_des);
 
-							a_mm = _mm_mul_ps(a_mm, b_mm);
-							rst_mm = _mm_add_ps(a_mm, rst_mm);
+							rst_mm = _mm_add_ps(_mm_mul_ps(a_mm, b_mm), rst_mm);
 
 							_mm_store_ps(p_des, rst_mm);
 							p_des += 4;
@@ -407,6 +481,132 @@ namespace catool
 			}
 #endif // CATOOL_ENABLE_SSE
 
+			template<class T>
+			void mtimes_micro_4x4(int p,T * rst,int rst_d0,const T* a,int a_d0,const T* b,int b_d0)
+			{
+				for (int k = 0; k < p; ++k)
+				{
+					for (int j = 0; j < 4; ++j)// b col
+					{
+						const T* p_a = &a[k * a_d0];
+						T * p_rst = &rst[j * rst_d0];
+						T p_b = b[k + j*b_d0];
+						
+						//rst[i + j * rst_d0] += a[i + k * a_d0] * b[k + j*b_d0];
+						(*p_rst++) += (*p_a++)*p_b;
+						(*p_rst++) += (*p_a++)*p_b;
+						(*p_rst++) += (*p_a++)*p_b;
+						(*p_rst++) += (*p_a++)*p_b;
+					}
+				}
+			}
+
+#if defined CATOOL_ENABLE_AVX
+			inline void mtimes_micro_4x4(int p, double * rst, int rst_d0, const double* a, int a_d0, const double* b, int b_d0)
+			{
+				for (int k = 0; k < p; ++k)
+				{
+					//float * p_rst = &rst[0 * rst_d0];
+					double p_b;
+
+					__m256d a_mm, b_mm, rst_mm;
+
+					a_mm = _mm256_load_pd(&a[k * a_d0]);
+
+					//0 col
+					p_b = b[k + 0 * b_d0];
+					b_mm = _mm256_set1_pd(p_b);
+					rst_mm = _mm256_load_pd(&rst[0 * rst_d0]);
+					rst_mm = _mm256_add_pd(rst_mm, _mm256_mul_pd(a_mm, b_mm));
+					_mm256_store_pd(&rst[0 * rst_d0], rst_mm);
+
+					//1 col
+					p_b = b[k + 1 * b_d0];
+					b_mm = _mm256_set1_pd(p_b);
+					rst_mm = _mm256_load_pd(&rst[1 * rst_d0]);
+					rst_mm = _mm256_add_pd(rst_mm, _mm256_mul_pd(a_mm, b_mm));
+					_mm256_store_pd(&rst[1 * rst_d0], rst_mm);
+
+					//2 col
+					p_b = b[k + 2 * b_d0];
+					b_mm = _mm256_set1_pd(p_b);
+					rst_mm = _mm256_load_pd(&rst[2 * rst_d0]);
+					rst_mm = _mm256_add_pd(rst_mm, _mm256_mul_pd(a_mm, b_mm));
+					_mm256_store_pd(&rst[2 * rst_d0], rst_mm);
+
+					//3 col
+					p_b = b[k + 3 * b_d0];
+					b_mm = _mm256_set1_pd(p_b);
+					rst_mm = _mm256_load_pd(&rst[3 * rst_d0]);
+					rst_mm = _mm256_add_pd(rst_mm, _mm256_mul_pd(a_mm, b_mm));
+					_mm256_store_pd(&rst[3 * rst_d0], rst_mm);
+
+				}
+			}
+
+#elif defined CATOOL_ENABLE_SSE
+			inline void mtimes_micro_4x4(int p, float * rst, int rst_d0, const float* a, int a_d0, const float* b, int b_d0)
+			{
+				for (int k = 0; k < p; ++k)
+				{
+						//float * p_rst = &rst[0 * rst_d0];
+						float p_b;
+						
+						__m128 a_mm, b_mm, rst_mm;
+
+						a_mm = _mm_load_ps(&a[k * a_d0]);
+
+						//0 col
+						p_b = b[k + 0 * b_d0];
+						b_mm = _mm_set1_ps(p_b);
+						rst_mm = _mm_load_ps(&rst[0 * rst_d0]);
+						rst_mm = _mm_add_ss(rst_mm, _mm_mul_ss(a_mm, b_mm));
+						_mm_store_ps(&rst[0 * rst_d0], rst_mm);
+
+						//1 col
+						p_b = b[k + 1 * b_d0];
+						b_mm = _mm_set1_ps(p_b);
+						rst_mm = _mm_load_ps(&rst[1 * rst_d0]);
+						rst_mm = _mm_add_ss(rst_mm, _mm_mul_ss(a_mm, b_mm));
+						_mm_store_ps(&rst[1 * rst_d0], rst_mm);
+
+						//2 col
+						p_b = b[k + 2 * b_d0];
+						b_mm = _mm_set1_ps(p_b);
+						rst_mm = _mm_load_ps(&rst[2 * rst_d0]);
+						rst_mm = _mm_add_ss(rst_mm, _mm_mul_ss(a_mm, b_mm));
+						_mm_store_ps(&rst[2 * rst_d0], rst_mm);
+
+						//3 col
+						p_b = b[k + 3 * b_d0];
+						b_mm = _mm_set1_ps(p_b);
+						rst_mm = _mm_load_ps(&rst[3 * rst_d0]);
+						rst_mm = _mm_add_ss(rst_mm, _mm_mul_ss(a_mm, b_mm));
+						_mm_store_ps(&rst[3 * rst_d0], rst_mm);
+
+				}
+			}
+#endif // CATOOL_ENABLE_SSE
+			//kc mc必须是4的倍数
+			template<class T>
+			inline void mtimes_block(T * rst, int rst_d0, const T* a, int a_d0, const T* b, int b_d0)
+			{
+				for (int i = 0; i < KC; i += 4)
+				{
+					T* p_rst = &rst[i*rst_d0];
+					const T* p_a = &a[0 * a_d0];
+					const T* p_b = &b[0 + i*b_d0];
+					for (int j = 0; j < MC; j += 4)
+					{
+						//packing
+
+						//mtimes_micro_4x4(b_d0, &rst[j + i*rst_d0], rst_d0, &a[j + 0 * a_d0], a_d0, &b[0 + i*b_d0], b_d0);
+						mtimes_micro_4x4(b_d0, p_rst, rst_d0, p_a, a_d0, p_b, b_d0);
+						p_a+=4;
+						p_rst+=4;
+					}
+				}
+			}
 
 			template<class T>
 			Array<T> mtimes_impl_large(const Array<T>& a, const Array<T>& b)
@@ -414,21 +614,42 @@ namespace catool
 				int a_d0 = a.get_dim_data(0), a_d1 = a.get_dim_data(1);
 				int b_d0 = b.get_dim_data(0), b_d1 = b.get_dim_data(1);
 				Array<T> result(a_d0, b_d1);
-				for (int i = 0; i < b_d1; ++i)//b col
+				int i, j;
+				for ( i= 0; i < b_d1-KC+1; i+=KC)//c col
 				{
-					const T * p_b = &b[i*b_d0];
-					for (int j = 0; j < b_d0; ++j)//b row
+					for (j = 0; j < a_d0-MC+1; j+=MC)//c row
 					{
-						T * p_des = &result[i*a_d0];
-						const T* p_a = &a[j*a_d0];
-						T b_tmp = *p_b++;
-
-						for (int k = 0; k < a_d0; ++k)//a row
+						T * p_rst = &result[j+i*a_d0];
+						const T *p_a = &a[j+0*a_d0];
+						const T *p_b = &b[0+i*b_d0];
+						mtimes_block(p_rst, a_d0, p_a, a_d0, p_b, b_d0);
+					}
+					for (int k = 0; k<b_d0; ++k)
+					{
+						//for (int l=j;l<a_d0;++l)
+						T* p_rst = &result[i*a_d0];
+						const T* p_a = &a[k*a_d0];
+						T tmp_b = b[k + i*b_d0];
+						for (int l = j; l<a_d0; ++l)
 						{
-							(*p_des++) += (*p_a++) * b_tmp;
+							//result[j + i*a_d0] += a[j + k*a_d0] * b[k + i*b_d0];
+							(*p_rst++) = (*p_a++)*tmp_b;
 						}
 					}
-
+				}
+				for (; i<b_d1; ++i)
+				{
+					for (int k = 0; k < b_d0; ++k)
+					{
+						T* p_rst = &result[i*a_d0];
+						const T* p_a = &a[k*a_d0];
+						T tmp_b = b[k + i*b_d0];
+						for (j=0; j < a_d0; ++j)
+						{
+							//result[j + i*a_d0] += a[j + k*a_d0] * b[k + i*b_d0];
+							(*p_rst++) = (*p_a++)*tmp_b;
+						}
+					}
 				}
 				return result;
 			}

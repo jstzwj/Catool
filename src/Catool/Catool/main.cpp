@@ -22,9 +22,9 @@ using namespace catool::main_toolbox::data::audio;
 using namespace catool::main_toolbox::graphics;
 int main()
 {
-	Array<int> abc{ 1,2,3,6,8 };
+	Array<int> abc{ 1,2,3,6 };
 	Array<double> rty{ 4.6,5.0,-4.1,0.0,6.9 };
-	Array<int> def{ 1,2,3,4,5 };
+	Array<int> def{ 1,2,3,4 };
 	//var_dump(plus(def, abc));
 	//var_dump(mtimes(ones(5,1), ones(1, 5)));
 	//var_dump(rand(5,6,7,8));
@@ -183,7 +183,7 @@ catch (std::exception e)
 //var_dump(mean(abc,1));
 
 clock_t strt = clock();
-mtimes(ones<float>(1000, 1000), ones<float>(1000, 1000));
+mtimes(ones(1000, 1000), ones(1000, 1000));
 //var_dump(mtimes(transpose(abc),def));
 clock_t nd = clock();
 std::cout << nd - strt << std::endl;
