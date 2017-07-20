@@ -48,6 +48,7 @@ Temporary Items
 
 
 .vs
+.db
 Debug
 Release
 *.sdf

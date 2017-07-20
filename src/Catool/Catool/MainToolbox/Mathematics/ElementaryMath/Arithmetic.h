@@ -12,7 +12,8 @@
 
 
 #ifdef CATOOL_ENABLE_SSE
-#include <emmintrin.h>  
+//#include <emmintrin.h>  
+#include <intrin.h> 
 #endif // CATOOL_ENABLE_SSE
 
 namespace catool
@@ -305,29 +306,133 @@ namespace catool
 				}
 				return result;
 			}
+			
+
 			template<class T>
-			Array<T> mtimes_impl(const Array<T>& a, const Array<T>& b)
+			Array<T> mtimes_impl_small(const Array<T>& a, const Array<T>& b)
 			{
 				int a_d0=a.get_dim_data(0), a_d1=a.get_dim_data(1);
 				int b_d0=b.get_dim_data(0), b_d1=b.get_dim_data(1);
 				Array<T> result(a_d0, b_d1);
-				//result.resize(a.rows()*b.cols());
+				for (int i=0; i < b_d1;++i)//b col
+				{
+					const T * p_b = &b[i*b_d0];
+					for (int j=0; j < b_d0;++j)//b row
+					{
+						T * p_des = &result[i*a_d0];
+						const T* p_a = &a[j*a_d0];
+						T b_tmp = *p_b++;
+
+						for (int k = 0; k < a_d0; ++k)//a row
+						{
+							(*p_des++) += (*p_a++) * b_tmp;
+						}
+					}
+					
+				}
+				return result;
+			}
+#ifdef CATOOL_ENABLE_SSE
+			Array<double> mtimes_impl_small_sse(const Array<double>& a, const Array<double>& b)
+			{
+				int a_d0 = a.get_dim_data(0), a_d1 = a.get_dim_data(1);
+				int b_d0 = b.get_dim_data(0), b_d1 = b.get_dim_data(1);
+				Array<double> result(a_d0, b_d1);
 				for (int i = 0; i < b_d1; ++i)//b col
 				{
+					const double * p_b = &b[i*b_d0];
 					for (int j = 0; j < b_d0; ++j)//b row
 					{
-						T abs_tmp = std::abs(a[i*b_d0 + j]);
-						if (abs_tmp> std::numeric_limits<T>::epsilon())
+						double * p_des = &result[i*a_d0];
+						const double* p_a = &a[j*a_d0];
+						double b_tmp = *p_b++;
+
+						int k;
+						for (; k < a_d0-1; k+=4)//a row
 						{
-							for (int k = 0; k < a_d0; ++k)//a row
-							{
-								result[i*a_d0 + k] += a[j*a_d0 + k] * b[i*b_d0 + j];
-							}
+							__m128d a_mm=_mm_load_pd(p_a);
+							__m128d b_mm=_mm_set_pd(b_tmp,b_tmp);
+							__m128d rst_mm = _mm_load_pd(p_des);
+
+							a_mm=_mm_mul_pd(a_mm,b_mm);
+							rst_mm = _mm_add_pd(a_mm,rst_mm);
+
+							_mm_store_pd(p_des, rst_mm);
+							p_des+=2;
+							p_a+=2;
+						}
+						for (; k < a_d0; ++k)//a row
+						{
+							(*p_des++) += (*p_a++) * b_tmp;
 						}
 					}
 				}
 				return result;
 			}
+			Array<float> mtimes_impl_small_sse(const Array<float>& a, const Array<float>& b)
+			{
+				int a_d0 = a.get_dim_data(0), a_d1 = a.get_dim_data(1);
+				int b_d0 = b.get_dim_data(0), b_d1 = b.get_dim_data(1);
+				Array<float> result(a_d0, b_d1);
+				for (int i = 0; i < b_d1; ++i)//b col
+				{
+					const float * p_b = &b[i*b_d0];
+					for (int j = 0; j < b_d0; ++j)//b row
+					{
+						float * p_des = &result[i*a_d0];
+						const float* p_a = &a[j*a_d0];
+						float b_tmp = *p_b++;
+
+						int k;
+						for (; k < a_d0 - 3; k += 4)//a row
+						{
+							__m128 a_mm = _mm_load_ps(p_a);
+							__m128 b_mm = _mm_set_ps(b_tmp, b_tmp, b_tmp, b_tmp);
+							__m128 rst_mm = _mm_load_ps(p_des);
+
+							a_mm = _mm_mul_ps(a_mm, b_mm);
+							rst_mm = _mm_add_ps(a_mm, rst_mm);
+
+							_mm_store_ps(p_des, rst_mm);
+							p_des += 4;
+							p_a += 4;
+						}
+						for (; k < a_d0; ++k)//a row
+						{
+							(*p_des++) += (*p_a++) * b_tmp;
+						}
+					}
+				}
+				return result;
+			}
+#endif // CATOOL_ENABLE_SSE
+
+
+			template<class T>
+			Array<T> mtimes_impl_large(const Array<T>& a, const Array<T>& b)
+			{
+				int a_d0 = a.get_dim_data(0), a_d1 = a.get_dim_data(1);
+				int b_d0 = b.get_dim_data(0), b_d1 = b.get_dim_data(1);
+				Array<T> result(a_d0, b_d1);
+				for (int i = 0; i < b_d1; ++i)//b col
+				{
+					const T * p_b = &b[i*b_d0];
+					for (int j = 0; j < b_d0; ++j)//b row
+					{
+						T * p_des = &result[i*a_d0];
+						const T* p_a = &a[j*a_d0];
+						T b_tmp = *p_b++;
+
+						for (int k = 0; k < a_d0; ++k)//a row
+						{
+							(*p_des++) += (*p_a++) * b_tmp;
+						}
+					}
+
+				}
+				return result;
+			}
+
 			template<class T>
 			Array<T> copySubMatrix(const Array<T>& m,int dim0,int len0,int dim1,int len1)
 			{
@@ -355,7 +460,7 @@ namespace catool
 				{
 					throw std::runtime_error("Matrix dimensions must agree.");
 				}
-				return mtimes_impl(a, b);
+				return mtimes_impl_small(a, b);
 			}
 
 			/*
