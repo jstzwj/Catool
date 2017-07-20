@@ -327,11 +327,8 @@ namespace catool
 						T b_tmp = *p_b++;
 
 						for (int k = 0; k < a_d0; ++k)//a row
-						{
 							(*p_des++) += (*p_a++) * b_tmp;
-						}
 					}
-					
 				}
 				return result;
 			}

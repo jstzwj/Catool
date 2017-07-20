@@ -185,17 +185,14 @@ namespace catool
 			template<class T>
 			Array<T> mpower(const Array<T>& A, int n)
 			{
-				Array<T> result(A);
-				int time = 1;
-				while (time * 2 < n)
+				Array<T> result=eye<T>();
+				Array<T> tmp(A);
+				int time = n;
+				while (time!=0)
 				{
-					result = mtimes(result, result);
-					time *= 2;
-				}
-				while (time < n)
-				{
-					result = mtimes(result, A);
-					time++;
+					if (time % 2 == 1) result = result*tmp;
+					tmp = mtimes(tmp, tmp);
+					time /= 2;
 				}
 				return result;
 			}
