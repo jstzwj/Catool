@@ -49,6 +49,8 @@ Temporary Items
 
 .vs
 *.db
+*.bmp
+*.wav
 Debug
 Release
 *.sdf

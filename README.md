@@ -147,8 +147,15 @@ These compilers which have been tested are shown in the following list.
 
 `lu`  LU matrix factorization  
 
+`transpose`	Transpose vector or matrix  
+`ctranspose`	Complex conjugate transpose  
+`mtimes`	Matrix Multiplication  
+`mpower`	Matrix power  
+
 `rank`	Rank of matrix  
 `trace`	Sum of diagonal elements  
+
+
 
 ## Random Number Generation
 
@@ -164,8 +171,22 @@ Attension: this function needs GnuPlot interface.
 
 ## Data Import and Analysis
 
+### Workspace Variables and MAT-Files
+`load`	Load variables from file into workspace  
+
+### Data Import and Export 
+
 `audioread`	Read audio file  
 `audiowrite`	Write audio file  
+
+`imwrite`	Write image to graphics file  
+
+### Descriptive Statistics
+`min`	Smallest elements in array  
+`max`	Largest elements in array  
+`bounds`	Smallest and largest elements  
+`mean`	Average or mean value of array  
+
 
 ## Sparse Matrices
 `spalloc`	Allocate space for sparse matrix  
