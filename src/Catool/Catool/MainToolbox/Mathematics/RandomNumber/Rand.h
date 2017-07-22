@@ -104,20 +104,20 @@ namespace catool
 			{
 				return ((double)std::rand() / RAND_MAX)*max;
 			}
-			inline Array<double> randi(int max, int n)
+			inline Array<int> randi(int max, int n)
 			{
-				Array<double> result(n, n);
+				Array<int> result(n, n);
 				for (auto& each : result)
-					each = ((double)std::rand() / RAND_MAX)*max;
+					each = (int)((double)std::rand() / RAND_MAX)*max;
 				return result;
 			}
 			template<typename T1, typename... T2>
-			inline Array<double> randi(int max, T1 p, T2... arg)
+			inline Array<int> randi(int max, T1 p, T2... arg)
 			{
-				Array<double> result;
+				Array<int> result;
 				result.resize(p, arg...);
 				for (auto& each : result)
-					each = ((double)std::rand() / RAND_MAX)*max;
+					each = (int)((double)std::rand() / RAND_MAX)*max;
 				return result;
 			}
 			inline Array<double> randi(int max, const Array<int> & sz)

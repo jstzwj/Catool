@@ -11,6 +11,8 @@
 #include"MainToolbox\Data\Endian.h"
 #include"MainToolbox\Data\StandardFile\Audio\Wav.h"
 #include"MainToolbox\Data\StandardFile\Audio\Audio.h"
+#include"MainToolbox\Data\StandardFile\Images\Bmp.h"
+#include"MainToolbox\Data\StandardFile\Images\Image.h"
 #include"MainToolbox\Graphics\Gnuplot.h"
 #include"MainToolbox\Data\DescriptiveStatistics.h"
 #include"MainToolbox\Data\Variables\Mat.h"
@@ -189,8 +191,34 @@ catch (std::exception e)
 //	var_dump(vec_arry[0]);
 //}
 
+//bmpwrite raw
+//{
+//	std::FILE * file = nullptr;
+//	fopen_s(&file, "a.bmp", "wb");
+//
+//	if (file == nullptr)
+//	{
+//		throw std::runtime_error("fail to open file.");
+//	}
+//
+//	stream::FileOutputStream stream(file);
+//	images::BmpWriter writer(std::move(stream));
+//
+//	auto mean_rand = sum(rand<double>(400, 400, 100, 1),2);
+//	writer.write(mean_rand);
+//
+//	std::fclose(file);
+//}
+
+//imwrite
+{
+	images::imwrite(rdivide(movsum(rand<double>(400, 400)),3), "c.bmp");
+}
+
+
+
 clock_t strt = clock();
-mtimes(ones<float>(5000, 1000), ones<float>(1000, 5000));
+//mtimes(ones<float>(5000, 1000), ones<float>(1000, 5000));
 //var_dump(mtimes(transpose(abc),def));
 clock_t nd = clock();
 std::cout << nd - strt << std::endl;
