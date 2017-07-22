@@ -9,6 +9,7 @@
 #include<functional>
 #include <type_traits>
 #include <iterator>
+#include<mutex>
 #include<cstdlib>
 #include<ctime>
 
@@ -32,6 +33,8 @@ namespace catool
 			std::vector<int> dim;
 			std::vector<T> data;
 		public:
+			//mutable std::mutex mtx;
+
 			using SizeType = int;
 			using IntervalIterator = ArrayIntervalIterator<T>;
 			using ConstIntervalIterator = ArrayConstIntervalIterator<T>;

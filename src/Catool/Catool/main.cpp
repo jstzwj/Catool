@@ -13,6 +13,7 @@
 #include"MainToolbox\Data\StandardFile\Audio\Audio.h"
 #include"MainToolbox\Graphics\Gnuplot.h"
 #include"MainToolbox\Data\DescriptiveStatistics.h"
+#include"MainToolbox\Data\Variables\Mat.h"
 
 using namespace catool::main_toolbox;
 using namespace catool::main_toolbox::mathematics;
@@ -182,8 +183,14 @@ catch (std::exception e)
 //var_dump(shiftdim(ones(2,3,4),-2));
 //var_dump(mean(abc,1));
 
+//load
+//{
+//	auto vec_arry = load<int>("a.txt", FileTag::ASCII);
+//	var_dump(vec_arry[0]);
+//}
+
 clock_t strt = clock();
-mtimes(ones(3000, 3000), ones(3000, 3000));
+mtimes(ones<float>(5000, 1000), ones<float>(1000, 5000));
 //var_dump(mtimes(transpose(abc),def));
 clock_t nd = clock();
 std::cout << nd - strt << std::endl;
