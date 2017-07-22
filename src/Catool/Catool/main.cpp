@@ -211,10 +211,14 @@ catch (std::exception e)
 //}
 
 //imwrite
-{
-	images::imwrite(rdivide(movsum(rand<double>(400, 400)),3), "c.bmp");
-}
+//{
+//	images::imwrite(rdivide(movsum(rand<double>(400, 400)),3), "c.bmp");
+//}
 
+//type_info
+{
+	print_type_info(ones(100));
+}
 
 
 clock_t strt = clock();

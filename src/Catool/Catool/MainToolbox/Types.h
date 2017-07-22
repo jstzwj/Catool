@@ -181,6 +181,9 @@ namespace catool
 			std::cout << "i" << std::endl;
 		}
 
+
+
+		//disp
 		template<class T = void>
 		using void_t = void;
 
@@ -218,6 +221,20 @@ namespace catool
 			std::cout << obj.real() << "+";
 			std::cout << obj.imag() << "i";
 		}
+
+
+		//type_info
+		template<class T>
+		void print_type_info(const T & obj)
+		{
+			std::cout << typeid(obj).name() << std::endl;
+		}
+		template<class T>
+		void print_type_info(const Array<T> & obj)
+		{
+			std::cout << typeid(obj).name() << obj.composeIndexToString(obj.get_dim(),false) << std::endl;
+		}
+
 	}
 }
 

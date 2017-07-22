@@ -14,6 +14,35 @@ These compilers which have been tested are shown in the following list.
 * Visual C++ 2015 on Windows (32/64-bit)
 * Mingw 4.9.2 on Windows (32-bit)
 
+
+# Usage
+
+## Output
+This simple example is 'hello world'.
+
+```cpp
+#include"MainToolbox\Types.h"
+int main()
+{
+    catool::main_toolbox::disp("hello world!");
+    return 0;
+}
+
+```
+
+## Create a array
+
+```cpp
+#include"MainToolbox\Types.h"
+#include"MainToolbox\Array.h"
+int main()
+{
+    catool::main_toolbox::Array<int> intArry=ones<int>(100);
+    catool::main_toolbox::disp(intArray);
+    return 0;
+}
+```
+
 # Function index
 
 ## Fundamentals

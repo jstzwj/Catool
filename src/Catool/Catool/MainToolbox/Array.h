@@ -310,22 +310,32 @@ namespace catool
 			}
 
 			//tostring
-			static std::string composeIndexToString(std::vector<int>& loop)
+			static std::string composeIndexToString(const std::vector<int>& loop,bool ignoreHead=true)
 			{
 				std::string ans = "(";
 				for (unsigned int i = 0; i < loop.size(); ++i)
 				{
-					if (i == 0)
+					if (ignoreHead == false)
 					{
-						ans += ":";
-					}
-					else if (i == 1)
-					{
-						ans += ",:";
+						if (i == 0)
+							ans += std::to_string(loop[i]);
+						else
+							ans += "," + std::to_string(loop[i]);
 					}
 					else
 					{
-						ans += "," + std::to_string(loop[i]);
+						if (i == 0)
+						{
+							ans += ":";
+						}
+						else if (i == 1)
+						{
+							ans += ",:";
+						}
+						else
+						{
+							ans += "," + std::to_string(loop[i]);
+						}
 					}
 				}
 				ans += ")";
