@@ -77,6 +77,13 @@ namespace catool
 			Array(const Array<T>& other)
 				: dim(other.get_dim()), data(other.begin(), other.end()) {}
 
+			Array<T>& operator =(const Array<T>& other)
+			{
+				dim = other.dim;
+				data = other.data;
+				return *this;
+			}
+
 			//using iterator = std::vector<T>::iterator;
 			//using const_iterator = std::vector<T>::const_iterator;
 

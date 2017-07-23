@@ -10,6 +10,7 @@
 #include <cstddef>
 #include<cstdio>
 #include<cstring>
+#include<cmath>
 #include"../../Stream/FileInputStream.h"
 #include"../../Stream/FileOutputStream.h"
 #include"../../../Array.h"
@@ -24,13 +25,13 @@ namespace catool
 			{
 				struct tag_BitMapFileHeader
 				{
-					uint16_t bfType;
+					char bfType[2];
 					uint32_t bfSize;
 					uint16_t bfReserved1;
 					uint16_t bfReserved2;
 					uint32_t bfOffBits;
 				};
-				struct tag_BITMAPINFOHEADER 
+				struct tag_BitmapInfoHeader
 				{
 					uint32_t biSize; //指定此结构体的长度，为40
 					int32_t biWidth; //位图宽
@@ -45,7 +46,7 @@ namespace catool
 					uint32_t biClrImportant; //重要颜色数，如果为0，则表示所有颜色都是重要的
 				};
 
-				struct tag_RGBQUAD 
+				struct tag_RGBQuad
 				{
 					uint8_t rgbBlue; //该颜色的蓝色分量
 					uint8_t rgbGreen; //该颜色的绿色分量
@@ -67,7 +68,187 @@ namespace catool
 				class BmpReader
 				{
 				public:
+					using StreamType = stream::InputStream<char>;
+					std::unique_ptr<StreamType> data_source;
 
+					template<class T>
+					BmpReader(T &&stream)
+						:data_source(new T(std::forward<T>(stream))) {}
+
+					template<class U>
+					static U toMemoryType(uint8_t d)
+					{
+						return (U)d;
+					}
+					template<>
+					static double toMemoryType<double>(uint8_t d)
+					{
+						return d/255.0;
+					}
+					template<class U>
+					static U singleToMemoryType(uint8_t d)
+					{
+						return (U)d;
+					}
+
+
+
+					template<class T=double>
+					Array<T> read(const char *path)
+					{
+						//file header
+						tag_BitMapFileHeader file_header;
+						data_source->read(file_header.bfType, 2);
+						file_header.bfSize=stream::InputWrapper<uint32_t>::read(*data_source);//file size
+						file_header.bfReserved1=stream::InputWrapper<uint16_t>::read(*data_source);//reserved
+						file_header.bfReserved2=stream::InputWrapper<uint16_t>::read(*data_source);//reserved
+						file_header.bfOffBits=stream::InputWrapper<uint32_t>::read(*data_source);//bytes before pic info
+
+						//bitmap header
+						tag_BitmapInfoHeader bitmap_header;
+						bitmap_header.biSize=stream::InputWrapper<uint32_t>::read(*data_source);//bitmap info header size
+						bitmap_header.biWidth=stream::InputWrapper<int32_t>::read(*data_source);//width
+						bitmap_header.biHeight = stream::InputWrapper<int32_t>::read(*data_source);//height
+						bitmap_header.biPlanes =stream::InputWrapper<uint16_t>::read(*data_source);//biplanes
+						bitmap_header.biBitCount =stream::InputWrapper<uint16_t>::read(*data_source);//bitcount
+						bitmap_header.biCompression=stream::InputWrapper<uint32_t>::read(*data_source);//bicompression
+						bitmap_header.biSizeImage=stream::InputWrapper<uint32_t>::read(*data_source);//DWORD biSizeImage
+						bitmap_header.biXPelsPerMeter=stream::InputWrapper<int32_t>::read(*data_source);//x
+						bitmap_header.biYPelsPerMeter=stream::InputWrapper<int32_t>::read(*data_source);//y
+						bitmap_header.biClrUsed=stream::InputWrapper<uint32_t>::read(*data_source);//index number
+						bitmap_header.biClrImportant=stream::InputWrapper<uint32_t>::read(*data_source);//index number
+
+						//index
+						std::vector<tag_RGBQuad> color_index;
+						
+						for (int i=0;i<bitmap_header.biClrUsed;++i)
+						{
+							tag_RGBQuad quad;
+							quad.rgbBlue = stream::InputWrapper<uint8_t>::read(*data_source);
+							quad.rgbGreen = stream::InputWrapper<uint8_t>::read(*data_source);
+							quad.rgbRed = stream::InputWrapper<uint8_t>::read(*data_source);
+							quad.rgbReserved = stream::InputWrapper<uint8_t>::read(*data_source);
+							color_index.push_back(quad);
+						}
+						//data
+						Array<T> rst;
+						if (bitmap_header.biBitCount == 1)
+						{
+							rst.resize(bitmap_header.biHeight, bitmap_header.biWidth, 1);
+							int acc1 = rst.get_dim_acc(1), acc2 = rst.get_dim_acc(2);
+							for (int i = 0; i<bitmap_header.biHeight; ++i)
+							{
+								for (int j = 0; j<bitmap_header.biWidth/8; ++j)
+								{
+									uint8_t tmp = stream::InputWrapper<uint8_t>::read(*data_source);
+									rst[(j*8 + 0)*acc1 + i] = singleToMemoryType<T>((tmp & 0x80)>>7);
+									rst[(j*8 + 1)*acc1 + i] = singleToMemoryType<T>((tmp & 0x40)>>6);
+									rst[(j*8 + 2)*acc1 + i] = singleToMemoryType<T>((tmp & 0x20)>>5);
+									rst[(j*8 + 3)*acc1 + i] = singleToMemoryType<T>((tmp & 0x10)>>4);
+									rst[(j*8 + 4)*acc1 + i] = singleToMemoryType<T>((tmp & 0x08)>>3);
+									rst[(j*8 + 5)*acc1 + i] = singleToMemoryType<T>((tmp & 0x04)>>2);
+									rst[(j*8 + 6)*acc1 + i] = singleToMemoryType<T>((tmp & 0x02)>>1);
+									rst[(j*8 + 7)*acc1 + i] = singleToMemoryType<T>(tmp & 0x01);
+								}
+								//padding
+								int padding_size = 4 * (int)std::ceil(8 * bitmap_header.biWidth / 32.0);
+								for (int j = 0; j<padding_size - bitmap_header.biWidth; ++j)
+								{
+									stream::InputWrapper<uint8_t>::read(*data_source);
+								}
+							}
+						}
+						if (bitmap_header.biBitCount == 4)
+						{
+							rst.resize(bitmap_header.biHeight, bitmap_header.biWidth, 4);
+							int acc1 = rst.get_dim_acc(1), acc2 = rst.get_dim_acc(2);
+							for (int i = 0; i<bitmap_header.biHeight; ++i)
+							{
+								for (int j = 0; j<bitmap_header.biWidth/2; ++j)
+								{
+									//bgr->rgb
+									uint8_t tmp = stream::InputWrapper<uint8_t>::read(*data_source);
+									uint8_t sample1 = (tmp & 0xf0) >> 4;
+									uint8_t sample2 = tmp & 0x0f;
+									rst[0 * acc2 + (j * 2 + 0)*acc1 + i] = singleToMemoryType<T>((sample1 & 0x2)>>1);
+									rst[1 * acc2 + (j * 2 + 0)*acc1 + i] = singleToMemoryType<T>((sample1 & 0x4)>>2);
+									rst[2 * acc2 + (j * 2 + 0)*acc1 + i] = singleToMemoryType<T>((sample1 & 0x8)>>3);
+									rst[3 * acc2 + (j * 2 + 0)*acc1 + i] = singleToMemoryType<T>(sample1 & 0x1);
+
+									rst[0 * acc2 + (j * 2 + 1)*acc1 + i] = singleToMemoryType<T>((sample2 & 0x2)>>1);
+									rst[1 * acc2 + (j * 2 + 1)*acc1 + i] = singleToMemoryType<T>((sample2 & 0x4)>>2);
+									rst[2 * acc2 + (j * 2 + 1)*acc1 + i] = singleToMemoryType<T>((sample2 & 0x8)>>3);
+									rst[3 * acc2 + (j * 2 + 1)*acc1 + i] = singleToMemoryType<T>(sample2 & 0x1);
+								}
+								//padding
+								int padding_size = 4 * (int)std::ceil(8 * bitmap_header.biWidth / 32.0);
+								for (int j = 0; j<padding_size - bitmap_header.biWidth; ++j)
+								{
+									stream::InputWrapper<uint8_t>::read(*data_source);
+								}
+							}
+						}
+						else if (bitmap_header.biBitCount == 1*8)
+						{
+							rst.resize(bitmap_header.biHeight,bitmap_header.biWidth,1);
+							int acc1 = rst.get_dim_acc(1), acc2 = rst.get_dim_acc(2);
+							for (int i = 0; i<bitmap_header.biHeight; ++i)
+							{
+								for (int j = 0; j<bitmap_header.biWidth; ++j)
+								{
+									rst[j*acc1 + i]=toMemoryType<T>(stream::InputWrapper<uint8_t>::read(*data_source));
+								}
+								//padding
+								int padding_size = 4 * (int)std::ceil(8 * bitmap_header.biWidth / 32.0);
+								for (int j = 0; j<padding_size - bitmap_header.biWidth; ++j)
+								{
+									stream::InputWrapper<uint8_t>::read(*data_source);
+								}
+							}
+						}
+						else if (bitmap_header.biBitCount == 3*8)
+						{
+							rst.resize(bitmap_header.biHeight, bitmap_header.biWidth, 3);
+							int acc1 = rst.get_dim_acc(1), acc2 = rst.get_dim_acc(2);
+							for (int i = 0; i<bitmap_header.biHeight; ++i)
+							{
+								for (int j = 0; j<bitmap_header.biWidth; ++j)
+								{
+									//bgr->rgb
+									rst[2*acc2+j*acc1 + i] = toMemoryType<T>(stream::InputWrapper<uint8_t>::read(*data_source));
+									rst[1*acc2+j*acc1 + i] = toMemoryType<T>(stream::InputWrapper<uint8_t>::read(*data_source));
+									rst[0*acc2+j*acc1 + i] = toMemoryType<T>(stream::InputWrapper<uint8_t>::read(*data_source));
+								}
+								//padding
+								int padding_size = 4 * (int)std::ceil(24 * bitmap_header.biWidth / 32.0);
+								for (int j = 0; j<padding_size - bitmap_header.biWidth*3; ++j)
+								{
+									stream::InputWrapper<uint8_t>::read(*data_source);
+								}
+							}
+						}
+						else if (bitmap_header.biBitCount == 4*8)
+						{
+							rst.resize(bitmap_header.biHeight, bitmap_header.biWidth, 4);
+							int acc1 = rst.get_dim_acc(1), acc2 = rst.get_dim_acc(2);
+							for (int i = 0; i<bitmap_header.biHeight; ++i)
+							{
+								for (int j = 0; j<bitmap_header.biWidth; ++j)
+								{
+									//bgr->rgb
+									rst[2 * acc2 + j*acc1 + i] = toMemoryType<T>(stream::InputWrapper<uint8_t>::read(*data_source));
+									rst[1 * acc2 + j*acc1 + i] = toMemoryType<T>(stream::InputWrapper<uint8_t>::read(*data_source));
+									rst[0 * acc2 + j*acc1 + i] = toMemoryType<T>(stream::InputWrapper<uint8_t>::read(*data_source));
+									rst[3 * acc2 + j*acc1 + i] = toMemoryType<T>(stream::InputWrapper<uint8_t>::read(*data_source));
+								}
+							}
+						}
+						else
+						{
+							throw std::runtime_error("error: imread: unknown file color depth.");
+						}
+						return rst;
+					}
 				};
 				class BmpWriter
 				{
@@ -139,45 +320,59 @@ namespace catool
 						//data
 						if (d2 == 1)
 						{
-							for (int i = 0; i<d1; ++i)
+							for (int i = 0; i<d0; ++i)
 							{
-								for (int j = 0; j<d0; ++j)
+								for (int j = 0; j<d1; ++j)
 								{
-									stream::OutputWrapper<uint8_t>::write(*data_source, toFileType(a[i*acc1 + j]));
-									stream::OutputWrapper<uint8_t>::write(*data_source, toFileType(a[i*acc1 + j]));
-									stream::OutputWrapper<uint8_t>::write(*data_source, toFileType(a[i*acc1 + j]));
+									stream::OutputWrapper<uint8_t>::write(*data_source, toFileType(a[j*acc1 + i]));
+									stream::OutputWrapper<uint8_t>::write(*data_source, toFileType(a[j*acc1 + i]));
+									stream::OutputWrapper<uint8_t>::write(*data_source, toFileType(a[j*acc1 + i]));
+								}
+								//padding
+								int padding_size = 4 * (int)std::ceil(24 * d1 / 32.0);
+								for (int j=0;j<padding_size-d1*3;++j)
+								{
+									stream::OutputWrapper<uint8_t>::write(*data_source, 0);
 								}
 							}
 						}
 						else if (d2 == 3)
 						{
-							for (int i = 0; i<d1; ++i)
+							for (int i = 0; i<d0; ++i)
 							{
-								for (int j = 0; j<d0; ++j)
+								for (int j = 0; j<d1; ++j)
 								{
+									//rgb ->bgr
 									stream::OutputWrapper<uint8_t>::write(*data_source, 
-										toFileType(a[0 * acc2 + i*acc1 + j]));
+										toFileType(a[2 * acc2 + j*acc1 + i]));
 									stream::OutputWrapper<uint8_t>::write(*data_source,
-										toFileType(a[1 * acc2 + i*acc1 + j]));
+										toFileType(a[1 * acc2 + j*acc1 + i]));
 									stream::OutputWrapper<uint8_t>::write(*data_source, 
-										toFileType(a[2 * acc2 + i*acc1 + j]));
+										toFileType(a[0 * acc2 + j*acc1 + i]));
+								}
+								//padding
+								int padding_size = 4 * (int)std::ceil(24 * d1 / 32.0);
+								for (int j = 0; j<padding_size - d1*3; ++j)
+								{
+									stream::OutputWrapper<uint8_t>::write(*data_source, 0);
 								}
 							}
 						}
 						else if (d2 == 4)
 						{
-							for (int i = 0; i<d1; ++i)
+							for (int i = 0; i<d0; ++i)
 							{
-								for (int j = 0; j<d0; ++j)
+								for (int j = 0; j<d1; ++j)
 								{
+									//rgb->bgr
 									stream::OutputWrapper<uint8_t>::write(*data_source,
-										toFileType(a[0 * acc2 + i*acc1 + j]));
+										toFileType(a[2 * acc2 + j*acc1 + i]));
 									stream::OutputWrapper<uint8_t>::write(*data_source,
-										toFileType(a[1 * acc2 + i*acc1 + j]));
+										toFileType(a[1 * acc2 + j*acc1 + i]));
 									stream::OutputWrapper<uint8_t>::write(*data_source,
-										toFileType(a[2 * acc2 + i*acc1 + j]));
+										toFileType(a[0 * acc2 + j*acc1 + i]));
 									stream::OutputWrapper<uint8_t>::write(*data_source,
-										toFileType(a[3 * acc2 + i*acc1 + j]));
+										toFileType(a[3 * acc2 + j*acc1 + i]));
 								}
 							}
 						}

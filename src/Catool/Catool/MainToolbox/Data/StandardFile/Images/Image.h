@@ -22,6 +22,44 @@ namespace catool
 		{
 			namespace images
 			{
+				template<class T = double>
+				Array<T> imread(const char *path)
+				{
+					std::FILE * file = nullptr;
+#ifdef _MSC_VER
+					fopen_s(&file, path, "rb");
+#else
+					file = std::fopen(path, "rb");
+#endif // _MSC_VER
+
+					if (file == nullptr)
+					{
+						throw std::runtime_error("fail to open file.");
+					}
+					std::string p(path);
+					std::string type;
+					int split_pos = p.find_last_of('.');
+					if (split_pos == -1)
+					{
+						throw std::runtime_error("Unknown image type.");
+					}
+					type = p.substr(split_pos + 1, p.length() - split_pos);
+
+					Array<T> image_data;
+
+					if (type == "bmp")
+					{
+						stream::FileInputStream stream(file);
+						BmpReader reader(std::move(stream));
+						image_data = reader.read<T>(path);
+					}
+					else
+					{
+						throw std::runtime_error("Unknown audio type.");
+					}
+					std::fclose(file);
+					return image_data;
+				}
 				template<class T>
 				void imwrite(const Array<T>& img,const char * path)
 				{
