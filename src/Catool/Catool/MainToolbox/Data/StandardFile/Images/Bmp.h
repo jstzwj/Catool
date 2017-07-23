@@ -158,7 +158,7 @@ namespace catool
 								}
 							}
 						}
-						if (bitmap_header.biBitCount == 4)
+						else if (bitmap_header.biBitCount == 4)
 						{
 							rst.resize(bitmap_header.biHeight, bitmap_header.biWidth, 4);
 							int acc1 = rst.get_dim_acc(1), acc2 = rst.get_dim_acc(2);
