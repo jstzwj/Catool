@@ -893,10 +893,11 @@ namespace catool
 					throw std::runtime_error("error: diff: order K must be non-negative");
 				if(dim<0||dim>=arry.dim_size())
 					throw std::runtime_error("error: diff: DIM must be a valid dimension");
-				tmp_m.dimloop(dim, [&n,&dim](Array<T>& m, std::vector<int>&dims)
+				tmp_m.dimloop(dim, [&n,&dim](Array<T>& m,const std::vector<int>&dims)
 				{
-					dims[dim] = 0;
-					int index = m.composeIndex(dims);
+					std::vector<int> tmp_dims(dims);
+					tmp_dims[dim] = 0;
+					int index = m.composeIndex(tmp_dims);
 					int acc = m.get_dim_acc(dim);
 					int len = m.get_dim_data(dim);
 
@@ -917,10 +918,11 @@ namespace catool
 			Array<T> movsum(const Array<T>& m,int kb=1,int kf=1, int dim = 0)
 			{
 				Array<T> result(m.get_dim());
-				m.dimloop(dim, [&result,&dim,&kb,&kf](const Array<T>& m, std::vector<int>&dims)
+				m.dimloop(dim, [&result,&dim,&kb,&kf](const Array<T>& m,const std::vector<int>&dims)
 				{
-					dims[dim] = 0;
-					int index = m.composeIndex(dims);
+					std::vector<int> tmp_dims(dims);
+					tmp_dims[dim] = 0;
+					int index = m.composeIndex(tmp_dims);
 					int acc = m.get_dim_acc(dim);
 					int len = m.get_dim_data(dim);
 					

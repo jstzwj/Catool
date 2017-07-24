@@ -286,7 +286,7 @@ namespace catool
 			}
 			//用于按某一维度遍历
 			void dimloop(int loop_dim,
-				std::function<void(const Array<T>& m, std::vector<int>&dims)> f)const
+				std::function<void(const Array<T>& m,const std::vector<int>&dims)> f)const
 			{
 				std::vector<int> dims;
 				dims.resize(dim.size());
@@ -294,7 +294,7 @@ namespace catool
 			}
 
 			void dimloop(int loop_dim,
-				std::function<void(Array<T>& m, std::vector<int>&dims)> f)
+				std::function<void(Array<T>& m,const std::vector<int>&dims)> f)
 			{
 				std::vector<int> dims;
 				dims.resize(dim.size());
@@ -452,8 +452,8 @@ namespace catool
 					loop_impl(dims,cur_dim-1, loop_range, f);
 				}
 			}
-			void dimloop_impl(std::vector<int>& dims, int cur_dim, int loop_dim,
-				std::function<void(const Array<T>& m, std::vector<int>&dims)> &f)const
+			void dimloop_impl(std::vector<int> dims, int cur_dim, int loop_dim,
+				std::function<void(const Array<T>& m,const std::vector<int>&dims)> &f)const
 			{
 				if (cur_dim < 0)
 				{
@@ -467,8 +467,8 @@ namespace catool
 						dimloop_impl(dims, cur_dim - 1, loop_dim, f);
 			}
 
-			void dimloop_impl(std::vector<int>& dims, int cur_dim, int loop_dim,
-				std::function<void(Array<T>& m, std::vector<int>&dims)> &f)
+			void dimloop_impl(std::vector<int> dims, int cur_dim, int loop_dim,
+				std::function<void(Array<T>& m,const std::vector<int>&dims)> &f)
 			{
 				if (cur_dim < 0)
 				{
@@ -478,8 +478,10 @@ namespace catool
 				if (cur_dim == loop_dim)
 					dimloop_impl(dims, cur_dim - 1, loop_dim, f);
 				else
-					for (int &i = dims[cur_dim]; i<dim[cur_dim]; ++i)
+					for (int &i = dims[cur_dim]; i < dim[cur_dim]; ++i)
+					{
 						dimloop_impl(dims, cur_dim - 1, loop_dim, f);
+					}
 			}
 
 			std::string to_string_impl(std::vector<int>& loop, int cur_loop)const
@@ -1421,7 +1423,7 @@ namespace catool
 		template<class T>
 		void sort_in_place(Array<T> & m,int dim=0)
 		{
-			m.dimloop(dim, [&m, &dim](Array<T>& m, std::vector<int>&dims)
+			m.dimloop(dim, [&m, &dim](Array<T>& m,const std::vector<int>&dims)
 			{
 				int index = m.composeIndex(dims);
 				int acc = m.get_dim_acc(dim);
@@ -1429,7 +1431,7 @@ namespace catool
 
 				typename Array<T>::IntervalIterator begin(m, index,acc);
 				typename Array<T>::IntervalIterator end(m, index+len*acc,acc);
-				std::sort(begin,end);
+				std::sort(begin, end, std::less<T>());
 			});
 		}
 		template<class T>
@@ -1439,6 +1441,51 @@ namespace catool
 				throw std::runtime_error("error: sort DIM must be a valid dimension");
 			Array<T> rst(m);
 			sort_in_place(rst,dim);
+			return rst;
+		}
+		/*
+		flip
+		Flip order of elements
+		*/
+		template<class T>
+		void flip_in_place(Array<T> & m, int dim = 0)
+		{
+			m.dimloop(dim, [&m, &dim](Array<T>& m, const std::vector<int>&dims)
+			{
+				int index = m.composeIndex(dims);
+				int acc = m.get_dim_acc(dim);
+				int len = m.get_dim_data(dim);
+
+				typename Array<T>::IntervalIterator begin(m, index, acc);
+				typename Array<T>::IntervalIterator end(m, index + len*acc, acc);
+				std::reverse(begin, end);
+			});
+		}
+		template<class T>
+		Array<T> flip(Array<T> & m, int dim = 0)
+		{
+			if (dim<0 || dim >= m.dim_size())
+				throw std::runtime_error("error: sort DIM must be a valid dimension");
+			Array<T> rst(m);
+			flip_in_place(rst, dim);
+			return rst;
+		}
+		template<class T>
+		Array<T> fliplr(Array<T> & m)
+		{
+			if (dim<0 || dim >= m.dim_size())
+				throw std::runtime_error("error: sort DIM must be a valid dimension");
+			Array<T> rst(m);
+			flip_in_place(rst, 1);
+			return rst;
+		}
+		template<class T>
+		Array<T> flipup(Array<T> & m)
+		{
+			if (dim<0 || dim >= m.dim_size())
+				throw std::runtime_error("error: sort DIM must be a valid dimension");
+			Array<T> rst(m);
+			flip_in_place(rst, 0);
 			return rst;
 		}
 
@@ -1598,6 +1645,24 @@ namespace catool
 			rst.get_dim().resize(dim_size-nsize);
 			for (int i=0;i<dim_size-nsize;++i)
 				rst.get_dim().at(i) = X.get_dim().at(i+nsize);
+			return rst;
+		}
+		/*
+		squeeze
+		Remove singleton dimensions
+		*/
+		template<class T>
+		Array<T> squeeze(const Array<T>& X)
+		{
+			Array<T> rst(X);
+			std::vector<int> & rst_dim = rst.get_dim();
+			rst_dim.clear();
+			
+			for (const auto & each_dim:X.get_dim())
+			{
+				if (each_dim != 1)
+					rst_dim.push_back(each_dim);
+			}
 			return rst;
 		}
 

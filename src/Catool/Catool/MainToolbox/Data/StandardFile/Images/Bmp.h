@@ -160,7 +160,7 @@ namespace catool
 						}
 						else if (bitmap_header.biBitCount == 4)
 						{
-							rst.resize(bitmap_header.biHeight, bitmap_header.biWidth, 4);
+							rst.resize(bitmap_header.biHeight, bitmap_header.biWidth, 3);
 							int acc1 = rst.get_dim_acc(1), acc2 = rst.get_dim_acc(2);
 							for (int i = 0; i<bitmap_header.biHeight; ++i)
 							{
@@ -170,15 +170,43 @@ namespace catool
 									uint8_t tmp = stream::InputWrapper<uint8_t>::read(*data_source);
 									uint8_t sample1 = (tmp & 0xf0) >> 4;
 									uint8_t sample2 = tmp & 0x0f;
-									rst[0 * acc2 + (j * 2 + 0)*acc1 + i] = singleToMemoryType<T>((sample1 & 0x2)>>1);
-									rst[1 * acc2 + (j * 2 + 0)*acc1 + i] = singleToMemoryType<T>((sample1 & 0x4)>>2);
-									rst[2 * acc2 + (j * 2 + 0)*acc1 + i] = singleToMemoryType<T>((sample1 & 0x8)>>3);
-									rst[3 * acc2 + (j * 2 + 0)*acc1 + i] = singleToMemoryType<T>(sample1 & 0x1);
+									double scale=1.0;
 
-									rst[0 * acc2 + (j * 2 + 1)*acc1 + i] = singleToMemoryType<T>((sample2 & 0x2)>>1);
-									rst[1 * acc2 + (j * 2 + 1)*acc1 + i] = singleToMemoryType<T>((sample2 & 0x4)>>2);
-									rst[2 * acc2 + (j * 2 + 1)*acc1 + i] = singleToMemoryType<T>((sample2 & 0x8)>>3);
-									rst[3 * acc2 + (j * 2 + 1)*acc1 + i] = singleToMemoryType<T>(sample2 & 0x1);
+									if (sample1 == 0x8)
+									{
+										scale = 0.75294117647058823529411764705882;
+										rst[0 * acc2 + (j * 2 + 0)*acc1 + i] = scale*singleToMemoryType<T>(1);
+										rst[1 * acc2 + (j * 2 + 0)*acc1 + i] = scale*singleToMemoryType<T>(1);
+										rst[2 * acc2 + (j * 2 + 0)*acc1 + i] = scale*singleToMemoryType<T>(1);
+									}
+									else
+									{
+										if ((sample1 & 0x8) >> 3)
+											scale = 1.0;
+										else
+											scale = 0.50196078431372549019607843137255;
+										rst[0 * acc2 + (j * 2 + 0)*acc1 + i] = scale*singleToMemoryType<T>((sample1 & 0x1) >> 0);
+										rst[1 * acc2 + (j * 2 + 0)*acc1 + i] = scale*singleToMemoryType<T>((sample1 & 0x2) >> 1);
+										rst[2 * acc2 + (j * 2 + 0)*acc1 + i] = scale*singleToMemoryType<T>((sample1 & 0x4) >> 2);
+									}
+									
+									if (sample2 == 0x8 )
+									{
+										scale = 0.75294117647058823529411764705882;
+										rst[0 * acc2 + (j * 2 + 1)*acc1 + i] = scale*singleToMemoryType<T>(1);
+										rst[1 * acc2 + (j * 2 + 1)*acc1 + i] = scale*singleToMemoryType<T>(1);
+										rst[2 * acc2 + (j * 2 + 1)*acc1 + i] = scale*singleToMemoryType<T>(1);
+									}
+									else
+									{
+										if ((sample2 & 0x8) >> 3)
+											scale = 1.0;
+										else
+											scale = 0.50196078431372549019607843137255;
+										rst[0 * acc2 + (j * 2 + 1)*acc1 + i] = scale*singleToMemoryType<T>((sample2 & 0x1) >> 0);
+										rst[1 * acc2 + (j * 2 + 1)*acc1 + i] = scale*singleToMemoryType<T>((sample2 & 0x2) >> 1);
+										rst[2 * acc2 + (j * 2 + 1)*acc1 + i] = scale*singleToMemoryType<T>((sample2 & 0x4) >> 2);
+									}
 								}
 								//padding
 								int padding_size = 4 * (int)std::ceil(8 * bitmap_header.biWidth / 32.0);
@@ -247,6 +275,8 @@ namespace catool
 						{
 							throw std::runtime_error("error: imread: unknown file color depth.");
 						}
+						if (bitmap_header.biHeight > 0)
+							flip_in_place(rst, 0);
 						return rst;
 					}
 				};
@@ -302,7 +332,7 @@ namespace catool
 						//bitmap header
 						stream::OutputWrapper<uint32_t>::write(*data_source, 40);//bitmap info header size
 						stream::OutputWrapper<int32_t>::write(*data_source, a.get_dim_data(1));//width
-						stream::OutputWrapper<int32_t>::write(*data_source, a.get_dim_data(0));//height
+						stream::OutputWrapper<int32_t>::write(*data_source, -a.get_dim_data(0));//height
 						stream::OutputWrapper<uint16_t>::write(*data_source, 1);//biplanes
 						if (d2 == 1)
 							stream::OutputWrapper<uint16_t>::write(*data_source, 24);//bitcount

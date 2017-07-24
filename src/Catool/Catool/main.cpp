@@ -217,16 +217,28 @@ catch (std::exception e)
 //}
 
 //imread and imwrite
-{
-	auto tmp = images::imread("bd.bmp");
-	images::imwrite(tmp, "bd2.bmp");
-}
+//{
+//	auto tmp = images::imread("bd.bmp");
+//	images::imwrite(tmp, "bd2.bmp");
+//}
+//median
+//{
+//	Array<int> tst{ 1,5,7,2,4,5,7,3,9,0,4,2 };
+//	tst.resize(3, 4);
+//	var_dump(tst);
+//	var_dump(median(tst, 0));
+//}
 
 //type_info
 //{
 //	print_type_info(ones(100));
 //}
 
+//image processing
+{
+	auto tmp = images::imread("d.bmp");
+	images::imwrite(sort(tmp, 0), "d2.bmp");
+}
 
 clock_t strt = clock();
 //mtimes(ones<float>(5000, 1000), ones<float>(1000, 5000));

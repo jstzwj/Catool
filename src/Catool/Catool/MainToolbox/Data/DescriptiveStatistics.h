@@ -18,7 +18,7 @@ namespace catool
 			dims[dim] = 1;
 			result.resize(dims);
 
-			m.dimloop(dim, [&result, &dim](const Array<T>& m, std::vector<int>&dims)
+			m.dimloop(dim, [&result, &dim](const Array<T>& m,const std::vector<int>&dims)
 			{
 				int rst_index = 0;
 				for (unsigned int i = 0; i < dims.size(); ++i)
@@ -46,7 +46,7 @@ namespace catool
 			dims[dim] = 1;
 			result.resize(dims);
 
-			m.dimloop(dim, [&result, &dim](const Array<T>& m, std::vector<int>&dims)
+			m.dimloop(dim, [&result, &dim](const Array<T>& m,const std::vector<int>&dims)
 			{
 				int rst_index = 0;
 				for (unsigned int i = 0; i < dims.size(); ++i)
@@ -74,7 +74,7 @@ namespace catool
 			result_min.resize(dims);
 			result_max.resize(dims);
 
-			m.dimloop(dim, [&result_min,&result_max, &dim](const Array<T>& m, std::vector<int>&dims)
+			m.dimloop(dim, [&result_min,&result_max, &dim](const Array<T>& m,const std::vector<int>&dims)
 			{
 				int rst_index = 0;
 				for (unsigned int i = 0; i < dims.size(); ++i)
@@ -101,6 +101,46 @@ namespace catool
 		{
 			return rdivide((Array<double>)sum(m,dim),size(m,dim));
 		}
+
+		/*
+		median
+		Median value of array
+		*/
+		template<class T>
+		Array<T> median(const Array<T>& m, int dim = 0)
+		{
+			Array<T> result;
+			std::vector<int> dims = m.get_dim();
+			dims[dim] = 1;
+			result.resize(dims);
+
+			std::vector<T> tmp;
+			tmp.resize(m.get_dim_data(dim));
+
+			m.dimloop(dim, [&tmp,&result, &dim](const Array<T>& m,const std::vector<int>&dims)
+			{
+				int rst_index = 0;
+				for (unsigned int i = 0; i < dims.size(); ++i)
+				{
+					if (i != dim)
+						rst_index += dims[i] * result.get_dim_acc(i);
+				}
+				int index = m.composeIndex(dims);
+				int acc = m.get_dim_acc(dim);
+				int len = m.get_dim_data(dim);
+
+				typename Array<T>::ConstIntervalIterator begin(m, index, acc);
+				typename Array<T>::ConstIntervalIterator end(m, index + len*acc, acc);
+
+				std::copy(begin, end, tmp.begin());
+
+				std::nth_element(tmp.begin(), tmp.begin() + tmp.size() / 2, tmp.end());
+
+				result[rst_index] = tmp[tmp.size() / 2];
+			});
+			return result;
+		}
+
 	}
 }
 
