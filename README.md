@@ -76,10 +76,15 @@ int main()
 `iscolumn`	Determine whether input is column vector  
 `isempty`	Determine whether array is empty  
 
+`sort`	Sort array elements  
+`flip`	Flip order of elements  
+`fliplr`	Flip array left to right  
+`flipud`	Flip array up to down  
 `rot90`	Rotate array 90 degrees  
 `transpose`	Transpose vector or matrix  
 `ctranspose`	Complex conjugate transpose  
 `reshape`	Reshape array
+`squeeze`	Remove singleton dimensions  
 
 ## Elementary Math
 
@@ -215,6 +220,7 @@ Attension: this function needs GnuPlot interface.
 `max`	Largest elements in array  
 `bounds`	Smallest and largest elements  
 `mean`	Average or mean value of array  
+`median`	Median value of array  
 
 
 ## Sparse Matrices
