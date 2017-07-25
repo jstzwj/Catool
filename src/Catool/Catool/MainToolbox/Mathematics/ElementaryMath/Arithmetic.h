@@ -926,10 +926,10 @@ namespace catool
 					int acc = m.get_dim_acc(dim);
 					int len = m.get_dim_data(dim);
 					
-					for (int &i = dims[dim]; i < len; ++i)
+					for (int &i = tmp_dims[dim]; i < len; ++i)
 						for (int j = -kb; j <= kf; ++j)
 							if (i + j >= 0 && i + j < len)
-								result[result.composeIndex(dims)] += m[index+acc*(i+j)];
+								result[result.composeIndex(tmp_dims)] += m[index+acc*(i+j)];
 				});
 				return result;
 			}

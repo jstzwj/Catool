@@ -20,7 +20,7 @@
 
 #define CATOOL_VERSION_MAX 1
 #define CATOOL_VERSION_MIN 0
-#define CATOOL_CURRENT_VERSION "0.1.1"
+#define CATOOL_CURRENT_VERSION "0.2.1"
 
 namespace catool
 {

@@ -49,6 +49,8 @@ Temporary Items
 
 .vs
 *.db
+*.zip
+*.rar
 *.bmp
 *.wav
 Debug

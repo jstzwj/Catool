@@ -1300,7 +1300,11 @@ namespace catool
 		template<class T>
 		Array<int> size(const Array<T> &n)
 		{
-			return n.get_dim();
+			Array<int> rst;
+			rst.resize(1,n.get_dim().size());
+			for (unsigned int i = 0; i < n.dim_size(); ++i)
+				rst[i] = n.get_dim_data(i);
+			return rst;
 		}
 		template<class T>
 		int size(const Array<T> &n, int dim)

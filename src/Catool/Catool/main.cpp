@@ -234,10 +234,10 @@ catch (std::exception e)
 //	print_type_info(ones(100));
 //}
 
-//image processing
+//image
 {
 	auto tmp = images::imread("d.bmp");
-	images::imwrite(sort(tmp, 0), "d2.bmp");
+	images::imwrite(rdivide(movsum(tmp,100,100,0),201), "d2.bmp");
 }
 
 clock_t strt = clock();
