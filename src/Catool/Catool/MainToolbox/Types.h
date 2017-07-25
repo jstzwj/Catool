@@ -8,6 +8,7 @@
 #include<complex>
 #include<initializer_list>
 #include<typeinfo>
+#include<iomanip>
 #include"Array.h"
 #include"Complex.h"
 
@@ -81,7 +82,7 @@ namespace catool
 					{
 						for (int j = 0; j < v.get_dim_data(1); ++j)
 						{
-							std::cout << v[prefix_index + j*v.get_dim_data(0) + i] << " ";
+							std::cout<< v[prefix_index + j*v.get_dim_data(0) + i] << " ";
 						}
 						std::cout << std::endl;
 					}

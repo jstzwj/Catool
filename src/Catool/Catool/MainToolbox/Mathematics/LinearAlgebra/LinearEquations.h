@@ -4,6 +4,8 @@
 
 #include <limits>
 #include<tuple>
+#include<algorithm>
+#include<numeric>
 #include<cmath>
 #include"../../../Version.h"
 #include"../../Array.h"
@@ -14,6 +16,155 @@ namespace catool
 	{
 		namespace mathematics
 		{
+			double highPrecisionSqrt(double x)
+			{
+				if (x == 0) return 0;
+				double result = x;
+				double lastValue;
+				do 
+				{
+					lastValue = result;
+					result = (result+ x/ result)*0.5;
+				} while (std::abs(result - lastValue) > 1e-18);
+				return result;
+			}
+			/*
+			norm	Vector and matrix norms
+			*/
+			template<class T>
+			T norm(const Array<T> &a)
+			{
+				T sum=T();
+				for (const auto& each:a)
+				{
+					sum += each*each;
+				}
+				return std::sqrt(sum);
+			}
+			template<class T>
+			T norm(const Array<T> &m,int dim)
+			{
+				Array<T> result;
+				std::vector<int> dims = m.get_dim();
+				dims[dim] = 1;
+				result.resize(dims);
+
+				m.dimloop(dim, [&result, &dim](const Array<T>& m, const std::vector<int>&dims)
+				{
+					int rst_index = 0;
+					for (unsigned int i = 0; i < dims.size(); ++i)
+					{
+						if (i != dim)
+							rst_index += dims[i] * result.get_dim_acc(i);
+					}
+					int index = m.composeIndex(dims);
+					int acc = m.get_dim_acc(dim);
+					int len = m.get_dim_data(dim);
+
+					T sum = T();
+
+					for (int i=0;i<len;++i)
+					{
+						T tmp = m[index+acc*i];
+						sum += tmp*tmp;
+					}
+					result[rst_index] = std::sqrt(sum);
+				});
+				return result;
+			}
+			/*
+			hess
+			Hessenberg form of matrix
+			*/
+			template<class T>
+			Array<T> hess(const Array<T> & m)
+			{
+				Array<T> rst(m);
+				int d0 = m.get_dim_data(0), d1 = m.get_dim_data(1);
+				int cur_row = d0-1;
+				for (int i = d1-1; i >= 0;--i)//col
+				{
+					for (int j=i-2;j>=0;--j)
+					{
+						double scale = rst[d0*j+ cur_row] / rst[d0*i+ cur_row];
+						rst.addCol(-scale, i, j);
+					}
+					--cur_row;
+				}
+				return rst;
+			}
+			/*
+			qr
+			Orthogonal-triangular decomposition
+			*/
+			template<class T>
+			T norm2(const Array<T> & m)
+			{
+				T sum = T();
+				for (const auto& each : m)
+				{
+					sum += each*each;
+				};
+				return sum;
+			}
+			template<class T> 
+			std::tuple<Array<T>, Array<T>> qr(const Array<T> &m)
+			{
+				int d0 = m.get_dim_data(0);
+				Array<T> r(m);
+				Array<T> q=eye<T>(d0,d0);
+				//std::vector<Array<T>> h_vec;
+				Array<T> eye_mat=eye<T>(d0, d0);
+				Array<T> alpha;
+				
+				for (int i=0;i<d0;++i)
+				{
+					alpha.resize(d0);
+					//copy alpha
+					for (int j=0;j<i;++j)
+					{
+						alpha[j] = 0;
+					}
+					for (int j=i;j<d0;++j)
+					{
+						alpha[j] = r[i*d0+j];
+					}
+					T a = norm(alpha);
+
+					Array<T> e;
+					e.resize(d0);
+					e[i] = 1;
+
+					Array<T> tmp = minus(alpha, times(a, e));
+					Array<T> omega;
+					if (std::abs(norm2(tmp)) <= std::numeric_limits<T>::epsilon())
+						omega = tmp;
+					else
+						omega = rdivide(tmp, norm(tmp));
+					Array<T> H = minus(eye_mat, times(2, mtimes(omega, transpose(omega))));
+					q = mtimes(q, H);
+					r = mtimes(H, r);
+				}
+				return {q,r};
+			}
+			/*
+			eig
+			*/
+			template<class T>
+			std::tuple<Array<T>, Array<T>> eig(const Array<T>& m)
+			{
+				Array<T> tmp = hess(m);
+				
+				T last;
+				do
+				{
+					last = tmp[0];
+					std::tuple<Array<T>, Array<T>> qr_rst = qr(m);
+					tmp = std::get<1>(qr_rst);
+				}while (std::abs(last - tmp[0]) > std::numeric_limits<T>::epsilon());
+
+				return{tmp,tmp};
+			}
 			/*
 			Y = inv(X)
 			Matrix inverse

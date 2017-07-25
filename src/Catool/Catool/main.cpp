@@ -235,10 +235,43 @@ catch (std::exception e)
 //}
 
 //image
+//{
+//	auto tmp = images::imread("d.bmp");
+//	images::imwrite(rdivide(movsum(tmp,100,100,0),201), "d2.bmp");
+//}
+
+//qr
 {
-	auto tmp = images::imread("d.bmp");
-	images::imwrite(rdivide(movsum(tmp,100,100,0),201), "d2.bmp");
+	/*Array<int> tst{ 1,5,7,2,4,5,7,3,9,0,4,2 };
+	tst.resize(3, 4);
+	Array<double> tmp = { 1,2,3,4 };*/
+
+	Array<double> tst2{ 0,0,2,3,4,1,1,-2,1 };
+	tst2.resize(3, 3);
+	disp(tst2);
+	std::cout << "QR分解结果" << std::endl;
+	auto qr_res = qr(tst2);
+	disp(std::get<0>(qr_res));
+	disp(std::get<1>(qr_res));
 }
+
+//hess
+//{
+//	Array<double> tst2{ 0,0,2,3,4,1,1,-2,1 };
+//	tst2.resize(3, 3);
+//	var_dump(hess(tst2));
+//}
+
+//eig
+{
+	Array<double> tst2{ 0,0,2,3,4,1,1,-2,1 };
+	tst2.resize(3, 3);
+	Array<double> tst3{ 1,2,5,7,9,22,3,12,7};
+	tst3.resize(3, 3);
+	auto eig_rst = eig(tst3);
+	disp(std::get<0>(eig_rst));
+}
+
 
 clock_t strt = clock();
 //mtimes(ones<float>(5000, 1000), ones<float>(1000, 5000));
