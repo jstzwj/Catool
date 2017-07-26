@@ -134,7 +134,7 @@ namespace catool
 						Array<T> rst;
 						if (bitmap_header.biBitCount == 1)
 						{
-							rst.resize(bitmap_header.biHeight, bitmap_header.biWidth, 1);
+							rst.resize(bitmap_header.biHeight, bitmap_header.biWidth);
 							int acc1 = rst.get_dim_acc(1), acc2 = rst.get_dim_acc(2);
 							for (int i = 0; i<bitmap_header.biHeight; ++i)
 							{

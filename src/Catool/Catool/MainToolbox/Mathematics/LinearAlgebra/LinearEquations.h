@@ -153,14 +153,14 @@ namespace catool
 			template<class T>
 			std::tuple<Array<T>, Array<T>> eig(const Array<T>& m)
 			{
-				Array<T> tmp = hess(m);
+				Array<T> tmp(m);
 				
 				T last;
 				do
 				{
 					last = tmp[0];
-					std::tuple<Array<T>, Array<T>> qr_rst = qr(m);
-					tmp = std::get<1>(qr_rst);
+					std::tuple<Array<T>, Array<T>> qr_rst = qr(tmp);
+					tmp = mtimes(std::get<1>(qr_rst),std::get<0>(qr_rst));
 				}while (std::abs(last - tmp[0]) > std::numeric_limits<T>::epsilon());
 
 				return{tmp,tmp};
