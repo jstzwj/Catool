@@ -76,8 +76,16 @@ namespace catool
 
 			Array(const Array<T>& other)
 				: dim(other.get_dim()), data(other.begin(), other.end()) {}
+			Array(Array&& src) : dim(src.dim),data(src.data){}
+			virtual ~Array() = default;
 
 			Array<T>& operator =(const Array<T>& other)
+			{
+				dim = other.dim;
+				data = other.data;
+				return *this;
+			}
+			Array<T>& operator =(Array<T>&& other)
 			{
 				dim = other.dim;
 				data = other.data;
