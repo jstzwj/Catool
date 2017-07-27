@@ -119,6 +119,7 @@ namespace catool
 				
 				for (int i=0;i<d0;++i)
 				{
+					std::cout << i << " ";
 					alpha.resize(d0);
 					//copy alpha
 					for (int j=0;j<i;++j)
@@ -396,6 +397,85 @@ namespace catool
 				{
 					result += a[i*m + i];
 				}
+				return result;
+			}
+			/*
+			planerot
+			Givens plane rotation
+			*/
+			template<class T>
+			std::tuple<Array<T>, Array<T>> planerot(const Array<T> & m)
+			{
+
+			}
+			/*
+			dot
+			*/
+			template<class T>
+			T dot(const Array<T> &a, const Array<T> &b, int dim = 0)
+			{
+				if (a.get_dim()!=b.get_dim())
+				{
+					throw std::runtime_error("Error using dot A and B must be same size.");
+				}
+
+				Array<T> result;
+				std::vector<int> dims = m.get_dim();
+				dims[dim] = 1;
+				result.resize(dims);
+
+				a.dimloop(dim, [&result,&a,&b, &dim](const Array<T>& m, const std::vector<int>&dims)
+				{
+					int rst_index = 0;
+					for (unsigned int i = 0; i < dims.size(); ++i)
+					{
+						if (i != dim)
+							rst_index += dims[i] * result.get_dim_acc(i);
+					}
+					int index = m.composeIndex(dims);
+					int acc = m.get_dim_acc(dim);
+					int len = m.get_dim_data(dim);
+					for (int i=0;i<len;++i)
+					{
+						result[rst_index] += a[index+i*acc]* b[index + i*acc];
+					}
+				});
+				return result;
+			}
+			/*
+			cross
+			*/
+			template<class T>
+			T cross(const Array<T> &a, const Array<T> &b, int dim = 0)
+			{
+				if (a.get_dim_data(dim) !=3|| b.get_dim_data(dim)!=3)
+				{
+					throw std::runtime_error("Error using cross A and B must be of length 3 in the dimension in which the cross product is taken.");
+				}
+				Array<T> result;
+				std::vector<int> dims = m.get_dim();
+				dims[dim] = 3;
+				result.resize(dims);
+
+				a.dimloop(dim, [&result, &a, &b, &dim](const Array<T>& m, const std::vector<int>&dims)
+				{
+					int rst_index = 0;
+					for (unsigned int i = 0; i < dims.size(); ++i)
+					{
+						if (i != dim)
+							rst_index += dims[i] * result.get_dim_acc(i);
+					}
+					int index = m.composeIndex(dims);
+					int acc = m.get_dim_acc(dim);
+					int len = m.get_dim_data(dim);
+					
+					result[rst_index + 0 * result.get_dim_data(dim)] = 
+						-a[index + 2 * acc] * b[index + 1 * acc]+ a[index + 1 * acc] * b[index + 2 * acc];
+					result[rst_index + 1 * result.get_dim_data(dim)] = 
+						-a[index + 2 * acc] * b[index + 0 * acc] + a[index + 0 * acc] * b[index + 2 * acc];
+					result[rst_index + 2 * result.get_dim_data(dim)] = 
+						-a[index + 1 * acc] * b[index + 0 * acc] + a[index + 0 * acc] * b[index + 1 * acc];
+				});
 				return result;
 			}
 		}
