@@ -111,8 +111,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AudioRead.cpp" />
-    <ClCompile Include="AudioWrite.cpp" />
+    <ClInclude Include="TestAudioRead.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClInclude Include="TestAudioWrite.h">
+      <FileType>CppCode</FileType>
+    </ClInclude>
+    <ClCompile Include="test.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="TestBmpRead.h" />
+    <ClInclude Include="TestBmpWriter.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

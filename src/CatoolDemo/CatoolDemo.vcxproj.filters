@@ -13,19 +13,30 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="源文件\Audio">
+    <Filter Include="头文件\Audio">
       <UniqueIdentifier>{779c4895-cbd9-4c80-ac3b-dfaaf2b03b72}</UniqueIdentifier>
     </Filter>
-    <Filter Include="源文件\Image">
+    <Filter Include="头文件\Image">
       <UniqueIdentifier>{db77ad52-ce88-44e1-a216-fe88e379bb64}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AudioRead.cpp">
-      <Filter>源文件\Audio</Filter>
+    <ClCompile Include="test.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="AudioWrite.cpp">
-      <Filter>源文件\Audio</Filter>
-    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="TestBmpRead.h">
+      <Filter>头文件\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="TestBmpWriter.h">
+      <Filter>头文件\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="TestAudioRead.h">
+      <Filter>头文件\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="TestAudioWrite.h">
+      <Filter>头文件\Audio</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

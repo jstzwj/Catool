@@ -173,5 +173,11 @@
     <ClInclude Include="MainToolbox\Data\DescriptiveStatistics.h">
       <Filter>头文件\MainToolbox\Data</Filter>
     </ClInclude>
+    <ClInclude Include="MainToolbox\Data\StandardFile\Images\ImageDefinition.h">
+      <Filter>头文件\MainToolbox\Data\StandardFile\Image</Filter>
+    </ClInclude>
+    <ClInclude Include="MainToolbox\Data\StandardFile\Audio\AudioDefinition.h">
+      <Filter>头文件\MainToolbox\Data\StandardFile\Audio</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

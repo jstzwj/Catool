@@ -45,13 +45,13 @@ namespace catool
 					}
 					type = p.substr(split_pos + 1, p.length() - split_pos);
 
-					std::tuple<Array<uint16_t>, int> audio_data;
+					std::tuple<Array<SampleType>, int> audio_data;
 
 					if (type == "wav")
 					{
 						stream::FileInputStream stream(file);
 						WaveReader reader(std::move(stream));
-						audio_data = reader.read();
+						audio_data = reader.read<SampleType>();
 					}
 					else
 					{
@@ -60,7 +60,7 @@ namespace catool
 					std::fclose(file);
 					return audio_data;
 				}
-				template<class SampleType = float>
+				template<class SampleType>
 				void audiowrite(const char *path, const Array<SampleType>& y, int samples = 44100)
 				{
 					std::FILE * file = nullptr;
@@ -87,7 +87,7 @@ namespace catool
 					{
 						stream::FileOutputStream stream(file);
 						WaveWriter writer(std::move(stream));
-						writer.write<uint16_t>(y, samples);
+						writer.write(y, samples);
 					}
 					else
 					{

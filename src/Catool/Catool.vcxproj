@@ -127,9 +127,11 @@
     <ClInclude Include="MainToolbox\Data\DescriptiveStatistics.h" />
     <ClInclude Include="MainToolbox\Data\Endian.h" />
     <ClInclude Include="MainToolbox\Data\StandardFile\Audio\Audio.h" />
+    <ClInclude Include="MainToolbox\Data\StandardFile\Audio\AudioDefinition.h" />
     <ClInclude Include="MainToolbox\Data\StandardFile\Audio\Wav.h" />
     <ClInclude Include="MainToolbox\Data\StandardFile\Images\Bmp.h" />
     <ClInclude Include="MainToolbox\Data\StandardFile\Images\Image.h" />
+    <ClInclude Include="MainToolbox\Data\StandardFile\Images\ImageDefinition.h" />
     <ClInclude Include="MainToolbox\Data\Stream\FileInputStream.h" />
     <ClInclude Include="MainToolbox\Data\Stream\FileOutputStream.h" />
     <ClInclude Include="MainToolbox\Data\Stream\InputStream.h" />

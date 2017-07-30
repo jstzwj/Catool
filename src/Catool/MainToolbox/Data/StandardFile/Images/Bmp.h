@@ -14,6 +14,7 @@
 #include"../../Stream/FileInputStream.h"
 #include"../../Stream/FileOutputStream.h"
 #include"../../../Array.h"
+#include"ImageDefinition.h"
 
 namespace catool
 {
@@ -75,24 +76,6 @@ namespace catool
 					BmpReader(T &&stream)
 						:data_source(new T(std::forward<T>(stream))) {}
 
-					template<class U>
-					static U toMemoryType(uint8_t d)
-					{
-						return (U)d;
-					}
-					template<>
-					static double toMemoryType<double>(uint8_t d)
-					{
-						return d/255.0;
-					}
-					template<class U>
-					static U singleToMemoryType(uint8_t d)
-					{
-						return (U)d;
-					}
-
-
-
 					template<class T=double>
 					Array<T> read(const char *path)
 					{
@@ -121,7 +104,7 @@ namespace catool
 						//index
 						std::vector<tag_RGBQuad> color_index;
 						
-						for (int i=0;i<bitmap_header.biClrUsed;++i)
+						for (std::uint32_t i=0;i<bitmap_header.biClrUsed;++i)
 						{
 							tag_RGBQuad quad;
 							quad.rgbBlue = stream::InputWrapper<uint8_t>::read(*data_source);
@@ -141,14 +124,14 @@ namespace catool
 								for (int j = 0; j<bitmap_header.biWidth/8; ++j)
 								{
 									uint8_t tmp = stream::InputWrapper<uint8_t>::read(*data_source);
-									rst[(j*8 + 0)*acc1 + i] = singleToMemoryType<T>((tmp & 0x80)>>7);
-									rst[(j*8 + 1)*acc1 + i] = singleToMemoryType<T>((tmp & 0x40)>>6);
-									rst[(j*8 + 2)*acc1 + i] = singleToMemoryType<T>((tmp & 0x20)>>5);
-									rst[(j*8 + 3)*acc1 + i] = singleToMemoryType<T>((tmp & 0x10)>>4);
-									rst[(j*8 + 4)*acc1 + i] = singleToMemoryType<T>((tmp & 0x08)>>3);
-									rst[(j*8 + 5)*acc1 + i] = singleToMemoryType<T>((tmp & 0x04)>>2);
-									rst[(j*8 + 6)*acc1 + i] = singleToMemoryType<T>((tmp & 0x02)>>1);
-									rst[(j*8 + 7)*acc1 + i] = singleToMemoryType<T>(tmp & 0x01);
+									rst[(j*8 + 0)*acc1 + i] = ImageConvert<std::uint8_t,T>::convert((tmp & 0x80)>>7);
+									rst[(j*8 + 1)*acc1 + i] = ImageConvert<std::uint8_t,T>::convert((tmp & 0x40)>>6);
+									rst[(j*8 + 2)*acc1 + i] = ImageConvert<std::uint8_t,T>::convert((tmp & 0x20)>>5);
+									rst[(j*8 + 3)*acc1 + i] = ImageConvert<std::uint8_t,T>::convert((tmp & 0x10)>>4);
+									rst[(j*8 + 4)*acc1 + i] = ImageConvert<std::uint8_t,T>::convert((tmp & 0x08)>>3);
+									rst[(j*8 + 5)*acc1 + i] = ImageConvert<std::uint8_t,T>::convert((tmp & 0x04)>>2);
+									rst[(j*8 + 6)*acc1 + i] = ImageConvert<std::uint8_t,T>::convert((tmp & 0x02)>>1);
+									rst[(j*8 + 7)*acc1 + i] = ImageConvert<std::uint8_t,T>::convert(tmp & 0x01);
 								}
 								//padding
 								int padding_size = 4 * (int)std::ceil(8 * bitmap_header.biWidth / 32.0);
@@ -175,9 +158,9 @@ namespace catool
 									if (sample1 == 0x8)
 									{
 										scale = 0.75294117647058823529411764705882;
-										rst[0 * acc2 + (j * 2 + 0)*acc1 + i] = scale*singleToMemoryType<T>(1);
-										rst[1 * acc2 + (j * 2 + 0)*acc1 + i] = scale*singleToMemoryType<T>(1);
-										rst[2 * acc2 + (j * 2 + 0)*acc1 + i] = scale*singleToMemoryType<T>(1);
+										rst[0 * acc2 + (j * 2 + 0)*acc1 + i] = scale*ImageConvert<std::uint8_t,T>::convert(1);
+										rst[1 * acc2 + (j * 2 + 0)*acc1 + i] = scale*ImageConvert<std::uint8_t,T>::convert(1);
+										rst[2 * acc2 + (j * 2 + 0)*acc1 + i] = scale*ImageConvert<std::uint8_t,T>::convert(1);
 									}
 									else
 									{
@@ -185,17 +168,17 @@ namespace catool
 											scale = 1.0;
 										else
 											scale = 0.50196078431372549019607843137255;
-										rst[0 * acc2 + (j * 2 + 0)*acc1 + i] = scale*singleToMemoryType<T>((sample1 & 0x1) >> 0);
-										rst[1 * acc2 + (j * 2 + 0)*acc1 + i] = scale*singleToMemoryType<T>((sample1 & 0x2) >> 1);
-										rst[2 * acc2 + (j * 2 + 0)*acc1 + i] = scale*singleToMemoryType<T>((sample1 & 0x4) >> 2);
+										rst[0 * acc2 + (j * 2 + 0)*acc1 + i] = scale*ImageConvert<std::uint8_t,T>::convert((sample1 & 0x1) >> 0);
+										rst[1 * acc2 + (j * 2 + 0)*acc1 + i] = scale*ImageConvert<std::uint8_t,T>::convert((sample1 & 0x2) >> 1);
+										rst[2 * acc2 + (j * 2 + 0)*acc1 + i] = scale*ImageConvert<std::uint8_t,T>::convert((sample1 & 0x4) >> 2);
 									}
 									
 									if (sample2 == 0x8 )
 									{
 										scale = 0.75294117647058823529411764705882;
-										rst[0 * acc2 + (j * 2 + 1)*acc1 + i] = scale*singleToMemoryType<T>(1);
-										rst[1 * acc2 + (j * 2 + 1)*acc1 + i] = scale*singleToMemoryType<T>(1);
-										rst[2 * acc2 + (j * 2 + 1)*acc1 + i] = scale*singleToMemoryType<T>(1);
+										rst[0 * acc2 + (j * 2 + 1)*acc1 + i] = scale*ImageConvert<std::uint8_t,T>::convert(1);
+										rst[1 * acc2 + (j * 2 + 1)*acc1 + i] = scale*ImageConvert<std::uint8_t,T>::convert(1);
+										rst[2 * acc2 + (j * 2 + 1)*acc1 + i] = scale*ImageConvert<std::uint8_t,T>::convert(1);
 									}
 									else
 									{
@@ -203,9 +186,9 @@ namespace catool
 											scale = 1.0;
 										else
 											scale = 0.50196078431372549019607843137255;
-										rst[0 * acc2 + (j * 2 + 1)*acc1 + i] = scale*singleToMemoryType<T>((sample2 & 0x1) >> 0);
-										rst[1 * acc2 + (j * 2 + 1)*acc1 + i] = scale*singleToMemoryType<T>((sample2 & 0x2) >> 1);
-										rst[2 * acc2 + (j * 2 + 1)*acc1 + i] = scale*singleToMemoryType<T>((sample2 & 0x4) >> 2);
+										rst[0 * acc2 + (j * 2 + 1)*acc1 + i] = scale*ImageConvert<std::uint8_t,T>::convert((sample2 & 0x1) >> 0);
+										rst[1 * acc2 + (j * 2 + 1)*acc1 + i] = scale*ImageConvert<std::uint8_t,T>::convert((sample2 & 0x2) >> 1);
+										rst[2 * acc2 + (j * 2 + 1)*acc1 + i] = scale*ImageConvert<std::uint8_t,T>::convert((sample2 & 0x4) >> 2);
 									}
 								}
 								//padding
@@ -224,7 +207,7 @@ namespace catool
 							{
 								for (int j = 0; j<bitmap_header.biWidth; ++j)
 								{
-									rst[j*acc1 + i]=toMemoryType<T>(stream::InputWrapper<uint8_t>::read(*data_source));
+									rst[j*acc1 + i]=ImageConvert<std::uint8_t,T>::convert(stream::InputWrapper<uint8_t>::read(*data_source));
 								}
 								//padding
 								int padding_size = 4 * (int)std::ceil(8 * bitmap_header.biWidth / 32.0);
@@ -243,9 +226,9 @@ namespace catool
 								for (int j = 0; j<bitmap_header.biWidth; ++j)
 								{
 									//bgr->rgb
-									rst[2*acc2+j*acc1 + i] = toMemoryType<T>(stream::InputWrapper<uint8_t>::read(*data_source));
-									rst[1*acc2+j*acc1 + i] = toMemoryType<T>(stream::InputWrapper<uint8_t>::read(*data_source));
-									rst[0*acc2+j*acc1 + i] = toMemoryType<T>(stream::InputWrapper<uint8_t>::read(*data_source));
+									rst[2*acc2+j*acc1 + i] = ImageConvert<std::uint8_t,T>::convert(stream::InputWrapper<uint8_t>::read(*data_source));
+									rst[1*acc2+j*acc1 + i] = ImageConvert<std::uint8_t,T>::convert(stream::InputWrapper<uint8_t>::read(*data_source));
+									rst[0*acc2+j*acc1 + i] = ImageConvert<std::uint8_t,T>::convert(stream::InputWrapper<uint8_t>::read(*data_source));
 								}
 								//padding
 								int padding_size = 4 * (int)std::ceil(24 * bitmap_header.biWidth / 32.0);
@@ -264,10 +247,10 @@ namespace catool
 								for (int j = 0; j<bitmap_header.biWidth; ++j)
 								{
 									//bgr->rgb
-									rst[2 * acc2 + j*acc1 + i] = toMemoryType<T>(stream::InputWrapper<uint8_t>::read(*data_source));
-									rst[1 * acc2 + j*acc1 + i] = toMemoryType<T>(stream::InputWrapper<uint8_t>::read(*data_source));
-									rst[0 * acc2 + j*acc1 + i] = toMemoryType<T>(stream::InputWrapper<uint8_t>::read(*data_source));
-									rst[3 * acc2 + j*acc1 + i] = toMemoryType<T>(stream::InputWrapper<uint8_t>::read(*data_source));
+									rst[2 * acc2 + j*acc1 + i] = ImageConvert<std::uint8_t,T>::convert(stream::InputWrapper<uint8_t>::read(*data_source));
+									rst[1 * acc2 + j*acc1 + i] = ImageConvert<std::uint8_t,T>::convert(stream::InputWrapper<uint8_t>::read(*data_source));
+									rst[0 * acc2 + j*acc1 + i] = ImageConvert<std::uint8_t,T>::convert(stream::InputWrapper<uint8_t>::read(*data_source));
+									rst[3 * acc2 + j*acc1 + i] = ImageConvert<std::uint8_t,T>::convert(stream::InputWrapper<uint8_t>::read(*data_source));
 								}
 							}
 						}
@@ -290,26 +273,6 @@ namespace catool
 					BmpWriter(T &&stream)
 						:data_source(new T(std::forward<T>(stream))) {}
 
-					static uint8_t toFileType(double d)
-					{
-						double tmp=d*255;
-						if (tmp > 255)
-						{
-							return 255;
-						}
-						else if (tmp < 0)
-						{
-							return 0;
-						}
-						else
-						{
-							return (uint8_t)tmp;
-						}
-					}
-					static uint8_t toFileType(int d)
-					{
-						return (uint8_t)d;
-					}
 					template<class T>
 					void write(const Array<T>& a)
 					{
@@ -354,9 +317,9 @@ namespace catool
 							{
 								for (int j = 0; j<d1; ++j)
 								{
-									stream::OutputWrapper<uint8_t>::write(*data_source, toFileType(a[j*acc1 + i]));
-									stream::OutputWrapper<uint8_t>::write(*data_source, toFileType(a[j*acc1 + i]));
-									stream::OutputWrapper<uint8_t>::write(*data_source, toFileType(a[j*acc1 + i]));
+									stream::OutputWrapper<uint8_t>::write(*data_source, ImageConvert<T,std::uint8_t>::convert(a[j*acc1 + i]));
+									stream::OutputWrapper<uint8_t>::write(*data_source, ImageConvert<T,std::uint8_t>::convert(a[j*acc1 + i]));
+									stream::OutputWrapper<uint8_t>::write(*data_source, ImageConvert<T,std::uint8_t>::convert(a[j*acc1 + i]));
 								}
 								//padding
 								int padding_size = 4 * (int)std::ceil(24 * d1 / 32.0);
@@ -374,11 +337,11 @@ namespace catool
 								{
 									//rgb ->bgr
 									stream::OutputWrapper<uint8_t>::write(*data_source, 
-										toFileType(a[2 * acc2 + j*acc1 + i]));
+										ImageConvert<T,std::uint8_t>::convert(a[2 * acc2 + j*acc1 + i]));
 									stream::OutputWrapper<uint8_t>::write(*data_source,
-										toFileType(a[1 * acc2 + j*acc1 + i]));
+										ImageConvert<T,std::uint8_t>::convert(a[1 * acc2 + j*acc1 + i]));
 									stream::OutputWrapper<uint8_t>::write(*data_source, 
-										toFileType(a[0 * acc2 + j*acc1 + i]));
+										ImageConvert<T,std::uint8_t>::convert(a[0 * acc2 + j*acc1 + i]));
 								}
 								//padding
 								int padding_size = 4 * (int)std::ceil(24 * d1 / 32.0);
@@ -396,13 +359,13 @@ namespace catool
 								{
 									//rgb->bgr
 									stream::OutputWrapper<uint8_t>::write(*data_source,
-										toFileType(a[2 * acc2 + j*acc1 + i]));
+										ImageConvert<T,std::uint8_t>::convert(a[2 * acc2 + j*acc1 + i]));
 									stream::OutputWrapper<uint8_t>::write(*data_source,
-										toFileType(a[1 * acc2 + j*acc1 + i]));
+										ImageConvert<T,std::uint8_t>::convert(a[1 * acc2 + j*acc1 + i]));
 									stream::OutputWrapper<uint8_t>::write(*data_source,
-										toFileType(a[0 * acc2 + j*acc1 + i]));
+										ImageConvert<T,std::uint8_t>::convert(a[0 * acc2 + j*acc1 + i]));
 									stream::OutputWrapper<uint8_t>::write(*data_source,
-										toFileType(a[3 * acc2 + j*acc1 + i]));
+										ImageConvert<T,std::uint8_t>::convert(a[3 * acc2 + j*acc1 + i]));
 								}
 							}
 						}
