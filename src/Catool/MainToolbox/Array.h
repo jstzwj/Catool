@@ -26,44 +26,50 @@ namespace catool
 		/*
 		array
 		*/
+		template<class T,class SizeType_>
+		class ArrayTraits
+		{
+		public:
+			using SizeType = SizeType_;
+			
+			typedef T* pointer;
+			typedef T& reference;
+		};
 		template<class T>
-		class Array
+		class ArrayBase:public ArrayTraits<T,int>
 		{
 		protected:
 			std::vector<int> dim;
 			std::vector<T> data;
 		public:
-			//mutable std::mutex mtx;
+			typedef ArrayBase<T> Self;
 
-			using SizeType = int;
-			using IntervalIterator = ArrayIntervalIterator<T>;
-			using ConstIntervalIterator = ArrayConstIntervalIterator<T>;
-			Array() noexcept {}
-			Array(int row_)
+			ArrayBase() noexcept {}
+			ArrayBase(int row_)
 			{
 				if (row_ < 0)row_ = 0;
 				dim.push_back(row_);
 				dim.push_back(1);
 				data.resize(row_);
 			}
-			Array(const std::vector<int> &dims)
+			ArrayBase(const std::vector<int> &dims)
 				:dim(dims)
 			{
 				this->resize_from_dim();
 			}
-			Array(const std::vector<Range> &dims)
+			ArrayBase(const std::vector<Range> &dims)
 			{
-				for (const auto & each_range:dims)
-					dim.push_back((each_range.end - each_range.begin)/each_range.interval);
+				for (const auto & each_range : dims)
+					dim.push_back((each_range.end - each_range.begin) / each_range.interval);
 				resize_from_dim();
 			}
 			template<class ...K>
-			Array(K ...arg)
+			ArrayBase(K ...arg)
 			{
-				ArrayConstructor(arg...);
+				ArrayBaseConstructor(arg...);
 			}
 
-			Array(std::initializer_list<T> list)
+			ArrayBase(std::initializer_list<T> list)
 				:data(list)
 			{
 				dim.push_back(1);
@@ -71,12 +77,74 @@ namespace catool
 			}
 
 			template<class U>
-			explicit Array(const Array<U>& other)
+			explicit ArrayBase(const ArrayBase<U>& other)
 				:dim(other.get_dim()), data(other.begin(), other.end()) {}
 
-			Array(const Array<T>& other)
+			ArrayBase(const ArrayBase<T>& other)
 				: dim(other.get_dim()), data(other.begin(), other.end()) {}
-			Array(Array&& src) : dim(src.dim),data(src.data){}
+			ArrayBase(Array&& src) : dim(src.dim), data(src.data) {}
+			virtual ~ArrayBase() = default;
+
+			ArrayBase<T>& operator =(const ArrayBase<T>& other)
+			{
+				dim = other.dim;
+				data = other.data;
+				return *this;
+			}
+			ArrayBase<T>& operator =(ArrayBase<T>&& other)
+			{
+				dim = other.dim;
+				data = other.data;
+				return *this;
+			}
+		private:
+			void resize_from_dim()
+			{
+				int acc = 1;
+				for (const auto& each : dim)
+					acc *= each;
+				data.resize(acc);
+			}
+			template<typename T1, typename... T2>
+			void ArrayBaseConstructor(T1 p, T2... arg)
+			{
+				if (p < 0)p = 0;
+				dim.push_back(p);
+				ArrayBaseConstructor(arg...);
+			}
+			void ArrayBaseConstructor()
+			{
+				resize_from_dim();
+			}
+		};
+		template<class T>
+		class Array:public ArrayBase
+		{
+		public:
+			using IntervalIterator = ArrayIntervalIterator<T>;
+			using ConstIntervalIterator = ArrayConstIntervalIterator<T>;
+			Array() noexcept {}
+			explicit Array(int row_)
+				:ArrayBase(row_){}
+
+			explicit Array(const std::vector<int> &dims)
+				:ArrayBase(dims) {}
+			
+			explicit Array(const std::vector<Range> &dims)
+				:ArrayBase(dims){}
+			template<class ...K>
+			explicit Array(K ...arg) : ArrayBase(K...) {}
+
+			explicit Array(std::initializer_list<T> list)
+				:ArrayBase(list) {}
+
+			template<class U>
+			explicit Array(const Array<U>& other)
+				:ArrayBase(other){}
+
+			Array(const Array<T>& other)
+				: ArrayBase(other) {}
+			Array(Array&& src) : ArrayBase(src){}
 			virtual ~Array() = default;
 
 			Array<T>& operator =(const Array<T>& other)
@@ -163,13 +231,6 @@ namespace catool
 				}
 				dim = sz.get_data();
 				resize_from_dim();
-			}
-			void resize_from_dim()
-			{
-				int acc = 1;
-				for (const auto& each : dim)
-					acc *= each;
-				data.resize(acc);
 			}
 
 			void fill(const T& val)
@@ -762,8 +823,8 @@ namespace catool
 				throw std::runtime_error("the size array shall be one dimension array.");
 			}
 			Array<int> result;
-			result.get_dim() = sz.get_data();
-			result.resize_from_dim();
+			result.resize(sz.get_data());
+			result.fill(0);
 			return result;
 		}
 		/*
@@ -832,8 +893,7 @@ namespace catool
 				throw std::runtime_error("the size array shall be one dimension array.");
 			}
 			Array<bool> result;
-			result.get_dim() = sz.get_data();
-			result.resize_from_dim();
+			result.resize(sz.get_data());
 			result.fill(true);
 			return result;
 		}
@@ -866,8 +926,7 @@ namespace catool
 				throw std::runtime_error("the size array shall be one dimension array.");
 			}
 			Array<bool> result;
-			result.get_dim() = sz.get_data();
-			result.resize_from_dim();
+			result.resize(sz.get_data());
 			result.fill(false);
 			return result;
 		}
