@@ -179,5 +179,8 @@
     <ClInclude Include="MainToolbox\Data\StandardFile\Audio\AudioDefinition.h">
       <Filter>头文件\MainToolbox\Data\StandardFile\Audio</Filter>
     </ClInclude>
+    <ClInclude Include="DiagnosticToolBox\DiagnosticEngine.h">
+      <Filter>头文件\DiagnosticToolBox</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

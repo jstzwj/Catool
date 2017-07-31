@@ -118,6 +118,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="DiagnosticToolBox\DiagnosticEngine.h" />
     <ClInclude Include="MainToolbox\Array.h" />
     <ClInclude Include="MainToolbox\Complex.h" />
     <ClInclude Include="MainToolbox\Data\Charset\Charset.h" />

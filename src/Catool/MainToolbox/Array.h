@@ -44,32 +44,41 @@ namespace catool
 		public:
 			typedef ArrayBase<T> Self;
 
-			ArrayBase() noexcept {}
-			ArrayBase(int row_)
+			explicit ArrayBase() noexcept {}
+			explicit ArrayBase(int row_)
 			{
 				if (row_ < 0)row_ = 0;
 				dim.push_back(row_);
 				dim.push_back(1);
 				data.resize(row_);
 			}
-			ArrayBase(const std::vector<int> &dims)
+			explicit ArrayBase(const std::vector<int> &dims)
 				:dim(dims)
 			{
 				this->resize_from_dim();
 			}
-			ArrayBase(const std::vector<Range> &dims)
+			explicit ArrayBase(std::vector<int> &&dims)
+				:dim(dims)
+			{
+				this->resize_from_dim();
+			}
+			explicit ArrayBase(const std::vector<int> &dim_,const std::vector<T>& data_)
+				:dim(dim_),data(data_){}
+			explicit ArrayBase(std::vector<int> &&dim_, std::vector<T>&& data_)
+				:dim(dim_), data(data_) {}
+			explicit ArrayBase(const std::vector<Range> &dims)
 			{
 				for (const auto & each_range : dims)
 					dim.push_back((each_range.end - each_range.begin) / each_range.interval);
 				resize_from_dim();
 			}
 			template<class ...K>
-			ArrayBase(K ...arg)
+			explicit ArrayBase(K ...arg)
 			{
 				ArrayBaseConstructor(arg...);
 			}
 
-			ArrayBase(std::initializer_list<T> list)
+			explicit ArrayBase(std::initializer_list<T> list)
 				:data(list)
 			{
 				dim.push_back(1);
@@ -82,22 +91,10 @@ namespace catool
 
 			ArrayBase(const ArrayBase<T>& other)
 				: dim(other.get_dim()), data(other.begin(), other.end()) {}
-			ArrayBase(Array&& src) : dim(src.dim), data(src.data) {}
+			ArrayBase(ArrayBase<T> && src) : dim(src.dim), data(src.data) {}
 			virtual ~ArrayBase() = default;
 
-			ArrayBase<T>& operator =(const ArrayBase<T>& other)
-			{
-				dim = other.dim;
-				data = other.data;
-				return *this;
-			}
-			ArrayBase<T>& operator =(ArrayBase<T>&& other)
-			{
-				dim = other.dim;
-				data = other.data;
-				return *this;
-			}
-		private:
+		protected:
 			void resize_from_dim()
 			{
 				int acc = 1;
@@ -105,6 +102,8 @@ namespace catool
 					acc *= each;
 				data.resize(acc);
 			}
+		private:
+			
 			template<typename T1, typename... T2>
 			void ArrayBaseConstructor(T1 p, T2... arg)
 			{
@@ -118,33 +117,35 @@ namespace catool
 			}
 		};
 		template<class T>
-		class Array:public ArrayBase
+		class Array:public ArrayBase<T>
 		{
 		public:
 			using IntervalIterator = ArrayIntervalIterator<T>;
 			using ConstIntervalIterator = ArrayConstIntervalIterator<T>;
-			Array() noexcept {}
+			Array() noexcept:ArrayBase<T>() {}
 			explicit Array(int row_)
-				:ArrayBase(row_){}
+				:ArrayBase<T>(row_){}
 
 			explicit Array(const std::vector<int> &dims)
-				:ArrayBase(dims) {}
+				:ArrayBase<T>(dims) {}
+			explicit Array(std::vector<int> &&dims)
+				:ArrayBase<T>(dims) {}
 			
 			explicit Array(const std::vector<Range> &dims)
-				:ArrayBase(dims){}
+				:ArrayBase<T>(dims){}
 			template<class ...K>
-			explicit Array(K ...arg) : ArrayBase(K...) {}
+			explicit Array(K ...arg) : ArrayBase<T>(arg...) {}
 
 			explicit Array(std::initializer_list<T> list)
-				:ArrayBase(list) {}
+				:ArrayBase<T>(list) {}
 
 			template<class U>
 			explicit Array(const Array<U>& other)
-				:ArrayBase(other){}
+				:ArrayBase<T>(other){}
 
 			Array(const Array<T>& other)
-				: ArrayBase(other) {}
-			Array(Array&& src) : ArrayBase(src){}
+				: ArrayBase<T>(other.dim, other.data) {}
+			Array(Array<T> && src) : ArrayBase<T>(src.dim,src.data){}
 			virtual ~Array() = default;
 
 			Array<T>& operator =(const Array<T>& other)

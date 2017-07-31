@@ -45,8 +45,7 @@ namespace catool
 					throw std::runtime_error("the size array shall be one dimension array.");
 				}
 				Array<double> result;
-				result.get_dim() = sz.get_data();
-				result.resize_from_dim();
+				result.resize(sz.get_data());
 				for (auto& each : result)
 					each = (double)std::rand() / RAND_MAX;
 				return result;
