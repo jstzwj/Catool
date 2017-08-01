@@ -111,7 +111,7 @@ namespace catool
 						{
 							for (int i = 0; i < audio.get_dim_data(0); ++i)
 							{
-								stream::OutputWrapper<SampleType>::write(*data_source, AudioConvert<SampleType,std::uint16_t>::convert(audio[i]));
+								stream::OutputWrapper<SampleType>::write(*data_source, AudioConvert<SampleType, std::uint16_t>::convert(audio[i]));
 							}
 						}
 						else
@@ -217,7 +217,7 @@ namespace catool
 							{
 								for (uint32_t i = 0; i < data.dwDataSize / wave_format.wBlockAlign; ++i)
 								{
-									result[i] = AudioConvert<std::uint16_t,SampleType>::convert(stream::InputWrapper<uint16_t>::read(*data_source));
+									result[i] = AudioConvert<std::uint16_t, SampleType>::convert(stream::InputWrapper<uint16_t>::read(*data_source));
 									result[result.get_dim_data(0) + i] = AudioConvert<std::uint16_t, SampleType>::convert(stream::InputWrapper<uint16_t>::read(*data_source));
 								}
 							}

@@ -19,5 +19,4 @@ inline void TestBmpRead()
 	std::cin >> path;
 	auto img = imread(path.c_str());
 	disp(img);
-	
 }

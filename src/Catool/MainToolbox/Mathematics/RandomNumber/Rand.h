@@ -16,7 +16,7 @@ namespace catool
 			rand
 			Uniformly distributed random numbers
 			*/
-			template<class T=double>
+			template<class T = double>
 			inline T rand()
 			{
 				return ((float)std::rand() / RAND_MAX);
@@ -29,7 +29,7 @@ namespace catool
 					each = (float)std::rand() / RAND_MAX;
 				return result;
 			}
-			template<typename T=double,typename T1, typename... T2>
+			template<typename T = double, typename T1, typename... T2>
 			Array<T> rand(T1 p, T2... arg)
 			{
 				Array<T> result;

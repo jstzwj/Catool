@@ -21,10 +21,10 @@ namespace catool
 				if (x == 0) return 0;
 				double result = x;
 				double lastValue;
-				do 
+				do
 				{
 					lastValue = result;
-					result = (result+ x/ result)*0.5;
+					result = (result + x / result)*0.5;
 				} while (std::abs(result - lastValue) > 1e-18);
 				return result;
 			}
@@ -34,15 +34,15 @@ namespace catool
 			template<class T>
 			T norm(const Array<T> &a)
 			{
-				T sum=T();
-				for (const auto& each:a)
+				T sum = T();
+				for (const auto& each : a)
 				{
 					sum += each*each;
 				}
 				return std::sqrt(sum);
 			}
 			template<class T>
-			T norm(const Array<T> &m,int dim)
+			T norm(const Array<T> &m, int dim)
 			{
 				Array<T> result;
 				std::vector<int> dims = m.get_dim();
@@ -63,9 +63,9 @@ namespace catool
 
 					T sum = T();
 
-					for (int i=0;i<len;++i)
+					for (int i = 0; i < len; ++i)
 					{
-						T tmp = m[index+acc*i];
+						T tmp = m[index + acc*i];
 						sum += tmp*tmp;
 					}
 					result[rst_index] = std::sqrt(sum);
@@ -81,12 +81,12 @@ namespace catool
 			{
 				Array<T> rst(m);
 				int d0 = m.get_dim_data(0), d1 = m.get_dim_data(1);
-				int cur_row = d0-1;
-				for (int i = d1-1; i >= 0;--i)//col
+				int cur_row = d0 - 1;
+				for (int i = d1 - 1; i >= 0; --i)//col
 				{
-					for (int j=i-2;j>=0;--j)
+					for (int j = i - 2; j >= 0; --j)
 					{
-						double scale = rst[d0*j+ cur_row] / rst[d0*i+ cur_row];
+						double scale = rst[d0*j + cur_row] / rst[d0*i + cur_row];
 						rst.addCol(-scale, i, j);
 					}
 					--cur_row;
@@ -107,28 +107,28 @@ namespace catool
 				};
 				return sum;
 			}
-			template<class T> 
+			template<class T>
 			std::tuple<Array<T>, Array<T>> qr(const Array<T> &m)
 			{
 				int d0 = m.get_dim_data(0);
 				Array<T> r(m);
-				Array<T> q=eye<T>(d0,d0);
+				Array<T> q = eye<T>(d0, d0);
 				//std::vector<Array<T>> h_vec;
-				Array<T> eye_mat=eye<T>(d0, d0);
+				Array<T> eye_mat = eye<T>(d0, d0);
 				Array<T> alpha;
-				
-				for (int i=0;i<d0;++i)
+
+				for (int i = 0; i < d0; ++i)
 				{
 					std::cout << i << " ";
 					alpha.resize(d0);
 					//copy alpha
-					for (int j=0;j<i;++j)
+					for (int j = 0; j < i; ++j)
 					{
 						alpha[j] = 0;
 					}
-					for (int j=i;j<d0;++j)
+					for (int j = i; j < d0; ++j)
 					{
-						alpha[j] = r[i*d0+j];
+						alpha[j] = r[i*d0 + j];
 					}
 					T a = norm(alpha);
 
@@ -146,7 +146,7 @@ namespace catool
 					q = mtimes(q, H);
 					r = mtimes(H, r);
 				}
-				return {q,r};
+				return{ q,r };
 			}
 			/*
 			eig
@@ -155,16 +155,16 @@ namespace catool
 			std::tuple<Array<T>, Array<T>> eig(const Array<T>& m)
 			{
 				Array<T> tmp(m);
-				
+
 				T last;
 				do
 				{
 					last = tmp[0];
 					std::tuple<Array<T>, Array<T>> qr_rst = qr(tmp);
-					tmp = mtimes(std::get<1>(qr_rst),std::get<0>(qr_rst));
-				}while (std::abs(last - tmp[0]) > std::numeric_limits<T>::epsilon());
+					tmp = mtimes(std::get<1>(qr_rst), std::get<0>(qr_rst));
+				} while (std::abs(last - tmp[0]) > std::numeric_limits<T>::epsilon());
 
-				return{tmp,tmp};
+				return{ tmp,tmp };
 			}
 			/*
 			Y = inv(X)
@@ -214,8 +214,6 @@ namespace catool
 				}
 				return result;
 			}
-
-			
 
 			inline int rank(const Array<double> &a)
 			{
@@ -282,7 +280,7 @@ namespace catool
 					//ÐÐÂúÖÈ
 					return mtimes(tran_m, inv(mtimes(m, tran_m)));
 				}
-				else if(rnk == m.get_dim_data(1))
+				else if (rnk == m.get_dim_data(1))
 				{
 					//ÁÐÂúÖÈ
 					return mtimes(inv(mtimes(tran_m, m)), tran_m);
@@ -337,10 +335,10 @@ namespace catool
 			template<class T>
 			Array<T> mpower(const Array<T>& A, int n)
 			{
-				Array<T> result=eye<T>();
+				Array<T> result = eye<T>();
 				Array<T> tmp(A);
 				int time = n;
-				while (time!=0)
+				while (time != 0)
 				{
 					if (time % 2 == 1) result = result*tmp;
 					tmp = mtimes(tmp, tmp);
@@ -406,7 +404,6 @@ namespace catool
 			template<class T>
 			std::tuple<Array<T>, Array<T>> planerot(const Array<T> & m)
 			{
-
 			}
 			/*
 			dot
@@ -414,7 +411,7 @@ namespace catool
 			template<class T>
 			T dot(const Array<T> &a, const Array<T> &b, int dim = 0)
 			{
-				if (a.get_dim()!=b.get_dim())
+				if (a.get_dim() != b.get_dim())
 				{
 					throw std::runtime_error("Error using dot A and B must be same size.");
 				}
@@ -424,7 +421,7 @@ namespace catool
 				dims[dim] = 1;
 				result.resize(dims);
 
-				a.dimloop(dim, [&result,&a,&b, &dim](const Array<T>& m, const std::vector<int>&dims)
+				a.dimloop(dim, [&result, &a, &b, &dim](const Array<T>& m, const std::vector<int>&dims)
 				{
 					int rst_index = 0;
 					for (unsigned int i = 0; i < dims.size(); ++i)
@@ -435,9 +432,9 @@ namespace catool
 					int index = m.composeIndex(dims);
 					int acc = m.get_dim_acc(dim);
 					int len = m.get_dim_data(dim);
-					for (int i=0;i<len;++i)
+					for (int i = 0; i < len; ++i)
 					{
-						result[rst_index] += a[index+i*acc]* b[index + i*acc];
+						result[rst_index] += a[index + i*acc] * b[index + i*acc];
 					}
 				});
 				return result;
@@ -448,7 +445,7 @@ namespace catool
 			template<class T>
 			T cross(const Array<T> &a, const Array<T> &b, int dim = 0)
 			{
-				if (a.get_dim_data(dim) !=3|| b.get_dim_data(dim)!=3)
+				if (a.get_dim_data(dim) != 3 || b.get_dim_data(dim) != 3)
 				{
 					throw std::runtime_error("Error using cross A and B must be of length 3 in the dimension in which the cross product is taken.");
 				}
@@ -468,12 +465,12 @@ namespace catool
 					int index = m.composeIndex(dims);
 					int acc = m.get_dim_acc(dim);
 					int len = m.get_dim_data(dim);
-					
-					result[rst_index + 0 * result.get_dim_data(dim)] = 
-						-a[index + 2 * acc] * b[index + 1 * acc]+ a[index + 1 * acc] * b[index + 2 * acc];
-					result[rst_index + 1 * result.get_dim_data(dim)] = 
+
+					result[rst_index + 0 * result.get_dim_data(dim)] =
+						-a[index + 2 * acc] * b[index + 1 * acc] + a[index + 1 * acc] * b[index + 2 * acc];
+					result[rst_index + 1 * result.get_dim_data(dim)] =
 						-a[index + 2 * acc] * b[index + 0 * acc] + a[index + 0 * acc] * b[index + 2 * acc];
-					result[rst_index + 2 * result.get_dim_data(dim)] = 
+					result[rst_index + 2 * result.get_dim_data(dim)] =
 						-a[index + 1 * acc] * b[index + 0 * acc] + a[index + 0 * acc] * b[index + 1 * acc];
 				});
 				return result;

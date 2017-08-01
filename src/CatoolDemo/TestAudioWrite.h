@@ -8,7 +8,6 @@
 #include"MainToolbox\Data\StandardFile\Audio\Wav.h"
 #include"MainToolbox\Data\StandardFile\Audio\Audio.h"
 
-
 using namespace catool::main_toolbox;
 using namespace catool::main_toolbox::mathematics;
 using namespace catool::main_toolbox::data;

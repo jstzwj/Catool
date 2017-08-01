@@ -14,14 +14,11 @@ namespace catool
 			int interval;
 		public:
 			Range(int val_)
-				:begin(val_), end(val_+1), interval(1) {}
-			Range(int begin_, int end_, int interval_=1)
-				:begin(begin_),end(end_),interval(interval_){}
-
+				:begin(val_), end(val_ + 1), interval(1) {}
+			Range(int begin_, int end_, int interval_ = 1)
+				:begin(begin_), end(end_), interval(interval_) {}
 		};
 	}
 }
-
-
 
 #endif // !CATOOL_MAINTOOLBOX_RANGE

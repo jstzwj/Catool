@@ -6,7 +6,6 @@
 #include"MainToolbox\Data\StandardFile\Audio\Wav.h"
 #include"MainToolbox\Data\StandardFile\Audio\Audio.h"
 
-
 using namespace catool::main_toolbox;
 using namespace catool::main_toolbox::data;
 using namespace catool::main_toolbox::data::stream;
@@ -20,6 +19,6 @@ inline void TestAudioRead()
 	auto trace = audioread(path.c_str());
 	disp(std::get<0>(trace));
 	disp(std::get<1>(trace));
-	
+
 	system("pause");
 }

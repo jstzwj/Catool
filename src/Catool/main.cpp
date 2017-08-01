@@ -147,14 +147,12 @@ catch (std::exception e)
 //cat
 //var_dump(cat(0,abc, def,abc));
 
-
 //min
 //{
 //	Array<double> tst{ 1.0,1.0,1.0,2.0,2.0,2,3,3,3,4,4,5 };
 //	tst.resize(3,4);
 //	var_dump(max(tst,1));
 //}
-
 
 //sum
 //{
@@ -272,12 +270,11 @@ catch (std::exception e)
 //	disp(std::get<0>(eig_rst));
 //}
 
-
-clock_t strt = clock();
-//mtimes(ones<float>(5000, 1000), ones<float>(1000, 5000));
-//var_dump(mtimes(transpose(abc),def));
-clock_t nd = clock();
-std::cout << nd - strt << std::endl;
+	clock_t strt = clock();
+	//mtimes(ones<float>(5000, 1000), ones<float>(1000, 5000));
+	//var_dump(mtimes(transpose(abc),def));
+	clock_t nd = clock();
+	std::cout << nd - strt << std::endl;
 	system("pause");
 	return 0;
 }

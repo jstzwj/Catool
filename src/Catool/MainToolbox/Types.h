@@ -82,7 +82,7 @@ namespace catool
 					{
 						for (int j = 0; j < v.get_dim_data(1); ++j)
 						{
-							std::cout<< v[prefix_index + j*v.get_dim_data(0) + i] << " ";
+							std::cout << v[prefix_index + j*v.get_dim_data(0) + i] << " ";
 						}
 						std::cout << std::endl;
 					}
@@ -182,8 +182,6 @@ namespace catool
 			std::cout << "i" << std::endl;
 		}
 
-
-
 		//disp
 		template<class T = void>
 		using void_t = void;
@@ -223,7 +221,6 @@ namespace catool
 			std::cout << obj.imag() << "i";
 		}
 
-
 		//type_info
 		template<class T>
 		void print_type_info(const T & obj)
@@ -233,9 +230,8 @@ namespace catool
 		template<class T>
 		void print_type_info(const Array<T> & obj)
 		{
-			std::cout << typeid(obj).name() << obj.composeIndexToString(obj.get_dim(),false) << std::endl;
+			std::cout << typeid(obj).name() << obj.composeIndexToString(obj.get_dim(), false) << std::endl;
 		}
-
 	}
 }
 

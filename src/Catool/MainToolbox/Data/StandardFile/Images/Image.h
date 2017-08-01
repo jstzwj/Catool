@@ -61,7 +61,7 @@ namespace catool
 					return image_data;
 				}
 				template<class T>
-				void imwrite(const Array<T>& img,const char * path)
+				void imwrite(const Array<T>& img, const char * path)
 				{
 					std::FILE * file = nullptr;
 #ifdef _MSC_VER

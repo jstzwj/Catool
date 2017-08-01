@@ -14,7 +14,7 @@ namespace catool
 {
 	namespace main_toolbox
 	{
-		enum class FileTag {MAT,ASCII};
+		enum class FileTag { MAT, ASCII };
 
 		template<class T>
 		inline std::vector<Array<T>> load_mat(const char *c)
@@ -32,30 +32,30 @@ namespace catool
 			{
 				throw std::runtime_error("error:load_ascii:fail to open the file.");
 			}
-			
+
 			std::vector<T> tmp;
 			int row = 0;
 			int col = 0;
-			while (std::getline(infile,line))
+			while (std::getline(infile, line))
 			{
 				std::stringstream ss(line);
 				T val;
-				while (ss>>val)
+				while (ss >> val)
 				{
 					tmp.push_back(val);
-					if(row==0)	//count colum number of the first line
+					if (row == 0)	//count colum number of the first line
 						++col;
 				}
 				++row;
 			}
 
 			Array<T> arry;
-			arry.resize(row,col);
-			for (int i=0;i<row;++i)
+			arry.resize(row, col);
+			for (int i = 0; i < row; ++i)
 			{
-				for (int j=0;j<col;++j)
+				for (int j = 0; j < col; ++j)
 				{
-					arry[j*row + i] = tmp[i*col+j];
+					arry[j*row + i] = tmp[i*col + j];
 				}
 			}
 			std::vector<Array<T>> rst;
@@ -64,13 +64,13 @@ namespace catool
 		}
 
 		template<class T>
-		inline std::vector<Array<T>> load(const char *c,FileTag tag)
+		inline std::vector<Array<T>> load(const char *c, FileTag tag)
 		{
 			if (tag == FileTag::MAT)
 			{
 				return load_mat<T>(c);
 			}
-			else if (tag== FileTag::ASCII)
+			else if (tag == FileTag::ASCII)
 			{
 				return load_ascii<T>(c);
 			}
@@ -81,6 +81,5 @@ namespace catool
 		}
 	}
 }
-
 
 #endif // !CATOOL_MAINTOOLBOX_DATA_VARIABLE_MAT_H

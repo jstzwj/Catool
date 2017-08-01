@@ -12,8 +12,7 @@ namespace catool
 		{
 			namespace images
 			{
-
-				template<class T,class U>
+				template<class T, class U>
 				class ImageConvert
 				{
 				public:
@@ -23,7 +22,7 @@ namespace catool
 					}
 				};
 				template<>
-				class ImageConvert<std::uint8_t,double>
+				class ImageConvert<std::uint8_t, double>
 				{
 				public:
 					static double convert(std::uint8_t val)
@@ -32,7 +31,7 @@ namespace catool
 					}
 				};
 				template<>
-				class ImageConvert<std::uint8_t,float>
+				class ImageConvert<std::uint8_t, float>
 				{
 				public:
 					static float convert(std::uint8_t val)
@@ -41,9 +40,8 @@ namespace catool
 					}
 				};
 
-
 				template<>
-				class ImageConvert<double,std::uint8_t>
+				class ImageConvert<double, std::uint8_t>
 				{
 				public:
 					static std::uint8_t convert(double val)
@@ -64,7 +62,7 @@ namespace catool
 					}
 				};
 				template<>
-				class ImageConvert<float,std::uint8_t>
+				class ImageConvert<float, std::uint8_t>
 				{
 				public:
 					static std::uint8_t convert(float val)
@@ -88,6 +86,5 @@ namespace catool
 		}
 	}
 }
-
 
 #endif // !CATOOL_MAINTOOLBOX_DATA_STANDARDFILE_IMAGES_IMAGEDEFINITION_H

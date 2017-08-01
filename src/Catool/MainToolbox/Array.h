@@ -20,23 +20,23 @@ namespace catool
 	namespace main_toolbox
 	{
 		template<typename T>
-		struct ArrayIntervalIterator; 
+		struct ArrayIntervalIterator;
 		template<typename T>
 		struct ArrayConstIntervalIterator;
 		/*
 		array
 		*/
-		template<class T,class SizeType_>
+		template<class T, class SizeType_>
 		class ArrayTraits
 		{
 		public:
 			using SizeType = SizeType_;
-			
+
 			typedef T* pointer;
 			typedef T& reference;
 		};
 		template<class T>
-		class ArrayBase:public ArrayTraits<T,int>
+		class ArrayBase :public ArrayTraits<T, int>
 		{
 		protected:
 			std::vector<int> dim;
@@ -62,8 +62,8 @@ namespace catool
 			{
 				this->resize_from_dim();
 			}
-			explicit ArrayBase(const std::vector<int> &dim_,const std::vector<T>& data_)
-				:dim(dim_),data(data_){}
+			explicit ArrayBase(const std::vector<int> &dim_, const std::vector<T>& data_)
+				:dim(dim_), data(data_) {}
 			explicit ArrayBase(std::vector<int> &&dim_, std::vector<T>&& data_)
 				:dim(dim_), data(data_) {}
 			explicit ArrayBase(const std::vector<Range> &dims)
@@ -103,7 +103,7 @@ namespace catool
 				data.resize(acc);
 			}
 		private:
-			
+
 			template<typename T1, typename... T2>
 			void ArrayBaseConstructor(T1 p, T2... arg)
 			{
@@ -117,22 +117,22 @@ namespace catool
 			}
 		};
 		template<class T>
-		class Array:public ArrayBase<T>
+		class Array :public ArrayBase<T>
 		{
 		public:
 			using IntervalIterator = ArrayIntervalIterator<T>;
 			using ConstIntervalIterator = ArrayConstIntervalIterator<T>;
 			Array() noexcept:ArrayBase<T>() {}
 			explicit Array(int row_)
-				:ArrayBase<T>(row_){}
+				:ArrayBase<T>(row_) {}
 
 			explicit Array(const std::vector<int> &dims)
 				:ArrayBase<T>(dims) {}
 			explicit Array(std::vector<int> &&dims)
 				:ArrayBase<T>(dims) {}
-			
+
 			explicit Array(const std::vector<Range> &dims)
-				:ArrayBase<T>(dims){}
+				:ArrayBase<T>(dims) {}
 			template<class ...K>
 			explicit Array(K ...arg) : ArrayBase<T>(arg...) {}
 
@@ -141,11 +141,11 @@ namespace catool
 
 			template<class U>
 			explicit Array(const Array<U>& other)
-				:ArrayBase<T>(other){}
+				:ArrayBase<T>(other) {}
 
 			Array(const Array<T>& other)
 				: ArrayBase<T>(other.dim, other.data) {}
-			Array(Array<T> && src) : ArrayBase<T>(src.dim,src.data){}
+			Array(Array<T> && src) : ArrayBase<T>(src.dim, src.data) {}
 			virtual ~Array() = default;
 
 			Array<T>& operator =(const Array<T>& other)
@@ -286,12 +286,11 @@ namespace catool
 				return true;
 			}
 
-
 			void swapRow(int a, int b)
 			{
 				if (dim_size() > 2)
 					throw std::runtime_error("error: swapRow not defined for N-D objects");
-				int d0= get_dim_data(0), d1= get_dim_data(1);
+				int d0 = get_dim_data(0), d1 = get_dim_data(1);
 				for (int i = 0; i < d1; ++i)
 				{
 					std::swap(at(i*d0 + a), at(i*d0 + b));
@@ -315,7 +314,7 @@ namespace catool
 				int d0 = get_dim_data(0), d1 = get_dim_data(1);
 				for (int i = 0; i < d1; ++i)
 				{
-					data[i*d0 + to] += data[i*d0 + from]*val;
+					data[i*d0 + to] += data[i*d0 + from] * val;
 				}
 			}
 			void addCol(double val, int from, int to)
@@ -331,8 +330,8 @@ namespace catool
 			std::vector<Range> getFullLoop()const
 			{
 				std::vector<Range> rst;
-				for (const auto& each:dim)
-					rst.emplace_back(0,each,1);
+				for (const auto& each : dim)
+					rst.emplace_back(0, each, 1);
 				return rst;
 			}
 			int composeIndex(const std::vector<int> &dims)const
@@ -347,16 +346,16 @@ namespace catool
 				return index;
 			}
 			//用于完全遍历
-			void loop(const std::vector<Range>& loop_range, 
-				std::function<void(const Array<T>& m,const std::vector<int>&dims)> f)const
+			void loop(const std::vector<Range>& loop_range,
+				std::function<void(const Array<T>& m, const std::vector<int>&dims)> f)const
 			{
 				std::vector<int> dims;
 				dims.resize(dim.size());
-				loop_impl(dims,dim.size()-1,loop_range,f);
+				loop_impl(dims, dim.size() - 1, loop_range, f);
 			}
 			//用于按某一维度遍历
 			void dimloop(int loop_dim,
-				std::function<void(const Array<T>& m,const std::vector<int>&dims)> f)const
+				std::function<void(const Array<T>& m, const std::vector<int>&dims)> f)const
 			{
 				std::vector<int> dims;
 				dims.resize(dim.size());
@@ -364,18 +363,17 @@ namespace catool
 			}
 
 			void dimloop(int loop_dim,
-				std::function<void(Array<T>& m,const std::vector<int>&dims)> f)
+				std::function<void(Array<T>& m, const std::vector<int>&dims)> f)
 			{
 				std::vector<int> dims;
 				dims.resize(dim.size());
 				dimloop_impl(dims, dim.size() - 1, loop_dim, f);
 			}
 
-			
 			Array<T> subArray(const std::vector<Range>& loop_range)const
 			{
 				Array<T> rst(loop_range);
-				loop(loop_range, [&rst,&loop_range](const Array<T>& m, const std::vector<int>&dims) 
+				loop(loop_range, [&rst, &loop_range](const Array<T>& m, const std::vector<int>&dims)
 				{
 					int index = 0;
 					int size = dims.size();
@@ -387,7 +385,7 @@ namespace catool
 			}
 
 			//tostring
-			static std::string composeIndexToString(const std::vector<int>& loop,bool ignoreHead=true)
+			static std::string composeIndexToString(const std::vector<int>& loop, bool ignoreHead = true)
 			{
 				std::string ans = "(";
 				for (unsigned int i = 0; i < loop.size(); ++i)
@@ -515,15 +513,15 @@ namespace catool
 				if (cur_dim < 0)return;
 				Range range = loop_range[cur_dim];
 				dims[cur_dim] = range.begin;
-				for (int &i = dims[cur_dim]; i<range.end; i += range.interval)
+				for (int &i = dims[cur_dim]; i < range.end; i += range.interval)
 				{
 					if (cur_dim == 0)
 						f(*this, dims);
-					loop_impl(dims,cur_dim-1, loop_range, f);
+					loop_impl(dims, cur_dim - 1, loop_range, f);
 				}
 			}
 			void dimloop_impl(std::vector<int> dims, int cur_dim, int loop_dim,
-				std::function<void(const Array<T>& m,const std::vector<int>&dims)> &f)const
+				std::function<void(const Array<T>& m, const std::vector<int>&dims)> &f)const
 			{
 				if (cur_dim < 0)
 				{
@@ -533,12 +531,12 @@ namespace catool
 				if (cur_dim == loop_dim)
 					dimloop_impl(dims, cur_dim - 1, loop_dim, f);
 				else
-					for (int &i = dims[cur_dim]; i<dim[cur_dim]; ++i)
+					for (int &i = dims[cur_dim]; i < dim[cur_dim]; ++i)
 						dimloop_impl(dims, cur_dim - 1, loop_dim, f);
 			}
 
 			void dimloop_impl(std::vector<int> dims, int cur_dim, int loop_dim,
-				std::function<void(Array<T>& m,const std::vector<int>&dims)> &f)
+				std::function<void(Array<T>& m, const std::vector<int>&dims)> &f)
 			{
 				if (cur_dim < 0)
 				{
@@ -590,7 +588,7 @@ namespace catool
 		};
 		//Array的interval迭代器
 		template<typename T>
-		struct ArrayIntervalIterator :public std::iterator<std::random_access_iterator_tag, T> 
+		struct ArrayIntervalIterator :public std::iterator<std::random_access_iterator_tag, T>
 		{
 			typedef ArrayIntervalIterator<T>      Self;
 			typedef Array<T>					Container;
@@ -600,114 +598,11 @@ namespace catool
 			Array<T> *arry;
 			SizeType index;
 			SizeType interval;
-			
+
 			explicit ArrayIntervalIterator(Container & arry, SizeType index, SizeType interval)noexcept
 				:arry(&arry), index(index), interval(interval) {}
-			ArrayIntervalIterator(const ArrayIntervalIterator &)=default;
-			Self& operator=(const ArrayIntervalIterator &)=default;
-
-
-			Self& operator+=(SizeType n)
-			{
-				index += n*interval;
-				return *this;
-			}
-			Self operator+(SizeType n)const
-			{
-				Self tmp = *this;
-				tmp.index += n*tmp.interval;
-				return tmp;
-			}
-			Self& operator-=(SizeType n)
-			{
-				index -= n*interval;
-				return *this;
-			}
-			Self operator-(SizeType n)const
-			{
-				Self tmp = *this;
-				tmp.index -= n*tmp.interval;
-				return tmp;
-			}
-			SizeType operator-(const Self & other)const
-			{
-				return (index - other.index) / interval;
-			}
-			reference operator[](SizeType n)const
-			{
-				return (*arry)[index+n*interval];
-			}
-			bool operator<(const Self & other)const
-			{
-				return index < other.index;
-			}
-			bool operator>(const Self & other)const
-			{
-				return index > other.index;
-			}
-			bool operator<=(const Self & other)const
-			{
-				return index <= other.index;
-			}
-			bool operator>=(const Self & other)const
-			{
-				return index >= other.index;
-			}
-
-			Self& operator++()noexcept {
-				index += interval;
-				return *this;
-			}
-			Self operator++(int) {
-				Self tmp = *this;
-				++(*this);
-				return tmp;
-			}
-			Self& operator--()noexcept {
-				index -= interval;
-				return *this;
-			}
-			Self operator--(int) {
-				Self tmp = *this;
-				--(*this);
-				return tmp;
-			}
-			reference operator*() const noexcept
-			{
-				return (*arry)[index];
-			}
-			pointer operator->() const noexcept
-			{
-				return &(*arry)[index];
-			}
-			bool operator==(const Self& v) const noexcept
-			{
-				return arry == v.arry&&index == v.index&&interval == v.interval;
-			}
-			bool operator!=(const Self& v) const noexcept
-			{
-				return arry != v.arry || index != v.index || interval != v.interval;
-			}
-		};
-
-
-		template<typename T>
-		struct ArrayConstIntervalIterator :public std::iterator<std::random_access_iterator_tag, T>
-		{
-			typedef ArrayConstIntervalIterator<T>      Self;
-			typedef Array<T>					Container;
-			typedef const T&                          reference;
-			typedef const T*                          pointer;
-			typedef typename Array<T>::SizeType			SizeType;
-			const Array<T> *arry;
-			SizeType index;
-			SizeType interval;
-
-			explicit ArrayConstIntervalIterator(const Container & arry, SizeType index, SizeType interval)noexcept
-				:arry(&arry), index(index), interval(interval) {}
-			ArrayConstIntervalIterator(const ArrayConstIntervalIterator &) = default;
-			Self& operator=(const ArrayConstIntervalIterator &) = default;
-
+			ArrayIntervalIterator(const ArrayIntervalIterator &) = default;
+			Self& operator=(const ArrayIntervalIterator &) = default;
 
 			Self& operator+=(SizeType n)
 			{
@@ -792,8 +687,105 @@ namespace catool
 			}
 		};
 
+		template<typename T>
+		struct ArrayConstIntervalIterator :public std::iterator<std::random_access_iterator_tag, T>
+		{
+			typedef ArrayConstIntervalIterator<T>      Self;
+			typedef Array<T>					Container;
+			typedef const T&                          reference;
+			typedef const T*                          pointer;
+			typedef typename Array<T>::SizeType			SizeType;
+			const Array<T> *arry;
+			SizeType index;
+			SizeType interval;
 
+			explicit ArrayConstIntervalIterator(const Container & arry, SizeType index, SizeType interval)noexcept
+				:arry(&arry), index(index), interval(interval) {}
+			ArrayConstIntervalIterator(const ArrayConstIntervalIterator &) = default;
+			Self& operator=(const ArrayConstIntervalIterator &) = default;
 
+			Self& operator+=(SizeType n)
+			{
+				index += n*interval;
+				return *this;
+			}
+			Self operator+(SizeType n)const
+			{
+				Self tmp = *this;
+				tmp.index += n*tmp.interval;
+				return tmp;
+			}
+			Self& operator-=(SizeType n)
+			{
+				index -= n*interval;
+				return *this;
+			}
+			Self operator-(SizeType n)const
+			{
+				Self tmp = *this;
+				tmp.index -= n*tmp.interval;
+				return tmp;
+			}
+			SizeType operator-(const Self & other)const
+			{
+				return (index - other.index) / interval;
+			}
+			reference operator[](SizeType n)const
+			{
+				return (*arry)[index + n*interval];
+			}
+			bool operator<(const Self & other)const
+			{
+				return index < other.index;
+			}
+			bool operator>(const Self & other)const
+			{
+				return index > other.index;
+			}
+			bool operator<=(const Self & other)const
+			{
+				return index <= other.index;
+			}
+			bool operator>=(const Self & other)const
+			{
+				return index >= other.index;
+			}
+
+			Self& operator++()noexcept {
+				index += interval;
+				return *this;
+			}
+			Self operator++(int) {
+				Self tmp = *this;
+				++(*this);
+				return tmp;
+			}
+			Self& operator--()noexcept {
+				index -= interval;
+				return *this;
+			}
+			Self operator--(int) {
+				Self tmp = *this;
+				--(*this);
+				return tmp;
+			}
+			reference operator*() const noexcept
+			{
+				return (*arry)[index];
+			}
+			pointer operator->() const noexcept
+			{
+				return &(*arry)[index];
+			}
+			bool operator==(const Self& v) const noexcept
+			{
+				return arry == v.arry&&index == v.index&&interval == v.interval;
+			}
+			bool operator!=(const Self& v) const noexcept
+			{
+				return arry != v.arry || index != v.index || interval != v.interval;
+			}
+		};
 
 		//functions
 		/*
@@ -844,7 +836,7 @@ namespace catool
 			return result;
 		}
 
-		template<class T=int,typename T1, typename... T2>
+		template<class T = int, typename T1, typename... T2>
 		inline Array<T> ones(T1 p, T2... arg)
 		{
 			Array<T> result;
@@ -852,7 +844,7 @@ namespace catool
 			result.fill(1);
 			return result;
 		}
-		template<class T=int>
+		template<class T = int>
 		inline Array<T> ones(const Array<int> & sz)
 		{
 			if (sz.dim_size() != 1)
@@ -1157,30 +1149,30 @@ namespace catool
 			return;
 		}
 		template<class T, class ...Targs>
-		void cat_impl(Array<T> &result,int dim,int cur_pos, const Array<T>& A, Targs ...args)
+		void cat_impl(Array<T> &result, int dim, int cur_pos, const Array<T>& A, Targs ...args)
 		{
 			std::vector<Range> range = A.getFullLoop();
-			A.loop(range, [&result,&dim,&cur_pos](const Array<T>& m, const std::vector<int>&dims) 
+			A.loop(range, [&result, &dim, &cur_pos](const Array<T>& m, const std::vector<int>&dims)
 			{
 				int index = 0;
 				for (unsigned int i = 0; i < dims.size(); ++i)
 				{
 					if (i == dim)
-						index += (dims[i]+cur_pos) * result.get_dim_acc(i);
+						index += (dims[i] + cur_pos) * result.get_dim_acc(i);
 					else
 						index += dims[i] * result.get_dim_acc(i);
 				}
 				result[index] = m[m.composeIndex(dims)];
 			});
 
-			cat_impl(result, dim, cur_pos+A.get_dim_data(dim),args...);
+			cat_impl(result, dim, cur_pos + A.get_dim_data(dim), args...);
 		}
-		
+
 		template<class T, class ...Targs>
 		Array<T> cat(int dim, const Array<T>& A, Targs ...args)
 		{
 			Array<T> result;
-			int cat_dim_sum = dimSum(dim, A,args...);
+			int cat_dim_sum = dimSum(dim, A, args...);
 
 			std::vector<int> dims = A.get_dim();
 			dims[dim] = cat_dim_sum;
@@ -1190,8 +1182,6 @@ namespace catool
 			return result;
 		}
 
-
-
 		/*
 		horzcat
 		Concatenate arrays horizontally
@@ -1199,7 +1189,7 @@ namespace catool
 		template<class T, class ...Targs>
 		Array<T> horzcat(const Array<T>& A, Targs ...args)
 		{
-			return cat(1,A,args...);
+			return cat(1, A, args...);
 		}
 		/*
 		vertcat
@@ -1369,7 +1359,7 @@ namespace catool
 		Array<int> size(const Array<T> &n)
 		{
 			Array<int> rst;
-			rst.resize(1,n.get_dim().size());
+			rst.resize(1, n.get_dim().size());
 			for (unsigned int i = 0; i < n.dim_size(); ++i)
 				rst[i] = n.get_dim_data(i);
 			return rst;
@@ -1493,26 +1483,26 @@ namespace catool
 		Sort array elements
 		*/
 		template<class T>
-		void sort_in_place(Array<T> & m,int dim=0)
+		void sort_in_place(Array<T> & m, int dim = 0)
 		{
-			m.dimloop(dim, [&m, &dim](Array<T>& m,const std::vector<int>&dims)
+			m.dimloop(dim, [&m, &dim](Array<T>& m, const std::vector<int>&dims)
 			{
 				int index = m.composeIndex(dims);
 				int acc = m.get_dim_acc(dim);
 				int len = m.get_dim_data(dim);
 
-				typename Array<T>::IntervalIterator begin(m, index,acc);
-				typename Array<T>::IntervalIterator end(m, index+len*acc,acc);
+				typename Array<T>::IntervalIterator begin(m, index, acc);
+				typename Array<T>::IntervalIterator end(m, index + len*acc, acc);
 				std::sort(begin, end, std::less<T>());
 			});
 		}
 		template<class T>
 		Array<T> sort(Array<T> & m, int dim = 0)
 		{
-			if (dim<0 || dim >= m.dim_size())
+			if (dim < 0 || dim >= m.dim_size())
 				throw std::runtime_error("error: sort DIM must be a valid dimension");
 			Array<T> rst(m);
-			sort_in_place(rst,dim);
+			sort_in_place(rst, dim);
 			return rst;
 		}
 		/*
@@ -1536,7 +1526,7 @@ namespace catool
 		template<class T>
 		Array<T> flip(Array<T> & m, int dim = 0)
 		{
-			if (dim<0 || dim >= m.dim_size())
+			if (dim < 0 || dim >= m.dim_size())
 				throw std::runtime_error("error: sort DIM must be a valid dimension");
 			Array<T> rst(m);
 			flip_in_place(rst, dim);
@@ -1545,7 +1535,7 @@ namespace catool
 		template<class T>
 		Array<T> fliplr(Array<T> & m)
 		{
-			if (dim<0 || dim >= m.dim_size())
+			if (dim < 0 || dim >= m.dim_size())
 				throw std::runtime_error("error: sort DIM must be a valid dimension");
 			Array<T> rst(m);
 			flip_in_place(rst, 1);
@@ -1554,13 +1544,12 @@ namespace catool
 		template<class T>
 		Array<T> flipup(Array<T> & m)
 		{
-			if (dim<0 || dim >= m.dim_size())
+			if (dim < 0 || dim >= m.dim_size())
 				throw std::runtime_error("error: sort DIM must be a valid dimension");
 			Array<T> rst(m);
 			flip_in_place(rst, 0);
 			return rst;
 		}
-
 
 		/*
 		rot90
@@ -1631,7 +1620,7 @@ namespace catool
 		{
 			if (m.dim_size() > 2)
 				throw std::runtime_error("error: transpose not defined for N-D objects");
-			int d0=m.get_dim_data(0), d1=m.get_dim_data(1);
+			int d0 = m.get_dim_data(0), d1 = m.get_dim_data(1);
 			Array<T> result(d1, d0);
 			for (int i = 0; i < d0; ++i)
 			{
@@ -1686,26 +1675,26 @@ namespace catool
 		{
 			Array<T> rst(X);
 			int dim_size = rst.dim_size();
-			if (n>=0)
+			if (n >= 0)
 			{
-				for (int i=0;i<dim_size;++i)
+				for (int i = 0; i < dim_size; ++i)
 					rst.get_dim().at((i + n) % dim_size) = X.get_dim().at(i);
 			}
 			else
 			{
-				rst.get_dim().resize(dim_size-n);
-				for (int i=dim_size-1;i>=0;--i)
-					rst.get_dim().at(i-n) = X.get_dim().at(i);
-				for (int i=0;i<-n;++i) 
+				rst.get_dim().resize(dim_size - n);
+				for (int i = dim_size - 1; i >= 0; --i)
+					rst.get_dim().at(i - n) = X.get_dim().at(i);
+				for (int i = 0; i < -n; ++i)
 					rst.get_dim().at(i) = 1;
 			}
 			return rst;
 		}
 		template<class T>
-		std::tuple<Array<T>,int> shiftdim(const Array<T>& X)
+		std::tuple<Array<T>, int> shiftdim(const Array<T>& X)
 		{
 			int nsize = 0;
-			for (const auto &each:X.get_dim())
+			for (const auto &each : X.get_dim())
 			{
 				if (each == 1)
 					++nsize;
@@ -1714,9 +1703,9 @@ namespace catool
 			}
 			Array<T> rst(X);
 			int dim_size = X.dim_size();
-			rst.get_dim().resize(dim_size-nsize);
-			for (int i=0;i<dim_size-nsize;++i)
-				rst.get_dim().at(i) = X.get_dim().at(i+nsize);
+			rst.get_dim().resize(dim_size - nsize);
+			for (int i = 0; i < dim_size - nsize; ++i)
+				rst.get_dim().at(i) = X.get_dim().at(i + nsize);
 			return rst;
 		}
 		/*
@@ -1729,8 +1718,8 @@ namespace catool
 			Array<T> rst(X);
 			std::vector<int> & rst_dim = rst.get_dim();
 			rst_dim.clear();
-			
-			for (const auto & each_dim:X.get_dim())
+
+			for (const auto & each_dim : X.get_dim())
 			{
 				if (each_dim != 1)
 					rst_dim.push_back(each_dim);

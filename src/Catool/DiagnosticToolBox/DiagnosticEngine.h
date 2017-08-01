@@ -8,7 +8,6 @@ namespace catool
 		class DiagnosticEngine
 		{
 		public:
-
 		};
 	}
 }

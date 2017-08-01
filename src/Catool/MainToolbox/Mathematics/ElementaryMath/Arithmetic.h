@@ -10,10 +10,9 @@
 #include"Constants.h"
 #include"../../Array.h"
 
-
 #ifdef CATOOL_ENABLE_SSE
-//#include <emmintrin.h>  
-#include <intrin.h> 
+//#include <emmintrin.h>
+#include <intrin.h>
 #endif // CATOOL_ENABLE_SSE
 
 #define KC 64
@@ -195,7 +194,7 @@ namespace catool
 			/*
 			x = A./B divides each element of A by the corresponding element of B.
 			*/
-			template<class T,class U>
+			template<class T, class U>
 			inline Array<T> rdivide(const Array<T>& a, const Array<U>& b)
 			{
 				Array<T> result(a);
@@ -309,18 +308,17 @@ namespace catool
 				}
 				return result;
 			}
-			
 
 			template<class T>
 			Array<T> mtimes_impl_small(const Array<T>& a, const Array<T>& b)
 			{
-				int a_d0=a.get_dim_data(0), a_d1=a.get_dim_data(1);
-				int b_d0=b.get_dim_data(0), b_d1=b.get_dim_data(1);
+				int a_d0 = a.get_dim_data(0), a_d1 = a.get_dim_data(1);
+				int b_d0 = b.get_dim_data(0), b_d1 = b.get_dim_data(1);
 				Array<T> result(a_d0, b_d1);
-				for (int i=0; i < b_d1;++i)//b col
+				for (int i = 0; i < b_d1; ++i)//b col
 				{
 					const T * p_b = &b[i*b_d0];
-					for (int j=0; j < b_d0;++j)//b row
+					for (int j = 0; j < b_d0; ++j)//b row
 					{
 						T * p_des = &result[i*a_d0];
 						const T* p_a = &a[j*a_d0];
@@ -421,17 +419,17 @@ namespace catool
 
 						__m128d b_mm = _mm_set1_pd(b_tmp);
 
-						int k=0;
-						for (; k < a_d0-1; k+=2)//a row
+						int k = 0;
+						for (; k < a_d0 - 1; k += 2)//a row
 						{
-							__m128d a_mm=_mm_load_pd(p_a);
+							__m128d a_mm = _mm_load_pd(p_a);
 							__m128d rst_mm = _mm_load_pd(p_des);
 
-							rst_mm = _mm_add_pd(_mm_mul_pd(a_mm, b_mm),rst_mm);
+							rst_mm = _mm_add_pd(_mm_mul_pd(a_mm, b_mm), rst_mm);
 
 							_mm_store_pd(p_des, rst_mm);
-							p_des+=2;
-							p_a+=2;
+							p_des += 2;
+							p_a += 2;
 						}
 						for (; k < a_d0; ++k)//a row
 						{
@@ -456,7 +454,7 @@ namespace catool
 						float b_tmp = *p_b++;
 
 						__m128 b_mm = _mm_set1_ps(b_tmp);
-						int k=0;
+						int k = 0;
 						for (; k < a_d0 - 3; k += 4)//a row
 						{
 							__m128 a_mm = _mm_load_ps(p_a);
@@ -479,7 +477,7 @@ namespace catool
 #endif // CATOOL_ENABLE_SSE
 
 			template<class T>
-			void mtimes_micro_4x4(int p,T * rst,int rst_d0,const T* a,int a_d0,const T* b,int b_d0)
+			void mtimes_micro_4x4(int p, T * rst, int rst_d0, const T* a, int a_d0, const T* b, int b_d0)
 			{
 				for (int k = 0; k < p; ++k)
 				{
@@ -488,7 +486,7 @@ namespace catool
 						const T* p_a = &a[k * a_d0];
 						T * p_rst = &rst[j * rst_d0];
 						T p_b = b[k + j*b_d0];
-						
+
 						//rst[i + j * rst_d0] += a[i + k * a_d0] * b[k + j*b_d0];
 						(*p_rst++) += (*p_a++)*p_b;
 						(*p_rst++) += (*p_a++)*p_b;
@@ -537,7 +535,6 @@ namespace catool
 					rst_mm = _mm256_load_pd(&rst[3 * rst_d0]);
 					rst_mm = _mm256_add_pd(rst_mm, _mm256_mul_pd(a_mm, b_mm));
 					_mm256_store_pd(&rst[3 * rst_d0], rst_mm);
-
 				}
 			}
 
@@ -546,41 +543,40 @@ namespace catool
 			{
 				for (int k = 0; k < p; ++k)
 				{
-						//float * p_rst = &rst[0 * rst_d0];
-						float p_b;
-						
-						__m128 a_mm, b_mm, rst_mm;
+					//float * p_rst = &rst[0 * rst_d0];
+					float p_b;
 
-						a_mm = _mm_load_ps(&a[k * a_d0]);
+					__m128 a_mm, b_mm, rst_mm;
 
-						//0 col
-						p_b = b[k + 0 * b_d0];
-						b_mm = _mm_set1_ps(p_b);
-						rst_mm = _mm_load_ps(&rst[0 * rst_d0]);
-						rst_mm = _mm_add_ss(rst_mm, _mm_mul_ss(a_mm, b_mm));
-						_mm_store_ps(&rst[0 * rst_d0], rst_mm);
+					a_mm = _mm_load_ps(&a[k * a_d0]);
 
-						//1 col
-						p_b = b[k + 1 * b_d0];
-						b_mm = _mm_set1_ps(p_b);
-						rst_mm = _mm_load_ps(&rst[1 * rst_d0]);
-						rst_mm = _mm_add_ss(rst_mm, _mm_mul_ss(a_mm, b_mm));
-						_mm_store_ps(&rst[1 * rst_d0], rst_mm);
+					//0 col
+					p_b = b[k + 0 * b_d0];
+					b_mm = _mm_set1_ps(p_b);
+					rst_mm = _mm_load_ps(&rst[0 * rst_d0]);
+					rst_mm = _mm_add_ss(rst_mm, _mm_mul_ss(a_mm, b_mm));
+					_mm_store_ps(&rst[0 * rst_d0], rst_mm);
 
-						//2 col
-						p_b = b[k + 2 * b_d0];
-						b_mm = _mm_set1_ps(p_b);
-						rst_mm = _mm_load_ps(&rst[2 * rst_d0]);
-						rst_mm = _mm_add_ss(rst_mm, _mm_mul_ss(a_mm, b_mm));
-						_mm_store_ps(&rst[2 * rst_d0], rst_mm);
+					//1 col
+					p_b = b[k + 1 * b_d0];
+					b_mm = _mm_set1_ps(p_b);
+					rst_mm = _mm_load_ps(&rst[1 * rst_d0]);
+					rst_mm = _mm_add_ss(rst_mm, _mm_mul_ss(a_mm, b_mm));
+					_mm_store_ps(&rst[1 * rst_d0], rst_mm);
 
-						//3 col
-						p_b = b[k + 3 * b_d0];
-						b_mm = _mm_set1_ps(p_b);
-						rst_mm = _mm_load_ps(&rst[3 * rst_d0]);
-						rst_mm = _mm_add_ss(rst_mm, _mm_mul_ss(a_mm, b_mm));
-						_mm_store_ps(&rst[3 * rst_d0], rst_mm);
+					//2 col
+					p_b = b[k + 2 * b_d0];
+					b_mm = _mm_set1_ps(p_b);
+					rst_mm = _mm_load_ps(&rst[2 * rst_d0]);
+					rst_mm = _mm_add_ss(rst_mm, _mm_mul_ss(a_mm, b_mm));
+					_mm_store_ps(&rst[2 * rst_d0], rst_mm);
 
+					//3 col
+					p_b = b[k + 3 * b_d0];
+					b_mm = _mm_set1_ps(p_b);
+					rst_mm = _mm_load_ps(&rst[3 * rst_d0]);
+					rst_mm = _mm_add_ss(rst_mm, _mm_mul_ss(a_mm, b_mm));
+					_mm_store_ps(&rst[3 * rst_d0], rst_mm);
 				}
 			}
 #endif // CATOOL_ENABLE_SSE
@@ -599,8 +595,8 @@ namespace catool
 
 						//mtimes_micro_4x4(b_d0, &rst[j + i*rst_d0], rst_d0, &a[j + 0 * a_d0], a_d0, &b[0 + i*b_d0], b_d0);
 						mtimes_micro_4x4(b_d0, p_rst, rst_d0, p_a, a_d0, p_b, b_d0);
-						p_a+=4;
-						p_rst+=4;
+						p_a += 4;
+						p_rst += 4;
 					}
 				}
 			}
@@ -612,36 +608,36 @@ namespace catool
 				int b_d0 = b.get_dim_data(0), b_d1 = b.get_dim_data(1);
 				Array<T> result(a_d0, b_d1);
 				int i, j;
-				for ( i= 0; i < b_d1-KC+1; i+=KC)//c col
+				for (i = 0; i < b_d1 - KC + 1; i += KC)//c col
 				{
-					for (j = 0; j < a_d0-MC+1; j+=MC)//c row
+					for (j = 0; j < a_d0 - MC + 1; j += MC)//c row
 					{
-						T * p_rst = &result[j+i*a_d0];
-						const T *p_a = &a[j+0*a_d0];
-						const T *p_b = &b[0+i*b_d0];
+						T * p_rst = &result[j + i*a_d0];
+						const T *p_a = &a[j + 0 * a_d0];
+						const T *p_b = &b[0 + i*b_d0];
 						mtimes_block(p_rst, a_d0, p_a, a_d0, p_b, b_d0);
 					}
-					for (int k = 0; k<b_d0; ++k)
+					for (int k = 0; k < b_d0; ++k)
 					{
 						//for (int l=j;l<a_d0;++l)
 						T* p_rst = &result[i*a_d0];
 						const T* p_a = &a[k*a_d0];
 						T tmp_b = b[k + i*b_d0];
-						for (int l = j; l<a_d0; ++l)
+						for (int l = j; l < a_d0; ++l)
 						{
 							//result[j + i*a_d0] += a[j + k*a_d0] * b[k + i*b_d0];
 							(*p_rst++) = (*p_a++)*tmp_b;
 						}
 					}
 				}
-				for (; i<b_d1; ++i)
+				for (; i < b_d1; ++i)
 				{
 					for (int k = 0; k < b_d0; ++k)
 					{
 						T* p_rst = &result[i*a_d0];
 						const T* p_a = &a[k*a_d0];
 						T tmp_b = b[k + i*b_d0];
-						for (j=0; j < a_d0; ++j)
+						for (j = 0; j < a_d0; ++j)
 						{
 							//result[j + i*a_d0] += a[j + k*a_d0] * b[k + i*b_d0];
 							(*p_rst++) = (*p_a++)*tmp_b;
@@ -652,20 +648,19 @@ namespace catool
 			}
 
 			template<class T>
-			Array<T> copySubMatrix(const Array<T>& m,int dim0,int len0,int dim1,int len1)
+			Array<T> copySubMatrix(const Array<T>& m, int dim0, int len0, int dim1, int len1)
 			{
-				Array<T> result(len0,len1);
-				int m_d0= m.get_dim_data(0);
-				for (int i=0;i<len1;++i)
+				Array<T> result(len0, len1);
+				int m_d0 = m.get_dim_data(0);
+				for (int i = 0; i < len1; ++i)
 				{
-					for (int j=0;j<len0;++j)
+					for (int j = 0; j < len0; ++j)
 					{
-						result[i*len0 + j] = m[(dim1+i)*m_d0+j+dim0];
+						result[i*len0 + j] = m[(dim1 + i)*m_d0 + j + dim0];
 					}
 				}
 				return result;
 			}
-
 
 			template<class T>
 			Array<T> mtimes(const Array<T>& a, const Array<T>& b)
@@ -891,9 +886,9 @@ namespace catool
 				Array<T> tmp_m(arry);
 				if (n < 0)
 					throw std::runtime_error("error: diff: order K must be non-negative");
-				if(dim<0||dim>=arry.dim_size())
+				if (dim < 0 || dim >= arry.dim_size())
 					throw std::runtime_error("error: diff: DIM must be a valid dimension");
-				tmp_m.dimloop(dim, [&n,&dim](Array<T>& m,const std::vector<int>&dims)
+				tmp_m.dimloop(dim, [&n, &dim](Array<T>& m, const std::vector<int>&dims)
 				{
 					std::vector<int> tmp_dims(dims);
 					tmp_dims[dim] = 0;
@@ -901,9 +896,9 @@ namespace catool
 					int acc = m.get_dim_acc(dim);
 					int len = m.get_dim_data(dim);
 
-					for (int i=0;i<n;++i)
-						for (int &j= dims[dim];j<len-i-1;++j)
-							m[index + acc*j] = m[index + acc*(j+1)]- m[index + acc*j];
+					for (int i = 0; i < n; ++i)
+						for (int &j = dims[dim]; j < len - i - 1; ++j)
+							m[index + acc*j] = m[index + acc*(j + 1)] - m[index + acc*j];
 				});
 				std::vector<Range> sub_range = tmp_m.getFullLoop();
 				sub_range[dim].end -= n;
@@ -915,21 +910,21 @@ namespace catool
 			kf:大坐标方向
 			*/
 			template<class T>
-			Array<T> movsum(const Array<T>& m,int kb=1,int kf=1, int dim = 0)
+			Array<T> movsum(const Array<T>& m, int kb = 1, int kf = 1, int dim = 0)
 			{
 				Array<T> result(m.get_dim());
-				m.dimloop(dim, [&result,&dim,&kb,&kf](const Array<T>& m,const std::vector<int>&dims)
+				m.dimloop(dim, [&result, &dim, &kb, &kf](const Array<T>& m, const std::vector<int>&dims)
 				{
 					std::vector<int> tmp_dims(dims);
 					tmp_dims[dim] = 0;
 					int index = m.composeIndex(tmp_dims);
 					int acc = m.get_dim_acc(dim);
 					int len = m.get_dim_data(dim);
-					
+
 					for (int &i = tmp_dims[dim]; i < len; ++i)
 						for (int j = -kb; j <= kf; ++j)
 							if (i + j >= 0 && i + j < len)
-								result[result.composeIndex(tmp_dims)] += m[index+acc*(i+j)];
+								result[result.composeIndex(tmp_dims)] += m[index + acc*(i + j)];
 				});
 				return result;
 			}
@@ -946,7 +941,7 @@ namespace catool
 				result.fill(1);
 
 				std::vector<Range> range = m.getFullLoop();
-				for (int i = 0; i<m.get_dim_data(dim); ++i)
+				for (int i = 0; i < m.get_dim_data(dim); ++i)
 				{
 					range[dim] = Range(i);
 					m.loop(range, [&result, &dim](const Array<T>& m, const std::vector<int>&dims)
@@ -974,7 +969,7 @@ namespace catool
 				result.resize(dims);
 
 				std::vector<Range> range = m.getFullLoop();
-				for (int i = 0; i<m.get_dim_data(dim); ++i)
+				for (int i = 0; i < m.get_dim_data(dim); ++i)
 				{
 					range[dim] = Range(i);
 					m.loop(range, [&result, &dim](const Array<T>& m, const std::vector<int>&dims)

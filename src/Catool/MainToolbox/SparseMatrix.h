@@ -228,7 +228,7 @@ namespace catool
 			return rst;
 		}
 		template<class T>
-		SparseMatrix<T> sparse(const Array<T>& a,double & compressed_percent)
+		SparseMatrix<T> sparse(const Array<T>& a, double & compressed_percent)
 		{
 			if (n.dim_size() > 2)
 				throw std::runtime_error("error: sparse not defined for N-D objects");
@@ -237,7 +237,7 @@ namespace catool
 			{
 				for (int j = 0; j < a.get_dim_data(1); ++j)
 				{
-					if(std::abs(a[j*a.get_dim_data(0) + i])>=std::numeric_limits<double>::epsilon())
+					if (std::abs(a[j*a.get_dim_data(0) + i]) >= std::numeric_limits<double>::epsilon())
 						rst.at(i, j) = a[j*a.get_dim_data(0) + i];
 				}
 			}
@@ -250,8 +250,6 @@ namespace catool
 			return SparseMatrix<T>(m, n);
 		}
 
-
-
 		/*
 		nnz
 		Number of nonzero matrix elements
@@ -259,10 +257,8 @@ namespace catool
 		template<class T>
 		uint64_t nnz(const SparseMatrix<T> & m)
 		{
-			return m.size()-m.data_size();
+			return m.size() - m.data_size();
 		}
-
-
 	}
 }
 

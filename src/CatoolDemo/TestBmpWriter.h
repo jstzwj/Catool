@@ -20,5 +20,4 @@ inline void TestBmpWrite()
 	std::cout << "Please input the path of bmp file." << std::endl;
 	std::cin >> path;
 	imwrite(rand<double>(400, 400), path.c_str());
-
 }

@@ -5,7 +5,6 @@
 #include<limits>
 #include<cstdint>
 
-
 namespace catool
 {
 	namespace main_toolbox
@@ -14,7 +13,6 @@ namespace catool
 		{
 			namespace audio
 			{
-
 				template<class T, class U>
 				class AudioConvert
 				{
@@ -25,7 +23,7 @@ namespace catool
 					}
 				};
 				template<>
-				class AudioConvert<std::uint16_t,double>
+				class AudioConvert<std::uint16_t, double>
 				{
 				public:
 					static double convert(std::uint16_t val)
@@ -34,7 +32,7 @@ namespace catool
 					}
 				};
 				template<>
-				class AudioConvert<std::uint16_t,float>
+				class AudioConvert<std::uint16_t, float>
 				{
 				public:
 					static float convert(std::uint16_t val)
@@ -43,9 +41,8 @@ namespace catool
 					}
 				};
 
-
 				template<>
-				class AudioConvert<double,std::uint16_t>
+				class AudioConvert<double, std::uint16_t>
 				{
 				public:
 					static std::uint16_t convert(double val)
@@ -65,7 +62,7 @@ namespace catool
 					}
 				};
 				template<>
-				class AudioConvert<float,std::uint16_t>
+				class AudioConvert<float, std::uint16_t>
 				{
 				public:
 					static std::uint16_t convert(float val)
@@ -88,6 +85,5 @@ namespace catool
 		}
 	}
 }
-
 
 #endif // !CATOOL_MAINTOOLBOX_DATA_STANDARDFILE_AUDIO_AUDIODEFINITION_H

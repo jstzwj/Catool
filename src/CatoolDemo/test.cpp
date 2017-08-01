@@ -3,7 +3,6 @@
 #include"TestBmpRead.h"
 #include"TestBmpWriter.h"
 
-
 int main()
 {
 	TestAudioRead();
