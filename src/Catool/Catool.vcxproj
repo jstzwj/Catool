@@ -144,6 +144,7 @@
     <ClInclude Include="MainToolbox\Graphics\Plots.h" />
     <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\Arithmetic.h" />
     <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\Constants.h" />
+    <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\CoordinateSystem.h" />
     <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\DiscreteMath.h" />
     <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\ExponentsLogarithms.h" />
     <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\Trigonometry.h" />

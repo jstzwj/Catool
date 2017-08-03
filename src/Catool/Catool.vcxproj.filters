@@ -182,5 +182,8 @@
     <ClInclude Include="DiagnosticToolBox\DiagnosticEngine.h">
       <Filter>头文件\DiagnosticToolBox</Filter>
     </ClInclude>
+    <ClInclude Include="MainToolbox\Mathematics\ElementaryMath\CoordinateSystem.h">
+      <Filter>头文件\MainToolbox\Mathematics\ElementaryMath</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
